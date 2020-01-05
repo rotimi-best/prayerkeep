@@ -2,7 +2,6 @@ import React from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { history } from './configureStore';
-import Header from './components/Header';
 import Home from './components/Home';
 import Welcome from './components/Welcome';
 import Prayer from './components/Prayer';
@@ -15,7 +14,6 @@ function App() {
     <ErrorWrapper>
       <main>
         <ConnectedRouter history={history}>
-          <Header />
           <Switch>
             <Route exact path="/welcome" component={Welcome} />
             <PrivateRoute
@@ -30,6 +28,9 @@ function App() {
             <PrivateRoute
               path="/prayerlist/:id"
               component={PrayerList}
+            />
+            <Redirect
+              to="/welcome"
             />
           </Switch>
         </ConnectedRouter>

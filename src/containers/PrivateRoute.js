@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Route, Redirect } from "react-router-dom";
+import Header from "../components/Header";
 
 const PrivateRoute = ({
   component: Component,
@@ -8,7 +9,12 @@ const PrivateRoute = ({
 }) => {
   const isLoggedIn = false;
 
-  const componentToRender = props => isLoggedIn ? <Component {...props} /> : <Redirect to="/welcome" />;
+  const componentToRender = props => isLoggedIn ? (
+    <>
+      <Header />
+      <Component {...props} />
+    </>
+    ) : <Redirect to="/welcome" />;
 
   return <Route render={componentToRender} {...rest} />;
 };
