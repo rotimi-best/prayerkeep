@@ -1,25 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ConnectedRouter } from 'connected-react-router';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import { history } from './configureStore';
+import Header from './components/Header';
+import Home from './components/Home';
+import Welcome from './components/Welcome';
+import Prayer from './components/Prayer';
+import PrayerList from './components/PrayerList';
+import PrivateRoute from './containers/PrivateRoute';
+import ErrorWrapper from './containers/ErrorWrapper';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ErrorWrapper>
+      <main>
+        <ConnectedRouter history={history}>
+          <Header />
+          <Switch>
+            <Route exact path="/welcome" component={Welcome} />
+            <PrivateRoute
+              path="/"
+              component={Home}
+            />
+            <PrivateRoute
+              exact
+              path="/prayer"
+              component={Prayer}
+            />
+            <PrivateRoute
+              path="/prayerlist/:id"
+              component={PrayerList}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </main>
+    </ErrorWrapper>
   );
 }
 
