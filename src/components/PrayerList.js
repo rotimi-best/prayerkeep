@@ -1,7 +1,38 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Container, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 
-const PrayerList = () => {
-  return <h1>PrayerList</h1>
+const styles = theme => ({
+  toolbar: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+});
+
+const PrayerList = props => {
+  const { classes } = props;
+
+  return (
+    <main className={classes.content}>
+      <div className={classes.toolbar} />
+      <Container maxWidth="sm">
+        <Typography component="h2">
+          PrayerList
+        </Typography>
+      </Container>
+    </main>
+  )
 }
 
-export default PrayerList;
+PrayerList.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = state => ({
+  state: state
+});
+
+export default connect(mapStateToProps)(withStyles(styles)(PrayerList));

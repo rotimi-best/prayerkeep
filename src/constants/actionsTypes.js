@@ -1,1 +1,2 @@
 export const USER_LOGIN_TOGGLE = 'USER_LOGIN_TOGGLE';
+export const TOGGLE_SIDE_BAR = 'TOGGLE_SIDE_BAR';

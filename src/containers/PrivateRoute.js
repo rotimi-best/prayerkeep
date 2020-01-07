@@ -7,7 +7,7 @@ const PrivateRoute = ({
   component: Component,
   ...rest
 }) => {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   const componentToRender = props => isLoggedIn ? (
     <>
