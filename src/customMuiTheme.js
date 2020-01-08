@@ -3,7 +3,8 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 const customMuiTheme = createMuiTheme({
     typography: {
         useNextVariants: true,
-        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'",
+        // fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'",
+        fontFamily: `'Lato',Helvetica,Arial,sans-serif`,
         h6: {
           color: '#5f6368'
         }

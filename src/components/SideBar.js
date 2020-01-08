@@ -5,21 +5,26 @@ import { useMediaQuery } from 'react-responsive';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Drawer from '@material-ui/core/Drawer';
+import Divider from '@material-ui/core/Divider';
+import Link from '@material-ui/core/Link';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import QueueIcon from '@material-ui/icons/Queue';
+import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
-import { toggleSideBar } from '../actions/sidebarAction'
+import { toggleSideBar } from '../actions/sidebarAction';
+import configs from '../configs';
 
 const drawerWidth = 250;
-
 const routes = {
   HOME: '/',
   PRAYERS: '/prayers',
-  PRAYER_LIST: '/prayerlist'
+  PRAYER_LIST: '/prayerlist',
 }
 
 const styles = theme => ({
@@ -41,6 +46,15 @@ const styles = theme => ({
   listItemSelected: {
     backgroundColor: `${theme.palette.secondary.light} !important`,
     borderRadius: '0 25px 25px 0'
+  },
+  paperAnchorDockedLeft: {
+    borderRight: 'none'
+  },
+  mobilePaperAnchorDockedLeft: {
+    boxShadow: '0 0 16px rgba(0,0,0,.28)'
+  },
+  gutters: {
+    marginBottom: 10
   }
 });
 
@@ -49,7 +63,7 @@ const SideBar = props => {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   })
-console.log(route)
+
   useEffect(() => {
     if (isDesktopOrLaptop && !sidebar.open) {
       dispatch(toggleSideBar())
@@ -63,15 +77,19 @@ console.log(route)
   }
 
   const changeRouteTo = (routeName) => {
+    handleToggleSideBar()
     dispatch(push(routeName))
+  }
+
+  const drawerClasses = {
+    paper: classes.drawerPaper,
+    paperAnchorDockedLeft: classes.mobilePaperAnchorDockedLeft
   }
 
   return (
     <Drawer
       open={sidebar.open}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
+      classes={drawerClasses}
       variant="persistent"
       onClose={handleToggleSideBar}
     >
@@ -85,7 +103,8 @@ console.log(route)
             selected={route === routes.HOME}
             button
             classes={{
-              selected: classes.listItemSelected
+              selected: classes.listItemSelected,
+              gutters: classes.gutters
             }}
             onClick={() => changeRouteTo(routes.HOME)}
             onKeyDown={() => changeRouteTo(routes.HOME)}
@@ -97,7 +116,8 @@ console.log(route)
             selected={route === routes.PRAYERS}
             button
             classes={{
-              selected: classes.listItemSelected
+              selected: classes.listItemSelected,
+              gutters: classes.gutters
             }}
             onClick={() => changeRouteTo(routes.PRAYERS)}
             onKeyDown={() => changeRouteTo(routes.PRAYERS)}
@@ -111,7 +131,8 @@ console.log(route)
             selected={route === routes.PRAYER_LIST}
             button
             classes={{
-              selected: classes.listItemSelected
+              selected: classes.listItemSelected,
+              gutters: classes.gutters
             }}
             onClick={() => changeRouteTo(routes.PRAYER_LIST)}
             onKeyDown={() => changeRouteTo(routes.PRAYER_LIST)}
@@ -121,6 +142,26 @@ console.log(route)
             </ListItemIcon>
             <ListItemText primary={"Prayer List"} />
           </ListItem>
+
+          <Divider />
+
+          <Link
+            href={`mailto:${configs.SUPPORT_EMAIL}?subject=[Help]: Parchment Notebook`}
+            underline="none"
+            color="textPrimary"
+            target="_blank"
+            rel="noopener"
+          >
+            <ListItem button>
+              <ListItemIcon classes={{ root: classes.listItemIconRoot }}>
+                <ContactSupportIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Contact Support"} />
+              <ListItemSecondaryAction>
+                <OpenInNewIcon />
+              </ListItemSecondaryAction>
+            </ListItem>
+          </Link>
         </List>
       </div>
     </Drawer>
