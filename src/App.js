@@ -6,7 +6,7 @@ import { history } from './configureStore';
 import customMuiTheme from './customMuiTheme';
 import Home from './components/Home';
 import Welcome from './components/Welcome';
-import Prayer from './components/Prayer';
+import Prayers from './components/Prayers';
 import PrayerList from './components/PrayerList';
 import PrivateRoute from './containers/PrivateRoute';
 import ErrorWrapper from './containers/ErrorWrapper';
@@ -26,7 +26,7 @@ function App() {
             <PrivateRoute
               exact
               path="/prayers"
-              component={Prayer}
+              component={Prayers}
             />
             <PrivateRoute
               path="/prayerlist"

@@ -37,7 +37,6 @@ const styles = theme => ({
 const Header = (props) => {
   const { classes, sidebar, dispatch } = props;
 
-  console.log("sidebar", sidebar)
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar())
   }

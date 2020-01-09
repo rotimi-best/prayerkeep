@@ -7,8 +7,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-
-const grey = '#5f6368';
+import colors from '../constants/colors';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -41,6 +40,9 @@ const styles = theme => ({
     textAlign: 'center',
   },
   userStatsCaption: {
+    // fontFamily: `"Lato script=all rev=1"`,
+    fontStyle: 'bold',
+    color: colors.grey,
     fontSize: 13
   },
   divider: {
@@ -53,7 +55,7 @@ const styles = theme => ({
     fontStyle: 'italic',
   },
   bibleVerse: {
-    color: grey,
+    color: colors.grey,
   }
 });
 
