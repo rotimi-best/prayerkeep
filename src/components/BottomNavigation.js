@@ -8,6 +8,7 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import RestoreIcon from "@material-ui/icons/Restore";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
+import routes from '../constants/routes';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -18,7 +19,7 @@ const styles = theme => ({
   }
 });
 
-const navigation = ["/", "/prayers", "/prayerlist"];
+const navigation = Object.keys(routes).map(routeKey => routes[routeKey]);
 const SimpleBottomNavigation = props => {
   const { classes, dispatch } = props;
   const [value, setValue] = React.useState(0);

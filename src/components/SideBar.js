@@ -18,14 +18,10 @@ import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
 import { toggleSideBar } from '../actions/sidebarAction';
+import routes from '../constants/routes';
 import configs from '../configs';
 
 const drawerWidth = 250;
-const routes = {
-  HOME: '/',
-  PRAYERS: '/prayers',
-  PRAYER_LIST: '/prayerlist',
-}
 
 const styles = theme => ({
   drawer: {
@@ -128,19 +124,19 @@ const SideBar = props => {
             <ListItemText primary={"Prayers"} />
           </ListItem>
           <ListItem
-            selected={route === routes.PRAYER_LIST}
+            selected={route === routes.COLLECTION}
             button
             classes={{
               selected: classes.listItemSelected,
               gutters: classes.gutters
             }}
-            onClick={() => changeRouteTo(routes.PRAYER_LIST)}
-            onKeyDown={() => changeRouteTo(routes.PRAYER_LIST)}
+            onClick={() => changeRouteTo(routes.COLLECTION)}
+            onKeyDown={() => changeRouteTo(routes.COLLECTION)}
           >
             <ListItemIcon classes={{ root: classes.listItemIconRoot }}>
               <QueueIcon />
             </ListItemIcon>
-            <ListItemText primary={"Prayer List"} />
+            <ListItemText primary={"Collection"} />
           </ListItem>
 
           <Divider />
