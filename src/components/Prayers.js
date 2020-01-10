@@ -6,10 +6,14 @@ import { connect } from 'react-redux';
 import Prayer from './Prayer';
 
 const styles = theme => ({
+  containerRoot: {
+    paddingLeft: 5,
+    paddingRight: 5
+  },
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    paddingTop: theme.spacing(3),
   },
 });
 
@@ -114,8 +118,14 @@ const Prayers = props => {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
-      <Container style={{ padding: 'unset' }} maxWidth="sm">
+      <Container
+        maxWidth="sm"
+        classes={{
+          root: classes.containerRoot
+        }}
+      >
         <CssBaseline />
+        {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
         {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
       </Container>
     </main>

@@ -11,6 +11,10 @@ const styles = theme => ({
     flexGrow: 1,
     padding: `${theme.spacing(3)}px 0`
   },
+  containerRoot: {
+    paddingLeft: 5,
+    paddingRight: 5
+  },
   userStatsRoot: {
     display: "flex",
     justifyContent: "center",
@@ -61,7 +65,12 @@ const Home = props => {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
-      <Container maxWidth="sm">
+      <Container
+        maxWidth="sm"
+        classes={{
+          root: classes.containerRoot
+        }}
+      >
         <Paper variant="outlined" className={classes.userStatsRoot}>
           <Typography
             variant="h6"

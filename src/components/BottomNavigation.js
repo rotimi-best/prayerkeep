@@ -10,9 +10,10 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const styles = theme => ({
-  root: {
+  toolbar: theme.mixins.toolbar,
+  bottomNavigation: {
     width: "100%",
-    position: "absolute",
+    position: "fixed",
     bottom: 0
   }
 });
@@ -30,19 +31,22 @@ const SimpleBottomNavigation = props => {
     return null;
   }
   return (
-    <BottomNavigation
-      value={value}
-      onChange={(event, newValue) => {
-        dispatch(push(navigation[newValue]));
-        setValue(newValue);
-      }}
-      showLabels
-      className={classes.root}
-    >
-      <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-      <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-    </BottomNavigation>
+      <>
+        <div className={classes.toolbar} />
+        <BottomNavigation
+          value={value}
+          onChange={(event, newValue) => {
+            dispatch(push(navigation[newValue]));
+            setValue(newValue);
+          }}
+          showLabels
+          className={classes.bottomNavigation}
+        >
+          <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+      </BottomNavigation>
+    </>
   );
 };
 
