@@ -4,6 +4,7 @@ import { Container, CssBaseline } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Prayer from './Prayer';
+import NewPrayerButton from './NewPrayerButton';
 
 const styles = theme => ({
   containerRoot: {
@@ -43,7 +44,7 @@ const prayers = [
       streak: 0
     },
     lastDatePrayed: Date.now(),
-    prayerList: [
+    collection: [
       {
         key: 1,
         title: "Spiritual",
@@ -75,7 +76,7 @@ const prayers = [
     creator: {},
     owner: {},
     lastDatePrayed: Date.now(),
-    prayerList: [
+    collection: [
       {
         key: 1,
         title: "Spiritual",
@@ -99,7 +100,7 @@ const prayers = [
     creator: {},
     owner: {},
     lastDatePrayed: Date.now(),
-    prayerList: [
+    collection: [
       {
         key: 3,
         title: "Relationship",
@@ -125,6 +126,7 @@ const Prayers = props => {
         }}
       >
         <CssBaseline />
+        <NewPrayerButton />
         {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
         {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
       </Container>

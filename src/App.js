@@ -11,6 +11,7 @@ import Collection from "./components/Collection";
 import PrivateRoute from "./containers/PrivateRoute";
 import ErrorWrapper from "./containers/ErrorWrapper";
 import Header from "./components/Header";
+import TriggerModalFromUrl from "./components/TriggerModalFromUrl";
 import BottomNavigation from "./components/BottomNavigation";
 
 function App() {
@@ -18,13 +19,14 @@ function App() {
     <ErrorWrapper>
       <MuiThemeProvider theme={customMuiTheme}>
         <ConnectedRouter history={history}>
+          <TriggerModalFromUrl />
           <Header />
           <Switch>
             <Route exact path="/welcome" component={Welcome} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/prayers" component={Prayers} />
             <PrivateRoute path="/collection" component={Collection} />
-            <Redirect to="/welcome" />
+            <Redirect to="/" />
           </Switch>
           <BottomNavigation />
         </ConnectedRouter>

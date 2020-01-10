@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { push } from "connected-react-router";
 import { connect } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -21,9 +22,10 @@ const styles = theme => ({
 });
 
 const navigation = Object.keys(routes).map(routeKey => routes[routeKey]);
+
 const SimpleBottomNavigation = props => {
-  const { classes, dispatch } = props;
-  const [value, setValue] = React.useState(0);
+  const { classes, dispatch, route } = props;
+  const [value, setValue] = React.useState(navigation.findIndex(navRoute => navRoute === route));
 
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
@@ -52,4 +54,13 @@ const SimpleBottomNavigation = props => {
   );
 };
 
-export default connect()(withStyles(styles)(SimpleBottomNavigation));
+SimpleBottomNavigation.propTypes = {
+  classes: PropTypes.object.isRequired,
+  route: PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => ({
+  route: state.router.location.pathname,
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(SimpleBottomNavigation));

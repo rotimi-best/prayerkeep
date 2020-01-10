@@ -12,7 +12,7 @@ const styles = theme => ({
   },
 });
 
-const PrayerList = props => {
+const Collection = props => {
   const { classes } = props;
 
   return (
@@ -27,7 +27,7 @@ const PrayerList = props => {
   )
 }
 
-PrayerList.propTypes = {
+Collection.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -35,4 +35,4 @@ const mapStateToProps = state => ({
   state: state
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(PrayerList));
+export default connect(mapStateToProps)(withStyles(styles)(Collection));

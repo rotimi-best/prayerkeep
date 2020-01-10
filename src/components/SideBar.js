@@ -73,7 +73,10 @@ const SideBar = props => {
   }
 
   const changeRouteTo = (routeName) => {
-    handleToggleSideBar()
+    if (!isDesktopOrLaptop) {
+      handleToggleSideBar()
+    }
+
     dispatch(push(routeName))
   }
 
@@ -106,7 +109,7 @@ const SideBar = props => {
             onKeyDown={() => changeRouteTo(routes.HOME)}
           >
             <ListItemIcon classes={{ root: classes.listItemIconRoot }}><HomeIcon /></ListItemIcon>
-            <ListItemText classes={{ root: classes.listItemTextRoot }} primary={"Feed"} />
+            <ListItemText classes={{ root: classes.listItemTextRoot }} primary={"Home"} />
           </ListItem>
           <ListItem
             selected={route === routes.PRAYERS}
@@ -166,6 +169,8 @@ const SideBar = props => {
 
 SideBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  sidebar: PropTypes.object.isRequired,
+  route: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
