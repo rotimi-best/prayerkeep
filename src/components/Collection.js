@@ -20,7 +20,7 @@ const PrayerList = props => {
       <div className={classes.toolbar} />
       <Container maxWidth="sm">
         <Typography component="h2">
-          PrayerList
+          Collection
         </Typography>
       </Container>
     </main>
