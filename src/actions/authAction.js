@@ -1,47 +1,40 @@
-// import axios from 'axios';
+import {
+  USER_LOGIN_TOGGLE,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_FAILED
+} from "../constants/actionsTypes";
+import { push } from "connected-react-router";
+import { authenticateUser } from "../services/authService";
+import routes from "../constants/routes"
 
-import { LOG_IN, LOG_OUT } from "../actions/types";
-import { ERRORS } from "../helpers/constants";
-import { postData } from "../modules";
+export const logIn = userParams => async dispatch => {
+  dispatch({ type: USER_LOGIN_REQUEST });
 
-export const logIn = (formData) => async dispatch => {
-  const response = await postData('/token', JSON.stringify(formData));
+  const { response: { data } } = await authenticateUser(userParams);
+  console.log("data", data)
 
-  if (response.success) {
-    const accessToken = response.token.access_token;
-    const now = new Date();
-    const expiresIn = now.setSeconds(now.getSeconds() + response.token.expires_in);
+  if (data && data.success) {
+    localStorage.setItem('user', JSON.stringify(data.user));
 
-    localStorage.setItem('access_token', accessToken);
-    localStorage.setItem('expires_in', expiresIn);
     dispatch({
-      type: LOG_IN,
-      payload: {
-        access_token: accessToken,
-        expires_in: expiresIn,
-        error: '',
-      }
-    }) 
+      type: USER_LOGIN_TOGGLE,
+      payload: data.user
+    })
+
+    dispatch(push(routes.HOME))
   } else {
     dispatch({
-      type: LOG_IN,
-      payload: {
-        error: ERRORS.AUTH_FAILED,
-      }
+      type: USER_LOGIN_FAILED,
+      payload: null
     });
   }
 }
 
 export const logOut = () => {
-  localStorage.setItem('access_token', '');
-  localStorage.setItem('expires_in', '');
+  localStorage.setItem('user', '');
 
   return {
-    type: LOG_OUT,
-    payload: {
-      access_token: '',
-      expires_in: '',
-      error: '',
-    }
+    type: USER_LOGIN_TOGGLE,
+    payload: null
   }
 };

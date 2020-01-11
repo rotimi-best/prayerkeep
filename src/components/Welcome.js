@@ -1,12 +1,22 @@
 import React from 'react';
 import FacebookLogin from 'react-facebook-login';
+import { connect } from "react-redux";
 import configs from '../configs';
 import logo from '../logo.svg';
+import { logIn } from '../actions/authAction';
 import '../styles/Welcome.css';
 
-const Welcome = () => {
+const Welcome = ({ dispatch }) => {
   const responseFacebook = (res) => {
     console.log('res', res);
+    const { name = '', picture, userID, email = '' } = res;
+
+    dispatch(logIn({
+      email,
+      name,
+      pictureUrl: picture.data.url,
+      userId: userID,
+    }))
   }
 
   return (
@@ -26,4 +36,4 @@ const Welcome = () => {
   )
 }
 
-export default Welcome;
+export default connect()(Welcome);

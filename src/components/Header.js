@@ -36,8 +36,10 @@ const styles = theme => ({
 });
 
 const Header = props => {
-  const { classes, sidebar, dispatch, route } = props;
-  const loggedIn = true;
+  const { classes, sidebar, dispatch, authentication } = props;
+  const { isLoggedIn, user } = authentication;
+  console.log("user", user)
+
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
   };
@@ -46,7 +48,7 @@ const Header = props => {
     query: "(min-width: 1224px)"
   });
 
-  if (!loggedIn) {
+  if (!isLoggedIn) {
     return null;
   }
 
@@ -89,6 +91,7 @@ Header.propTypes = {
 
 const mapStateToProps = state => ({
   route: state.router.location.pathname,
+  authentication: state.authentication,
   sidebar: state.sidebar
 });
 
