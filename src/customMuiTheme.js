@@ -6,7 +6,8 @@ const customMuiTheme = createMuiTheme({
         // fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'",
         fontFamily: `'Lato',Helvetica,Arial,sans-serif`,
         h6: {
-          color: '#5f6368'
+          color: '#5f6368',
+          fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif;`
         }
         // "fontSize": 14,
         // "fontWeightLight": 300,

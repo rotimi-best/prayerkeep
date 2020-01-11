@@ -15,6 +15,10 @@ const TriggerModalFromUrl = props => {
     dispatch(
       togglePrayerModal(prayerModal === "open", prayerId)
     )
+  } else if (!prayerModal && modalListener.prayerModal.open) {
+    dispatch(
+      togglePrayerModal(false)
+    )
   }
 
   console.log("modalListener", modalListener)
