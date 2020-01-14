@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {
+  useState,
+  useRef,
+  forwardRef,
+  useEffect
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
+import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
@@ -28,7 +34,6 @@ import Select from '@material-ui/core/Select';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from '@date-io/date-fns';
 
 const styles = theme => ({
   root: {
@@ -57,10 +62,12 @@ const styles = theme => ({
   },
 });
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
+// TODO: componentDidMount get the categories of that user
 const PrayerModal = props => {
   const {
     modalListener: {
@@ -69,20 +76,25 @@ const PrayerModal = props => {
     dispatch,
     classes
   } = props;
-  const inputLabel = React.useRef(null);
+  const inputLabel = useRef(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [collection, setCollection] = React.useState(['']);
-  const [answeredPrayer, setAnsweredPrayer] = React.useState(true);
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [collection, setCollection] = useState(['']);
+  const [answeredPrayer, setAnsweredPrayer] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  useEffect(() => {
+
+  },[])
 
   const handleClose = () => {
     dispatch(push('/prayers'))
   };
 
-  const handleCollection = collection => e => {
-    console.log('eveent', collection, e)
-    const newCollection = e.target.checked ? [...collection, collection] : collection.filter(c => c !== collection);
+  const handleCollection = collectionName => e => {
+    const newCollection = e.target.checked
+      ? [...collection, collectionName]
+      : collection.filter(c => c !== collectionName);
     setCollection(newCollection)
   }
 
@@ -147,12 +159,12 @@ const PrayerModal = props => {
             <ExpansionPanelDetails>
             <FormControl component="fieldset" className={classes.formControl}>
               <FormGroup>
-                {["Spiritual", "Financial", "Relationship", "Academics"].map(collection =>
+                {["Spiritual", "Financial", "Relationship", "Academics"].map(collectionName =>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={collection.includes(collection)} onChange={handleCollection(collection)} value={collection} />
+                      <Checkbox checked={collection.includes(collectionName)} onChange={handleCollection(collectionName)} value={collectionName} />
                     }
-                    label={collection}
+                    label={collectionName}
                   />
                 )}
               </FormGroup>
@@ -172,7 +184,7 @@ const PrayerModal = props => {
           <TextField
             id="your-prayer-request-note"
             label="Add a note"
-            placeholder="Any extra details?"
+            placeholder="Any testimony, word from God or scenerio related to this prayer?"
             variant="outlined"
             className={classes.margin}
             rows={6}
@@ -247,7 +259,8 @@ PrayerModal.propTypes = {
 
 const mapStateToProps = state => ({
   search: state.router.location.search,
-  modalListener: state.modalListener
+  modalListener: state.modalListener,
+  collection: state.collection
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(PrayerModal));

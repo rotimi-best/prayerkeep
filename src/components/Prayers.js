@@ -42,7 +42,7 @@ const Prayers = props => {
 
 Prayers.propTypes = {
   classes: PropTypes.object.isRequired,
-  prayers: PropTypes.object.isRequired,
+  prayers: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => ({

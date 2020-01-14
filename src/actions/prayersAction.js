@@ -63,7 +63,7 @@ export const updatePrayer = (prayerId, prayerParams) => async dispatch => {
   });
 };
 
-export const addPrayer = (prayerId, prayerParams, prayers) => async dispatch => {
+export const addPrayer = (prayerId, prayerParams, prevPrayers) => async dispatch => {
   dispatch({ type: PRAYER_ADD_REQUEST });
 
   const {
@@ -82,7 +82,7 @@ export const addPrayer = (prayerId, prayerParams, prayers) => async dispatch => 
 
   dispatch({
     type: PRAYER_ADD_SUCCESS,
-    payload: [prayer, ...prayers],
+    payload: [prayer, ...prevPrayers],
   });
 };
 

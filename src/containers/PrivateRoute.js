@@ -3,11 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 
-const PrivateRoute = ({ authentication, component: Component, ...rest }) => {
-  const { isLoggedIn } = authentication;
-
-  console.log("authentication", authentication);
-
+const PrivateRoute = ({ isLoggedIn, component: Component, ...rest }) => {
   const componentToRender = props =>
     isLoggedIn ? <Component {...props} /> : <Redirect to="/welcome" />;
 
@@ -19,8 +15,8 @@ PrivateRoute.propTypes = {
   path: PropTypes.string.isRequired
 };
 
-const mapStateToProps = state => ({
-  authentication: state.authentication
+const mapStateToProps = ({ authentication }) => ({
+  isLoggedIn: authentication.isLoggedIn
 });
 
 export default connect(mapStateToProps)(PrivateRoute);

@@ -127,19 +127,19 @@ const SideBar = props => {
             <ListItemText primary={"Prayers"} />
           </ListItem>
           <ListItem
-            selected={route === routes.COLLECTION}
+            selected={route === routes.COLLECTIONS}
             button
             classes={{
               selected: classes.listItemSelected,
               gutters: classes.gutters
             }}
-            onClick={() => changeRouteTo(routes.COLLECTION)}
-            onKeyDown={() => changeRouteTo(routes.COLLECTION)}
+            onClick={() => changeRouteTo(routes.COLLECTIONS)}
+            onKeyDown={() => changeRouteTo(routes.COLLECTIONS)}
           >
             <ListItemIcon classes={{ root: classes.listItemIconRoot }}>
               <QueueIcon />
             </ListItemIcon>
-            <ListItemText primary={"Collection"} />
+            <ListItemText primary={"Collections"} />
           </ListItem>
 
           <Divider />

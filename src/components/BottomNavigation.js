@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import { push } from "connected-react-router";
 import { connect } from "react-redux";
@@ -25,7 +25,7 @@ const navigation = Object.keys(routes).map(routeKey => routes[routeKey]);
 
 const SimpleBottomNavigation = props => {
   const { classes, dispatch, route } = props;
-  const [value, setValue] = React.useState(navigation.findIndex(navRoute => navRoute === route));
+  const [value, setValue] = useState(navigation.findIndex(navRoute => navRoute === route));
 
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
@@ -48,7 +48,7 @@ const SimpleBottomNavigation = props => {
         >
           <BottomNavigationAction label="Home" icon={<HomeIcon />} />
           <BottomNavigationAction label="Prayers" icon={<EventNoteOutlinedIcon />} />
-          <BottomNavigationAction label="Collection" icon={<QueueIcon />} />
+          <BottomNavigationAction label="Collections" icon={<QueueIcon />} />
       </BottomNavigation>
     </>
   );

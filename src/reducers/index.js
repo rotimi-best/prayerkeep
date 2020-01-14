@@ -5,13 +5,15 @@ import authenticationReducer from './authenticationReducer';
 import sidebarReducer from './sidebarReducer';
 import modalListenerReducer from './modalListenerReducer';
 import prayersReducer from './prayersReducer';
+import collectionsReducer from './collectionsReducer';
 
 const createRootReducer = history => combineReducers({
   router: connectRouter(history),
   authentication: authenticationReducer,
   sidebar: sidebarReducer,
   modalListener: modalListenerReducer,
-  prayers: prayersReducer
+  prayers: prayersReducer,
+  collections: collectionsReducer
 });
 
 export default createRootReducer;
