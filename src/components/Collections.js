@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
+import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import FolderIcon from '@material-ui/icons/Folder';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
+import Fab from '@material-ui/core/Fab';
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import CollectionBox from './CollectionBox';
+import NewCollectionModal from './NewCollectionModal';
+
 import { getCollections } from '../actions/collectionsAction';
 
 const styles = theme => ({
@@ -14,40 +18,29 @@ const styles = theme => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  collectionHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15
+  },
   collections: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))',
     gridGap: '1rem'
-  }
+  },
+  collectionBoxRoot: {
+    display: 'flex',
+    '&:hover': {
+      cursor: 'pointer'
+    },
+    '& > *': {
+      margin: theme.spacing(2),
+    },
+    width: '100%',
+  },
 });
 
-const CollectionBox = ({ title }) => {
-  const useStyles = makeStyles(theme => ({
-    root: {
-      display: 'flex',
-      '& > *': {
-        margin: theme.spacing(2),
-      },
-      width: '100%',
-  },
-  }));
-
-  const classes = useStyles();
-
-  return (
-    <Paper className={classes.root} variant="outlined">
-      <FolderIcon />
-      <span className>
-        <Typography variant="body2" color="textPrimary" component="p">
-          {title}
-        </Typography>
-        <Typography variant="caption" color="textSecondary" component="p">
-          {title}
-        </Typography>
-      </span>
-    </Paper>
-  )
-}
 
 const Collections = props => {
   const {
@@ -55,37 +48,57 @@ const Collections = props => {
     userId,
     collections,
     dispatch,
-    rootClassName
   } = props;
   const { allCollection, isLoading } = collections;
+  const [openNewCollection, setOpenNewCollection] = useState(false);
 
   useEffect(() => {
     dispatch(getCollections(userId))
   }, []);
 
-  console.log("rootClassName", rootClassName)
+  const toggleAddNewCollection = e => {
+    setOpenNewCollection(!openNewCollection);
+  }
 
   return (
     <main className={classes.root}>
       <div className={classes.toolbar} />
       <Container maxWidth="md">
-        <Typography variant="h4">
-          Collections
-        </Typography>
-        <div className={classes.collections}>
-          {isLoading
-            ? "Loading.........."
-            : allCollection.map(({ title }) => (
-              <>
-                <CollectionBox key={title} title={title} />
-                <CollectionBox key={title} title={title} />
-                <CollectionBox key={title} title={title} />
-                <CollectionBox key={title} title={title} />
-                <CollectionBox key={title} title={title} />
-              </>
-            ))}
-        </div>
+        <Grid container>
+          <Grid
+            item
+            xs={12}
+            className={classes.collectionHeader}
+          >
+            <Typography variant="h4">
+              Collections
+            </Typography>
+            <Fab
+              color="primary"
+              aria-label="new-collection"
+              onClick={toggleAddNewCollection}
+            >
+              <AddIcon />
+            </Fab>
+          </Grid>
+          <Grid item xs={12} className={classes.collections}>
+            {isLoading
+              ? "Loading.........."
+              : allCollection.map(({ _id, title, prayers }) => (
+                  <CollectionBox
+                    key={_id}
+                    title={title}
+                    prayers={prayers}
+                    collectionBoxRoot={classes.collectionBoxRoot}
+                  />
+              ))}
+          </Grid>
+        </Grid>
       </Container>
+      <NewCollectionModal
+        openModal={openNewCollection}
+        toggleAddNewCollection={toggleAddNewCollection}
+      />
     </main>
   )
 }

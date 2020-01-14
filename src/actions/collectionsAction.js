@@ -40,13 +40,13 @@ export const getCollections = userId => async dispatch => {
 };
 
 // TODO: This is not finished
-export const updateCollection = (collectionId, collectionParams) => async dispatch => {
+export const updateCollection = (collectionParams) => async dispatch => {
   dispatch({ type: COLLECTION_UPDATE_REQUEST });
 
   const {
     response = {},
     error = null
-  } = await updateCollectionService(collectionId, collectionParams);
+  } = await updateCollectionService(collectionParams);
 
   if (error) {
     return dispatch({
@@ -63,13 +63,13 @@ export const updateCollection = (collectionId, collectionParams) => async dispat
   });
 };
 
-export const addCollection = (collectionId, collectionParams, prevCollections) => async dispatch => {
+export const addCollection = (collectionParams, prevCollections) => async dispatch => {
   dispatch({ type: COLLECTION_ADD_REQUEST });
 
   const {
     response = {},
     error = null
-  } = await addCollectionService(collectionId, collectionParams);
+  } = await addCollectionService(collectionParams);
 
   if (error) {
     return dispatch({
