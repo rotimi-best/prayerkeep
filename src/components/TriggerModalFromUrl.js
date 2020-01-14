@@ -21,7 +21,6 @@ const TriggerModalFromUrl = props => {
     )
   }
 
-  console.log("modalListener", modalListener)
   return <></>;
 }
 

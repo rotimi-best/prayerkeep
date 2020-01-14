@@ -6,9 +6,9 @@ import { useMediaQuery } from "react-responsive";
 import { withStyles } from "@material-ui/core/styles";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import QueueIcon from '@material-ui/icons/Queue';
-import EventNoteOutlinedIcon from '@material-ui/icons/EventNote';
-import HomeIcon from '@material-ui/icons/Home'
+import HomeIcon from '@material-ui/icons/Home';
+import NotesIcon from '@material-ui/icons/Notes';
+import FolderIcon from '@material-ui/icons/Folder';
 import routes from '../constants/routes';
 
 const styles = theme => ({
@@ -47,8 +47,8 @@ const SimpleBottomNavigation = props => {
           className={classes.bottomNavigation}
         >
           <BottomNavigationAction label="Home" icon={<HomeIcon />} />
-          <BottomNavigationAction label="Prayers" icon={<EventNoteOutlinedIcon />} />
-          <BottomNavigationAction label="Collections" icon={<QueueIcon />} />
+          <BottomNavigationAction label="Prayers" icon={<NotesIcon />} />
+          <BottomNavigationAction label="Collections" icon={<FolderIcon />} />
       </BottomNavigation>
     </>
   );

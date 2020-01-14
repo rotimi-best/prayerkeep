@@ -13,9 +13,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
-import QueueIcon from '@material-ui/icons/Queue';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
+import NotesIcon from '@material-ui/icons/Notes';
+import FolderIcon from '@material-ui/icons/Folder';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
 import { toggleSideBar } from '../actions/sidebarAction';
 import routes from '../constants/routes';
@@ -51,19 +51,25 @@ const styles = theme => ({
   },
   gutters: {
     marginBottom: 10
+  },
+  withWidth: {
+    width: drawerWidth,
+  },
+  withoutWidth: {
+    width: 0,
   }
 });
 
 const SideBar = props => {
-  const { classes, sidebar, dispatch, route } = props;
+  const { classes, openSidebar, dispatch, route } = props;
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   })
 
   useEffect(() => {
-    if (isDesktopOrLaptop && !sidebar.open) {
+    if (isDesktopOrLaptop && !openSidebar) {
       dispatch(toggleSideBar())
-    } else if (!isDesktopOrLaptop && sidebar.open) {
+    } else if (!isDesktopOrLaptop && openSidebar) {
       dispatch(toggleSideBar())
     }
   }, [])
@@ -82,12 +88,13 @@ const SideBar = props => {
 
   const drawerClasses = {
     paper: classes.drawerPaper,
-    paperAnchorDockedLeft: classes.mobilePaperAnchorDockedLeft
+    paperAnchorDockedLeft: classes.mobilePaperAnchorDockedLeft,
+    root: openSidebar ? classes.withWidth : classes.withoutWidth
   }
 
   return (
     <Drawer
-      open={sidebar.open}
+      open={openSidebar}
       classes={drawerClasses}
       variant="persistent"
       onClose={handleToggleSideBar}
@@ -122,7 +129,7 @@ const SideBar = props => {
             onKeyDown={() => changeRouteTo(routes.PRAYERS)}
           >
             <ListItemIcon classes={{ root: classes.listItemIconRoot }}>
-              <EventNoteOutlinedIcon />
+              <NotesIcon />
             </ListItemIcon>
             <ListItemText primary={"Prayers"} />
           </ListItem>
@@ -137,7 +144,7 @@ const SideBar = props => {
             onKeyDown={() => changeRouteTo(routes.COLLECTIONS)}
           >
             <ListItemIcon classes={{ root: classes.listItemIconRoot }}>
-              <QueueIcon />
+              <FolderIcon />
             </ListItemIcon>
             <ListItemText primary={"Collections"} />
           </ListItem>
@@ -169,12 +176,12 @@ const SideBar = props => {
 
 SideBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  sidebar: PropTypes.object.isRequired,
+  openSidebar: PropTypes.bool.isRequired,
   route: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  sidebar: state.sidebar,
+  // sidebar: state.sidebar,
   route: state.router.location.pathname,
 })
 

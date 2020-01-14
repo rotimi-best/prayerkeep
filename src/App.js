@@ -1,5 +1,6 @@
 import React from "react";
 import { MuiThemeProvider } from "@material-ui/core/styles";
+import { useMediaQuery } from "react-responsive";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { history } from "./configureStore";
@@ -15,8 +16,10 @@ import TriggerModalFromUrl from "./components/TriggerModalFromUrl";
 import BottomNavigation from "./components/BottomNavigation";
 
 function App() {
+
+
   return (
-    <ErrorWrapper>
+    <ErrorWrapper >
       <MuiThemeProvider theme={customMuiTheme}>
         <ConnectedRouter history={history}>
           <TriggerModalFromUrl />

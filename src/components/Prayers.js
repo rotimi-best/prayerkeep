@@ -26,7 +26,7 @@ const Prayers = props => {
     <main className={classes.content}>
       <div className={classes.toolbar} />
       <Container
-        maxWidth="sm"
+        maxWidth="md"
         classes={{
           root: classes.containerRoot
         }}

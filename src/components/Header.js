@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useMediaQuery } from "react-responsive";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -9,7 +8,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-import SideBar from "./SideBar";
 import { toggleSideBar } from "../actions/sidebarAction";
 
 const styles = theme => ({
@@ -36,52 +34,46 @@ const styles = theme => ({
 });
 
 const Header = props => {
-  const { classes, sidebar, dispatch, authentication } = props;
-  const { isLoggedIn, user } = authentication;
-  console.log("user", user)
+  const { classes, dispatch, authentication } = props;
+  const { isLoggedIn } = authentication;
 
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
   };
-
-  const isDesktopOrLaptop = useMediaQuery({
-    query: "(min-width: 1224px)"
-  });
 
   if (!isLoggedIn) {
     return null;
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar
-        position="fixed"
-        className={classes.appBar}
-        classes={{
-          colorDefault: classes.colorDefault
-        }}
-        color="default"
-        elevation={0}
-      >
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-            onClick={handleToggleSideBar}
-            onKeyDown={handleToggleSideBar}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            Parchment Notebook
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-      <SideBar isDesktopOrLaptop={isDesktopOrLaptop} />
-    </div>
+      <div className={classes.root}>
+        <AppBar
+          position="fixed"
+          className={classes.appBar}
+          classes={{
+            colorDefault: classes.colorDefault
+          }}
+          color="default"
+          elevation={0}
+        >
+          <Toolbar>
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="menu"
+              onClick={handleToggleSideBar}
+              onKeyDown={handleToggleSideBar}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" className={classes.title}>
+              Parchment Notebook
+            </Typography>
+            <Button color="inherit">Login</Button>
+          </Toolbar>
+        </AppBar>
+      </div>
   );
 };
 
