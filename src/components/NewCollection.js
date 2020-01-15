@@ -11,8 +11,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
 import { DialogTitle } from '@material-ui/core';
 import { addCollection } from '../actions/collectionsAction';
+import AddIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
   dialogPaper: {
@@ -30,12 +32,15 @@ const NewCollectionModal = props => {
   const {
     dispatch,
     classes,
-    openModal,
-    toggleAddNewCollection,
     user,
     collections
   } = props;
   const [newColName, setNewColName] = useState('');
+  const [openNewCollection, setOpenNewCollection] = useState(false);
+
+  const toggleAddNewCollection = e => {
+    setOpenNewCollection(!openNewCollection);
+  }
 
   const handleSave = () => {
     dispatch(
@@ -59,8 +64,16 @@ const NewCollectionModal = props => {
   };
 
   return (
+    <>
+      <Fab
+        color="primary"
+        aria-label="new-collection"
+        onClick={toggleAddNewCollection}
+      >
+        <AddIcon />
+      </Fab>
       <Dialog
-        open={openModal}
+        open={openNewCollection}
         onClose={handleClose}
         aria-labelledby="prayer-request-modal"
         classes={{
@@ -80,6 +93,7 @@ const NewCollectionModal = props => {
         <DialogContent>
           <TextField
             fullWidth
+            autoFocus
             id="create-new-collection"
             placeholder="Collection name"
             type="text"
@@ -93,13 +107,12 @@ const NewCollectionModal = props => {
           </Button>
         </DialogActions>
       </Dialog>
+    </>
   );
 }
 
 NewCollectionModal.propTypes = {
   classes: PropTypes.object.isRequired,
-  toggleAddNewCollection: PropTypes.func.isRequired,
-  openModal: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({

@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Fab from '@material-ui/core/Fab';
 import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import CollectionBox from './CollectionBox';
-import NewCollectionModal from './NewCollectionModal';
+import NewCollection from './NewCollection';
 
 import { getCollections } from '../actions/collectionsAction';
 
@@ -41,7 +39,6 @@ const styles = theme => ({
   },
 });
 
-
 const Collections = props => {
   const {
     classes,
@@ -73,13 +70,7 @@ const Collections = props => {
             <Typography variant="h4">
               Collections
             </Typography>
-            <Fab
-              color="primary"
-              aria-label="new-collection"
-              onClick={toggleAddNewCollection}
-            >
-              <AddIcon />
-            </Fab>
+            <NewCollection />
           </Grid>
           <Grid item xs={12} className={classes.collections}>
             {isLoading
@@ -95,10 +86,6 @@ const Collections = props => {
           </Grid>
         </Grid>
       </Container>
-      <NewCollectionModal
-        openModal={openNewCollection}
-        toggleAddNewCollection={toggleAddNewCollection}
-      />
     </main>
   )
 }

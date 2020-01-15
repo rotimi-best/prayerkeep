@@ -31,9 +31,12 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
+import Chip from '@material-ui/core/Chip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import NewCollection from './NewCollection';
+import { getCollections } from '../actions/collectionsAction';
 
 const styles = theme => ({
   root: {
@@ -49,6 +52,12 @@ const styles = theme => ({
   margin: {
     margin: `${theme.spacing(1)}px 0`,
   },
+  newCollection: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 5
+  },
   expansionRoot: {
     width: '100%',
   },
@@ -60,6 +69,13 @@ const styles = theme => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
+  chipRoot: {
+    margin: 2
+  },
+  choosenCollection: {
+    display: 'flex',
+    marginBottom: 5
+  }
 });
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -73,18 +89,21 @@ const PrayerModal = props => {
     modalListener: {
       prayerModal
     },
+    userId,
     dispatch,
-    classes
+    classes,
+    allCollection
   } = props;
   const inputLabel = useRef(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [collection, setCollection] = useState(['']);
+  const [collection, setCollection] = useState([]);
   const [answeredPrayer, setAnsweredPrayer] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
 
   useEffect(() => {
-
+    dispatch(getCollections(userId))
   },[])
 
   const handleClose = () => {
@@ -147,6 +166,17 @@ const PrayerModal = props => {
             fullWidth
           />
 
+          <div className={classes.newCollection}>
+            <Typography variant="subtitle1">Add to a collection</Typography>
+            <NewCollection />
+          </div>
+          {collection.length
+            ? <div className={classes.choosenCollection}>
+                {collection.map(list =>
+                  <Chip key={list} label={list} classes={{ root: classes.chipRoot }} />
+                )}
+              </div>
+            : null}
           {/* Choose Collection */}
           <ExpansionPanel>
             <ExpansionPanelSummary
@@ -159,12 +189,12 @@ const PrayerModal = props => {
             <ExpansionPanelDetails>
             <FormControl component="fieldset" className={classes.formControl}>
               <FormGroup>
-                {["Spiritual", "Financial", "Relationship", "Academics"].map(collectionName =>
+                {collectionToPickFrom.map(({ edittableByUser, title }) =>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={collection.includes(collectionName)} onChange={handleCollection(collectionName)} value={collectionName} />
+                      <Checkbox checked={collection.includes(title)} onChange={handleCollection(title)} value={title} />
                     }
-                    label={collectionName}
+                    label={title}
                   />
                 )}
               </FormGroup>
@@ -259,8 +289,9 @@ PrayerModal.propTypes = {
 
 const mapStateToProps = state => ({
   search: state.router.location.search,
+  userId: state.authentication.user.userId,
   modalListener: state.modalListener,
-  collection: state.collection
+  allCollection: state.collections.allCollection
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(PrayerModal));
