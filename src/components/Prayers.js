@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Container, CssBaseline } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import Prayer from './Prayer';
 import NewPrayerButton from './NewPrayerButton';
 import PrayerModal from './PrayerModal';
+
+import { getPrayers } from '../actions/prayersAction';
 
 const styles = theme => ({
   containerRoot: {
@@ -20,13 +22,24 @@ const styles = theme => ({
 });
 
 const Prayers = props => {
-  const { classes, prayers } = props;
+  const {
+    classes,
+    prayers,
+    dispatch,
+    userId
+  } = props;
+
+  useEffect(() => {
+    if (!prayers.length) {
+      dispatch(getPrayers(userId))
+    }
+  }, []);
 
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
       <Container
-        maxWidth="md"
+        maxWidth="sm"
         classes={{
           root: classes.containerRoot
         }}
@@ -43,10 +56,12 @@ const Prayers = props => {
 Prayers.propTypes = {
   classes: PropTypes.object.isRequired,
   prayers: PropTypes.array.isRequired,
+  userId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  prayers: state.prayers.allPrayers
+  prayers: state.prayers.allPrayers,
+  userId: state.authentication.user.userId
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(Prayers));

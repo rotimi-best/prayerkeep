@@ -32,7 +32,7 @@ const NewCollectionModal = props => {
   const {
     dispatch,
     classes,
-    user,
+    userId,
     collections
   } = props;
   const [newColName, setNewColName] = useState('');
@@ -45,7 +45,7 @@ const NewCollectionModal = props => {
   const handleSave = () => {
     dispatch(
       addCollection({
-        userId: user.userId,
+        userId: userId,
         title: newColName,
         prayers: []
       }, collections.allCollection)
@@ -60,7 +60,6 @@ const NewCollectionModal = props => {
 
   const handleClose = () => {
     toggleAddNewCollection()
-    // dispatch(push('/collections'))
   };
 
   return (
@@ -116,7 +115,7 @@ NewCollectionModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.authentication.user,
+  userId: state.authentication.user.userId,
   collections: state.collections,
 });
 

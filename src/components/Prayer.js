@@ -19,13 +19,18 @@ const styles = theme => ({
   },
   chipRoot: {
     margin: 2
+  },
+  chipLabel: {
+    color: '#3c4043',
+    fontSize: 11
   }
 });
 
 const Prayer = props => {
   const { classes, prayer, dispatch } = props;
-  const { description, collection, _id } = prayer
-
+  const { description, collections, _id } = prayer;
+  console.log("prayer", prayer)
+  console.log("collections", collections)
   const openPrayer = () => {
     dispatch(push(`/prayers?prayerModal=open&prayerId=${_id}`))
   }
@@ -49,8 +54,16 @@ const Prayer = props => {
           root: classes.cardActionRoot
         }}
       >
-        {collection.map(list =>
-          <Chip key={list.key} onClick={handleClick} label={list.title} classes={{ root: classes.chipRoot }} />
+        {collections.map(list =>
+          <Chip
+            key={list._id}
+            onClick={handleClick}
+            label={list.title}
+            classes={{
+              root: classes.chipRoot,
+              label: classes.chipLabel
+            }}
+          />
         )}
       </CardActions>
     </Card>

@@ -13,6 +13,7 @@ import ErrorWrapper from "./containers/ErrorWrapper";
 import Header from "./components/Header";
 import TriggerModalFromUrl from "./components/TriggerModalFromUrl";
 import BottomNavigation from "./components/BottomNavigation";
+import Alert from "./components/Alert";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Redirect to="/" />
           </Switch>
           <BottomNavigation />
+          <Alert />
         </ConnectedRouter>
       </MuiThemeProvider>
     </ErrorWrapper>

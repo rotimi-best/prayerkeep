@@ -5,7 +5,7 @@ const { API_URL } = configs;
 export const getPrayersService = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/prayer/${userId}`);
-    return { response };
+    return { response: response.data };
   } catch (error) {
     return { error: error.toString() };
   }
@@ -24,7 +24,7 @@ export const addPrayerService = async (prayerParams) => {
       url: `${API_URL}/prayer`
     }
     const response = await axios(requestParams);
-    return { response };
+    return { response: response.data };
   } catch (error) {
     return { error: error.toString() };
   }
@@ -44,7 +44,7 @@ export const updatePrayerService = async (prayerId, prayerParams) => {
     }
 
     const response = await axios(requestParams);
-    return { response };
+    return { response: response.data };
   } catch (error) {
     return { error: error.toString() };
   }

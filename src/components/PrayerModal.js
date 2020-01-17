@@ -37,6 +37,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import NewCollection from './NewCollection';
 import { getCollections } from '../actions/collectionsAction';
+import { addPrayer } from '../actions/prayersAction';
 
 const styles = theme => ({
   root: {
@@ -82,8 +83,9 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const fullDate = new Date();
+const todaysDate = new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate());
 
-// TODO: componentDidMount get the categories of that user
 const PrayerModal = props => {
   const {
     modalListener: {
@@ -97,33 +99,86 @@ const PrayerModal = props => {
   const inputLabel = useRef(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [collection, setCollection] = useState([]);
-  const [answeredPrayer, setAnsweredPrayer] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [prayerRequest, setPrayerRequest] = useState('');
+  const [collections, setCollection] = useState([]);
+  const [answeredPrayer, setAnsweredPrayer] = useState(false);
+  const [note, setNote] = useState('');
+  const [repeat, setRepeat] = useState('never');
+  const [startDate, setStartDate] = useState(todaysDate);
+  const [endDate, setEndDate] = useState(todaysDate);
+  const [errors, setErrors] = useState({
+    prayerRequest: false
+  });
+
   const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
 
   useEffect(() => {
-    dispatch(getCollections(userId))
-  },[])
+    dispatch(getCollections(userId));
+  }, []);
 
   const handleClose = () => {
-    dispatch(push('/prayers'))
+    dispatch(push('/prayers'));
   };
 
-  const handleCollection = collectionName => e => {
+  const handleCollection = e => {
     const newCollection = e.target.checked
-      ? [...collection, collectionName]
-      : collection.filter(c => c !== collectionName);
-    setCollection(newCollection)
-  }
+      ? [...collections, e.target.value]
+      : collections.filter(c => c !== e.target.value);
+
+    setCollection(newCollection);
+  };
 
   const handleAnsweredPrayer = e => {
     setAnsweredPrayer(e.target.checked);
-  }
-
-  const handleDateChange = date => {
-    setSelectedDate(date);
   };
+
+  const handleStartDate = date => {
+    setStartDate(date);
+  };
+
+  const handleEndDate = date => {
+    setEndDate(date);
+  };
+
+  const handlePrayerRequest = e => {
+    setPrayerRequest(e.target.value);
+  };
+
+  const handleRepeat = e => {
+    setRepeat(e.target.value);
+  };
+
+  const handleNote = e => {
+    setNote(e.target.value);
+  };
+
+  // TODO: Continue here to save the prayer
+  const handleSave = e => {
+    if (!prayerRequest.length) {
+      return setErrors({
+        ...errors,
+        prayerRequest: true
+      });
+    }
+
+    const newPrayerRequest = {
+      description: prayerRequest,
+      repeat,
+      note,
+      answered: answeredPrayer,
+      collections,
+      start: new Date(startDate).getTime(),
+      end: new Date(endDate).getTime(),
+      userId,
+    };
+
+    // Send to server
+    dispatch(
+      addPrayer(newPrayerRequest, props.allPrayers)
+    )
+    handleClose();
+  }
 
   return (
       <Dialog
@@ -145,7 +200,7 @@ const PrayerModal = props => {
             </Typography>
             <Button
               color="inherit"
-              onClick={handleClose}
+              onClick={handleSave}
               startIcon={<SaveIcon />}
             >
               Save
@@ -157,11 +212,13 @@ const PrayerModal = props => {
           <TextField
             id="your-prayer-request"
             label="Your Prayer Request"
-            placeholder="Start typing..."
+            placeholder="Start typing your request..."
             variant="outlined"
             className={classes.margin}
-            rows={6}
+            value={prayerRequest}
+            onChange={handlePrayerRequest}
             rowsMax={6}
+            error={errors.prayerRequest}
             multiline
             fullWidth
           />
@@ -170,13 +227,14 @@ const PrayerModal = props => {
             <Typography variant="subtitle1">Add to a collection</Typography>
             <NewCollection />
           </div>
-          {collection.length
+          {collections.length
             ? <div className={classes.choosenCollection}>
-                {collection.map(list =>
+                {collections.map(list =>
                   <Chip key={list} label={list} classes={{ root: classes.chipRoot }} />
                 )}
               </div>
             : null}
+
           {/* Choose Collection */}
           <ExpansionPanel>
             <ExpansionPanelSummary
@@ -189,12 +247,13 @@ const PrayerModal = props => {
             <ExpansionPanelDetails>
             <FormControl component="fieldset" className={classes.formControl}>
               <FormGroup>
-                {collectionToPickFrom.map(({ edittableByUser, title }) =>
+                {collectionToPickFrom.map(({ _id, title }) =>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={collection.includes(title)} onChange={handleCollection(title)} value={title} />
+                      <Checkbox checked={collections.includes(title)} onChange={handleCollection} value={title} />
                     }
                     label={title}
+                    key={_id}
                   />
                 )}
               </FormGroup>
@@ -217,6 +276,8 @@ const PrayerModal = props => {
             placeholder="Any testimony, word from God or scenerio related to this prayer?"
             variant="outlined"
             className={classes.margin}
+            value={note}
+            onChange={handleNote}
             rows={6}
             rowsMax={6}
             multiline
@@ -230,14 +291,15 @@ const PrayerModal = props => {
             </InputLabel>
             <Select
               native
-              // value={state.age}
-              // onChange={handleChange('age')}
+              value={repeat}
+              onChange={handleRepeat}
               labelWidth={60}
               inputProps={{
                 name: 'repeat',
                 id: 'repeat-prayer',
               }}
             >
+              <option value="never">Never</option>
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
@@ -253,8 +315,8 @@ const PrayerModal = props => {
                 id="start-date-picker-dialog"
                 label="Start"
                 format="MM/dd/yyyy"
-                value={selectedDate}
-                onChange={handleDateChange}
+                value={startDate}
+                onChange={handleStartDate}
                 KeyboardButtonProps={{
                   'aria-label': 'Change start date',
                 }}
@@ -267,8 +329,8 @@ const PrayerModal = props => {
                 id="end-date-picker-dialog"
                 label="End"
                 format="MM/dd/yyyy"
-                value={selectedDate}
-                onChange={handleDateChange}
+                value={endDate}
+                onChange={handleEndDate}
                 KeyboardButtonProps={{
                   'aria-label': 'Change end date',
                 }}
@@ -291,6 +353,7 @@ const mapStateToProps = state => ({
   search: state.router.location.search,
   userId: state.authentication.user.userId,
   modalListener: state.modalListener,
+  allPrayers: state.prayers.allPrayers,
   allCollection: state.collections.allCollection
 });
 

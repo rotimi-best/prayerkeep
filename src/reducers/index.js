@@ -5,6 +5,7 @@ import authenticationReducer from './authenticationReducer';
 import sidebarReducer from './sidebarReducer';
 import modalListenerReducer from './modalListenerReducer';
 import prayersReducer from './prayersReducer';
+import alertReducer from './alertReducer';
 import collectionsReducer from './collectionsReducer';
 
 const createRootReducer = history => combineReducers({
@@ -13,7 +14,8 @@ const createRootReducer = history => combineReducers({
   sidebar: sidebarReducer,
   modalListener: modalListenerReducer,
   prayers: prayersReducer,
-  collections: collectionsReducer
+  collections: collectionsReducer,
+  alert: alertReducer
 });
 
 export default createRootReducer;

@@ -10,11 +10,14 @@ import {
   PRAYER_ADD_SUCCESS,
   PRAYER_ADD_ERROR
 } from '../constants/actionsTypes';
+import alerts from '../constants/alert';
 import {
   getPrayersService,
   updatePrayerService,
   addPrayerService
 } from '../services/prayersService';
+import { openAlert } from './alertAction';
+
 
 export const getPrayers = userId => async dispatch => {
   dispatch({ type: PRAYERS_START_FETCHING });
@@ -32,6 +35,7 @@ export const getPrayers = userId => async dispatch => {
   }
 
   const { prayers } = response || {};
+  console.log('get prayer', prayers)
 
   dispatch({
     type: PRAYERS_FETCHED,
@@ -49,6 +53,7 @@ export const updatePrayer = (prayerId, prayerParams) => async dispatch => {
   } = await updatePrayerService(prayerId, prayerParams);
 
   if (error) {
+    dispatch(openAlert(error, alerts.ERROR))
     return dispatch({
       type: PRAYER_UPDATE_ERROR,
       payload: error
@@ -61,18 +66,20 @@ export const updatePrayer = (prayerId, prayerParams) => async dispatch => {
     type: PRAYER_UPDATE_SUCCESS,
     payload: prayer,
   });
+
+  dispatch(openAlert("Successfully updated!!!", alerts.SUCCESS))
 };
 
-export const addPrayer = (prayerId, prayerParams, prevPrayers) => async dispatch => {
+export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
   dispatch({ type: PRAYER_ADD_REQUEST });
 
   const {
     response = {},
     error = null
-  } = await addPrayerService(prayerId, prayerParams);
+  } = await addPrayerService(prayerParams);
 
   if (error) {
-    return dispatch({
+  return dispatch({
       type: PRAYER_ADD_ERROR,
       payload: error
     });
@@ -84,6 +91,8 @@ export const addPrayer = (prayerId, prayerParams, prevPrayers) => async dispatch
     type: PRAYER_ADD_SUCCESS,
     payload: [prayer, ...prevPrayers],
   });
+
+  dispatch(openAlert("Successfully added!!!", alerts.SUCCESS))
 };
 
 export const stopRequest = () => dispatch => dispatch({ type: PRAYERS_STOP_REQUEST });
