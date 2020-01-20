@@ -84,14 +84,23 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const fullDate = new Date();
-const todaysDate = new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate());
+const getPrayer = (prayerId, prayers) => {
+  if (prayerId) {
+    return prayers.filter(p => p._id === prayerId)[0] || null;
+  }
+
+  return null
+}
+
+const todaysDate = defDate => {
+  const fullDate = defDate ? new Date(defDate) : new Date();
+
+  return new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate())
+};
 
 const PrayerModal = props => {
   const {
-    modalListener: {
-      prayerModal
-    },
+    modalListener: { prayerModal },
     userId,
     dispatch,
     classes,
@@ -102,14 +111,15 @@ const PrayerModal = props => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
+  const prayerToOpen = getPrayer(prayerModal.prayerId, prayers.allPrayers);
 
   const [prayerRequest, setPrayerRequest] = useState('');
   const [collections, setCollection] = useState([]);
   const [answeredPrayer, setAnsweredPrayer] = useState(false);
   const [note, setNote] = useState('');
   const [repeat, setRepeat] = useState('never');
-  const [startDate, setStartDate] = useState(todaysDate);
-  const [endDate, setEndDate] = useState(todaysDate);
+  const [startDate, setStartDate] = useState(todaysDate());
+  const [endDate, setEndDate] = useState(todaysDate());
   const [errors, setErrors] = useState({
     prayerRequest: false
   });
@@ -121,6 +131,24 @@ const PrayerModal = props => {
   }, []);
 
   // componentDidUpdate
+  useEffect(() => {
+    console.group('use effect')
+    console.log(prayerModal.open, prayerToOpen, collectionToPickFrom)
+    if (prayerModal.open && prayerToOpen) {
+      setPrayerRequest(prayerToOpen.description);
+      setAnsweredPrayer(prayerToOpen.answered);
+      const edittableByUserCol = prayerToOpen.collections
+        .filter(c => c.edittableByUser)
+        .map(c => c.title)
+      setCollection(edittableByUserCol);
+      setNote(prayerToOpen.note);
+      setRepeat(prayerToOpen.repeat);
+      setStartDate(todaysDate(prayerToOpen.start))
+      setEndDate(todaysDate(prayerToOpen.end));
+      console.log('update the state here')
+    }
+    console.groupEnd('use effect')
+  }, [prayerModal.open, prayerToOpen]);
   useEffect(() => {
     const { error, isAdding, isUpdating } = prayers;
     if (formSubmitted) {
@@ -137,7 +165,8 @@ const PrayerModal = props => {
     setCollection([]);
     setNote('');
     setRepeat('never');
-    setEndDate(todaysDate);
+    setStartDate(todaysDate());
+    setEndDate(todaysDate());
     setFormSubmitted(false);
     setErrors({
       prayerRequest: false
@@ -200,6 +229,7 @@ const PrayerModal = props => {
     dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers))
   }
 
+  console.log(collections)
   return (
       <Dialog
         fullScreen={fullScreen}
