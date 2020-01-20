@@ -8,7 +8,8 @@ import {
   PRAYER_UPDATE_SUCCESS,
   PRAYER_ADD_REQUEST,
   PRAYER_ADD_SUCCESS,
-  PRAYER_ADD_ERROR
+  PRAYER_ADD_ERROR,
+  PRAYER_RESET_ERROR
 } from '../constants/actionsTypes';
 import alerts from '../constants/alert';
 import {
@@ -54,6 +55,7 @@ export const updatePrayer = (prayerId, prayerParams) => async dispatch => {
 
   if (error) {
     dispatch(openAlert(error, alerts.ERROR))
+
     return dispatch({
       type: PRAYER_UPDATE_ERROR,
       payload: error
@@ -79,6 +81,8 @@ export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
   } = await addPrayerService(prayerParams);
 
   if (error) {
+  dispatch(openAlert(`Failed!! ${error}`, alerts.ERROR))
+
   return dispatch({
       type: PRAYER_ADD_ERROR,
       payload: error
@@ -96,3 +100,5 @@ export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
 };
 
 export const stopRequest = () => dispatch => dispatch({ type: PRAYERS_STOP_REQUEST });
+
+export const resetPrayerError = () => dispatch => dispatch({ type: PRAYER_RESET_ERROR });

@@ -17,6 +17,8 @@ import {
 } from '../services/collectionService';
 
 export const getCollections = userId => async dispatch => {
+  console.group("====================Getting collections====================")
+  console.groupEnd("====================Getting collections====================")
   dispatch({ type: COLLECTIONS_START_FETCHING });
 
   const {

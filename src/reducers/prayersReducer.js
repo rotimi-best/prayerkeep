@@ -8,7 +8,8 @@ import {
   PRAYER_ADD_SUCCESS,
   PRAYER_UPDATE_ERROR,
   PRAYER_UPDATE_REQUEST,
-  PRAYER_UPDATE_SUCCESS
+  PRAYER_UPDATE_SUCCESS,
+  PRAYER_RESET_ERROR,
 } from '../constants/actionsTypes';
 
 const initialState = {
@@ -68,6 +69,11 @@ export default function(state = initialState, action) {
         isUpdating: true,
         error: null
       };
+    case PRAYER_RESET_ERROR:
+      return {
+        ...state,
+        error: null,
+      }
     default:
       return state;
   }

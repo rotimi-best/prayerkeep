@@ -38,6 +38,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import NewCollection from './NewCollection';
 import { getCollections } from '../actions/collectionsAction';
 import { addPrayer } from '../actions/prayersAction';
+import usePrevious from "../hooks/usePrevious";
 
 const styles = theme => ({
   root: {
@@ -94,11 +95,13 @@ const PrayerModal = props => {
     userId,
     dispatch,
     classes,
-    allCollection
+    allCollection,
+    prayers
   } = props;
   const inputLabel = useRef(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
 
   const [prayerRequest, setPrayerRequest] = useState('');
   const [collections, setCollection] = useState([]);
@@ -110,15 +113,35 @@ const PrayerModal = props => {
   const [errors, setErrors] = useState({
     prayerRequest: false
   });
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
-
+  // componentDidMount
   useEffect(() => {
-    dispatch(getCollections(userId));
+    dispatch(getCollections(userId))
   }, []);
+
+  // componentDidUpdate
+  useEffect(() => {
+    const { error, isAdding, isUpdating } = prayers;
+    if (formSubmitted) {
+      if (!error && !isAdding && !isUpdating) {
+        handleClose()
+      }
+    }
+  }, [prayers.isAdding, prayers.error, prayers.isUpdating, formSubmitted]);
 
   const handleClose = () => {
     dispatch(push('/prayers'));
+    setPrayerRequest('');
+    setAnsweredPrayer(false);
+    setCollection([]);
+    setNote('');
+    setRepeat('never');
+    setEndDate(todaysDate);
+    setFormSubmitted(false);
+    setErrors({
+      prayerRequest: false
+    });
   };
 
   const handleCollection = e => {
@@ -153,7 +176,6 @@ const PrayerModal = props => {
     setNote(e.target.value);
   };
 
-  // TODO: Continue here to save the prayer
   const handleSave = e => {
     if (!prayerRequest.length) {
       return setErrors({
@@ -174,10 +196,8 @@ const PrayerModal = props => {
     };
 
     // Send to server
-    dispatch(
-      addPrayer(newPrayerRequest, props.allPrayers)
-    )
-    handleClose();
+    setFormSubmitted(true);
+    dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers))
   }
 
   return (
@@ -353,7 +373,7 @@ const mapStateToProps = state => ({
   search: state.router.location.search,
   userId: state.authentication.user.userId,
   modalListener: state.modalListener,
-  allPrayers: state.prayers.allPrayers,
+  prayers: state.prayers,
   allCollection: state.collections.allCollection
 });
 
