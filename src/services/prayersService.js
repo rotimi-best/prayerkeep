@@ -7,7 +7,9 @@ export const getPrayersService = async (userId) => {
     const response = await axios.get(`${API_URL}/prayer/${userId}`);
     return { response: response.data };
   } catch (error) {
-    return { error: error.toString() };
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
   }
 };
 
@@ -48,6 +50,8 @@ export const updatePrayerService = async (prayerId, prayerParams) => {
     const response = await axios(requestParams);
     return { response: response.data };
   } catch (error) {
-    return { error: error.toString() };
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
   }
 };
