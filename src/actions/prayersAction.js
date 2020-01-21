@@ -45,7 +45,7 @@ export const getPrayers = userId => async dispatch => {
 };
 
 // TODO: This is not finished
-export const updatePrayer = (prayerId, prayerParams) => async dispatch => {
+export const updatePrayer = (prayerId, prayerParams, prevPrayers) => async dispatch => {
   dispatch({ type: PRAYER_UPDATE_REQUEST });
 
   const {
@@ -66,7 +66,7 @@ export const updatePrayer = (prayerId, prayerParams) => async dispatch => {
 
   dispatch({
     type: PRAYER_UPDATE_SUCCESS,
-    payload: prayer,
+    payload: prevPrayers.map(p => p._id === prayer._id ? prayer : p)
   });
 
   dispatch(openAlert("Successfully updated!!!", alerts.SUCCESS))

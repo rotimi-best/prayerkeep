@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { push, goBack } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
@@ -37,8 +37,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import NewCollection from './NewCollection';
 import { getCollections } from '../actions/collectionsAction';
-import { addPrayer } from '../actions/prayersAction';
-import usePrevious from "../hooks/usePrevious";
+import { addPrayer, updatePrayer } from '../actions/prayersAction';
 
 const styles = theme => ({
   root: {
@@ -125,15 +124,13 @@ const PrayerModal = props => {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
-  // componentDidMount
+  // componentDidMount - Get collections
   useEffect(() => {
     dispatch(getCollections(userId))
   }, []);
 
-  // componentDidUpdate
+  // componentDidUpdate - Set fields
   useEffect(() => {
-    console.group('use effect')
-    console.log(prayerModal.open, prayerToOpen, collectionToPickFrom)
     if (prayerModal.open && prayerToOpen) {
       setPrayerRequest(prayerToOpen.description);
       setAnsweredPrayer(prayerToOpen.answered);
@@ -145,10 +142,10 @@ const PrayerModal = props => {
       setRepeat(prayerToOpen.repeat);
       setStartDate(todaysDate(prayerToOpen.start))
       setEndDate(todaysDate(prayerToOpen.end));
-      console.log('update the state here')
     }
-    console.groupEnd('use effect')
   }, [prayerModal.open, prayerToOpen]);
+
+  // componentDidUpdate - Close modal
   useEffect(() => {
     const { error, isAdding, isUpdating } = prayers;
     if (formSubmitted) {
@@ -159,7 +156,7 @@ const PrayerModal = props => {
   }, [prayers.isAdding, prayers.error, prayers.isUpdating, formSubmitted]);
 
   const handleClose = () => {
-    dispatch(push('/prayers'));
+    dispatch(goBack());
     setPrayerRequest('');
     setAnsweredPrayer(false);
     setCollection([]);
@@ -226,10 +223,11 @@ const PrayerModal = props => {
 
     // Send to server
     setFormSubmitted(true);
-    dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers))
+    if (prayerToOpen) {
+      dispatch(updatePrayer(prayerToOpen._id, newPrayerRequest, props.prayers.allPrayers))
+    } else dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers))
   }
 
-  console.log(collections)
   return (
       <Dialog
         fullScreen={fullScreen}

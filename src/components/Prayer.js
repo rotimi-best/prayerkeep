@@ -29,8 +29,7 @@ const styles = theme => ({
 const Prayer = props => {
   const { classes, prayer, dispatch } = props;
   const { description, collections, _id } = prayer;
-  console.log("prayer", prayer)
-  console.log("collections", collections)
+
   const openPrayer = () => {
     dispatch(push(`/prayers?prayerModal=open&prayerId=${_id}`))
   }

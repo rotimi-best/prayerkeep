@@ -12,13 +12,9 @@ const TriggerModalFromUrl = props => {
   } = queryString.parse(search);
 
   if (prayerModal && !modalListener.prayerModal.open) {
-    dispatch(
-      togglePrayerModal(prayerModal === "open", prayerId)
-    )
+    dispatch(togglePrayerModal(prayerModal === "open", prayerId))
   } else if (!prayerModal && modalListener.prayerModal.open) {
-    dispatch(
-      togglePrayerModal(false)
-    )
+    dispatch(togglePrayerModal(false))
   }
 
   return <></>;
