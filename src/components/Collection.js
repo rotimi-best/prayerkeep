@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Prayer from './Prayer';
+import CollectionTitleModal from './CollectionTitleModal';
 
 import { getCollections } from '../actions/collectionsAction';
 import { getDateCreated } from '../helpers';
@@ -14,6 +15,12 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(3),
+  },
+  collectionHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15
   }
 });
 
@@ -43,7 +50,7 @@ const Collection = props => {
     return null;
   }
 
-  const { title, creator, prayers, createdAt } = collection;
+  const { title, creator, prayers, createdAt, _id, edittableByUser } = collection;
   const dateCreated = getDateCreated(createdAt || creator.createdAt);
 
   return (
@@ -51,10 +58,20 @@ const Collection = props => {
       <div className={classes.toolbar} />
       <Container maxWidth="md">
         <Grid container>
-          <Grid item xs={12}>
+          <Grid
+            item
+            xs={12}
+            className={classes.collectionHeader}
+          >
             <Typography variant="h4">
               {title}
             </Typography>
+            <CollectionTitleModal
+              title={title}
+              isNew={false}
+              collectionId={_id}
+              edittableByUser={edittableByUser}
+            />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="caption" color="textSecondary" component="p">

@@ -6,7 +6,7 @@ import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import CollectionBox from './CollectionBox';
-import NewCollection from './NewCollection';
+import CollectionTitleModal from './CollectionTitleModal';
 
 import { getCollections } from '../actions/collectionsAction';
 
@@ -67,7 +67,7 @@ const Collections = props => {
             <Typography variant="h4">
               Collections
             </Typography>
-            <NewCollection />
+            <CollectionTitleModal title="" isNew/>
           </Grid>
           <Grid item xs={12} className={classes.collections}>
             {isLoading

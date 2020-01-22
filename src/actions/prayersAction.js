@@ -11,12 +11,12 @@ import {
   PRAYER_ADD_ERROR,
   PRAYER_RESET_ERROR
 } from '../constants/actionsTypes';
-import alerts from '../constants/alert';
 import {
   getPrayersService,
   updatePrayerService,
   addPrayerService
 } from '../services/prayersService';
+import alerts from '../constants/alert';
 import { openAlert } from './alertAction';
 
 

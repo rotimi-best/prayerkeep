@@ -71,16 +71,17 @@ export const getCollection = (collectionId, userId) => async dispatch => {
   });
 };
 
-// TODO: This is not finished
-export const updateCollection = (collectionParams) => async dispatch => {
+export const updateCollection = (collectionId, collectionParams, prevCollections) => async dispatch => {
   dispatch({ type: COLLECTION_UPDATE_REQUEST });
 
   const {
     response = {},
     error = null
-  } = await updateCollectionService(collectionParams);
+  } = await updateCollectionService(collectionId, collectionParams);
 
   if (error) {
+    dispatch(openAlert(`Sorry can't update this collection!! ${error}`, alerts.ERROR));
+
     return dispatch({
       type: COLLECTION_UPDATE_ERROR,
       payload: error
@@ -91,7 +92,7 @@ export const updateCollection = (collectionParams) => async dispatch => {
 
   dispatch({
     type: COLLECTION_UPDATE_SUCCESS,
-    payload: collection,
+    payload: prevCollections.map(p => p._id === collection._id ? collection : p),
   });
 };
 
@@ -104,6 +105,8 @@ export const addCollection = (collectionParams, prevCollections) => async dispat
   } = await addCollectionService(collectionParams);
 
   if (error) {
+    dispatch(openAlert(`Sorry can't add this collection!! ${error}`, alerts.ERROR));
+
     return dispatch({
       type: COLLECTION_ADD_ERROR,
       payload: error

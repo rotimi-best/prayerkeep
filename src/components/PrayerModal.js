@@ -35,7 +35,7 @@ import Chip from '@material-ui/core/Chip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import NewCollection from './NewCollection';
+import CollectionTitleModal from './CollectionTitleModal';
 import { getCollections } from '../actions/collectionsAction';
 import { addPrayer, updatePrayer, getPrayers } from '../actions/prayersAction';
 
@@ -112,7 +112,7 @@ const PrayerModal = props => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
   const prayerToOpen = getPrayer(prayerModal.prayerId, prayers.allPrayers);
-
+  console.log("prayerToOpen", prayerToOpen)
   const [prayerRequest, setPrayerRequest] = useState('');
   const [collections, setCollection] = useState([]);
   const [answeredPrayer, setAnsweredPrayer] = useState(false);
@@ -127,12 +127,15 @@ const PrayerModal = props => {
 
   // componentDidMount - Get collections
   useEffect(() => {
+    dispatch(getCollections(userId))
+  }, []);
+
+  useEffect(() => {
     if (prayerModal.prayerId && !prayerToOpen) {
       dispatch(getPrayers(userId))
     }
 
-    dispatch(getCollections(userId))
-  }, []);
+  }, [prayerModal.prayerId, prayerToOpen]);
 
   // componentDidUpdate - Set fields
   useEffect(() => {
@@ -278,7 +281,7 @@ const PrayerModal = props => {
 
           <div className={classes.newCollection}>
             <Typography variant="subtitle1">Add to a collection</Typography>
-            <NewCollection />
+            <CollectionTitleModal title="" isNew/>
           </div>
           {collections.length
             ? <div className={classes.choosenCollection}>

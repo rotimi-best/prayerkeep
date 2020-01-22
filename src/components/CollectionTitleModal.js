@@ -4,16 +4,18 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
-import { DialogTitle } from '@material-ui/core';
-import { addCollection } from '../actions/collectionsAction';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+
+import { addCollection, updateCollection } from '../actions/collectionsAction';
 
 const styles = theme => ({
   dialogPaper: {
@@ -25,53 +27,67 @@ const styles = theme => ({
     justifyContent: 'space-between',
     padding: '5px 24px'
   },
+  editRoot: {
+    minWidth: 56
+  }
 });
 
-const NewCollectionModal = props => {
+const CollectionTitleModal = props => {
   const {
     dispatch,
     classes,
     userId,
-    collections
+    collections,
+    isNew,
+    collectionId,
+    title: defaultTitle,
+    edittableByUser
   } = props;
-  const [newColName, setNewColName] = useState('');
-  const [openNewCollection, setOpenNewCollection] = useState(false);
+  const [title, setTitle] = useState(defaultTitle);
+  const [openModal, setOpenModal] = useState(false);
 
-  const toggleAddNewCollection = e => {
-    setOpenNewCollection(!openNewCollection);
+  const toggleModal = e => {
+    setOpenModal(!openModal);
   }
 
   const handleSave = () => {
-    dispatch(
-      addCollection({
-        userId: userId,
-        title: newColName,
-        prayers: []
-      }, collections.allCollection)
-    )
-    setNewColName();
-    toggleAddNewCollection();
+    if (isNew) {
+      dispatch(
+        addCollection({
+          userId: userId,
+          title,
+          prayers: []
+        }, collections.allCollection)
+      )
+    } else {
+      dispatch(updateCollection(collectionId, { title }, collections.allCollection))
+    }
+    setTitle('');
+    toggleModal();
   }
 
   const handleChange = (e) => {
-    setNewColName(e.target.value)
+    setTitle(e.target.value)
   }
 
   const handleClose = () => {
-    toggleAddNewCollection()
+    toggleModal()
   };
 
+  // TODO: Continue here. Edit throws an error on the backend
   return (
     <>
-      <Fab
-        color="primary"
-        aria-label="new-collection"
-        onClick={toggleAddNewCollection}
-      >
-        <AddIcon />
-      </Fab>
+      {edittableByUser &&
+        <Fab
+          color="primary"
+          aria-label="new-collection"
+          onClick={toggleModal}
+          classes={{ root: classes.editRoot }}
+        >
+          {isNew ? <AddIcon /> : <EditIcon />}
+        </Fab>}
       <Dialog
-        open={openNewCollection}
+        open={openModal}
         onClose={handleClose}
         aria-labelledby="prayer-request-modal"
         classes={{
@@ -95,7 +111,7 @@ const NewCollectionModal = props => {
             id="create-new-collection"
             placeholder="Collection name"
             type="text"
-            value={newColName}
+            value={title}
             onChange={handleChange}
           />
         </DialogContent>
@@ -109,13 +125,20 @@ const NewCollectionModal = props => {
   );
 }
 
-NewCollectionModal.propTypes = {
+CollectionTitleModal.propTypes = {
   classes: PropTypes.object.isRequired,
+  isNew: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  edittableByUser: PropTypes.bool
 };
+
+CollectionTitleModal.defaultProps = {
+  edittableByUser: true
+}
 
 const mapStateToProps = state => ({
   userId: state.authentication.user.userId,
   collections: state.collections,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(NewCollectionModal));
+export default connect(mapStateToProps)(withStyles(styles)(CollectionTitleModal));
