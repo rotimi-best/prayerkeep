@@ -31,7 +31,7 @@ const Prayer = props => {
   const { description, collections, _id } = prayer;
 
   const openPrayer = () => {
-    dispatch(push(`/prayers?prayerModal=open&prayerId=${_id}`))
+    dispatch(push(`?prayerModal=open&prayerId=${_id}`))
   }
 
   const handleClick = (e) => {

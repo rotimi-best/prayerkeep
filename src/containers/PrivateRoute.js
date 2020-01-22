@@ -3,17 +3,17 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import SideBar from "../components/SideBar";
+import PrayerModal from '../components/PrayerModal';
 
-const Main = ({ component: Component, openSidebar, ...rest }) => {
-  return (
-    <div style={{ display: 'flex' }}>
-      <SideBar openSidebar={openSidebar}/>
-      <Component
-        {...rest}
-      />
-    </div>
-  )
-}
+const Main = ({ component: Component, openSidebar, ...rest }) => (
+  <div style={{ display: 'flex' }}>
+    <SideBar openSidebar={openSidebar}/>
+    <Component
+      {...rest}
+    />
+    <PrayerModal backUrl={rest.match.url} />
+  </div>
+);
 
 const PrivateRoute = ({ isLoggedIn, component, openSidebar, ...rest }) => {
   const componentToRender = props =>

@@ -29,6 +29,7 @@ export const getPrayers = userId => async dispatch => {
   } = await getPrayersService(userId);
 
   if (error) {
+    dispatch(openAlert(error, alerts.ERROR))
     return dispatch({
       type: PRAYERS_ERROR,
       payload: error
@@ -44,7 +45,6 @@ export const getPrayers = userId => async dispatch => {
   });
 };
 
-// TODO: This is not finished
 export const updatePrayer = (prayerId, prayerParams, prevPrayers) => async dispatch => {
   dispatch({ type: PRAYER_UPDATE_REQUEST });
 
@@ -54,7 +54,7 @@ export const updatePrayer = (prayerId, prayerParams, prevPrayers) => async dispa
   } = await updatePrayerService(prayerId, prayerParams);
 
   if (error) {
-    dispatch(openAlert(error, alerts.ERROR))
+    dispatch(openAlert(`Failed!! ${error}`, alerts.ERROR))
 
     return dispatch({
       type: PRAYER_UPDATE_ERROR,

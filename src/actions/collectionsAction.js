@@ -8,25 +8,30 @@ import {
   COLLECTION_UPDATE_SUCCESS,
   COLLECTION_ADD_REQUEST,
   COLLECTION_ADD_SUCCESS,
-  COLLECTION_ADD_ERROR
+  COLLECTION_ADD_ERROR,
+  COLLECTION_FETCHING,
+  COLLECTION_FETCHED
 } from '../constants/actionsTypes';
 import {
-  getCollectionService,
+  getCollectionsService,
   updateCollectionService,
-  addCollectionService
+  addCollectionService,
+  getCollectionService
 } from '../services/collectionService';
+import alerts from '../constants/alert';
+import { openAlert } from './alertAction';
 
 export const getCollections = userId => async dispatch => {
-  console.group("====================Getting collections====================")
-  console.groupEnd("====================Getting collections====================")
   dispatch({ type: COLLECTIONS_START_FETCHING });
 
   const {
     response = {},
     error = null
-  } = await getCollectionService(userId);
+  } = await getCollectionsService(userId);
 
   if (error) {
+    dispatch(openAlert(`Sorry can't get your collections!! ${error}`, alerts.ERROR));
+
     return dispatch({
       type: COLLECTIONS_ERROR,
       payload: error
@@ -38,6 +43,31 @@ export const getCollections = userId => async dispatch => {
   dispatch({
     type: COLLECTIONS_FETCHED,
     payload: collections,
+  });
+};
+
+export const getCollection = (collectionId, userId) => async dispatch => {
+  dispatch({ type: COLLECTION_FETCHING });
+
+  const {
+    response = {},
+    error = null
+  } = await getCollectionService(collectionId, userId);
+
+  if (error) {
+    dispatch(openAlert(`Sorry can't get this collection!! ${error}`, alerts.ERROR));
+
+    return dispatch({
+      type: COLLECTIONS_ERROR,
+      payload: error
+    });
+  }
+
+  const { collection } = response || {};
+
+  dispatch({
+    type: COLLECTION_FETCHED,
+    payload: collection,
   });
 };
 

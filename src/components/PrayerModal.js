@@ -37,7 +37,7 @@ import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import NewCollection from './NewCollection';
 import { getCollections } from '../actions/collectionsAction';
-import { addPrayer, updatePrayer } from '../actions/prayersAction';
+import { addPrayer, updatePrayer, getPrayers } from '../actions/prayersAction';
 
 const styles = theme => ({
   root: {
@@ -104,7 +104,8 @@ const PrayerModal = props => {
     dispatch,
     classes,
     allCollection,
-    prayers
+    prayers,
+    backUrl
   } = props;
   const inputLabel = useRef(null);
   const theme = useTheme();
@@ -126,6 +127,10 @@ const PrayerModal = props => {
 
   // componentDidMount - Get collections
   useEffect(() => {
+    if (prayerModal.prayerId && !prayerToOpen) {
+      dispatch(getPrayers(userId))
+    }
+
     dispatch(getCollections(userId))
   }, []);
 
@@ -156,7 +161,7 @@ const PrayerModal = props => {
   }, [prayers.isAdding, prayers.error, prayers.isUpdating, formSubmitted]);
 
   const handleClose = () => {
-    dispatch(goBack());
+    dispatch(push(backUrl));
     setPrayerRequest('');
     setAnsweredPrayer(false);
     setCollection([]);

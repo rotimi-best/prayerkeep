@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Prayer from './Prayer';
 import NewPrayerButton from './NewPrayerButton';
-import PrayerModal from './PrayerModal';
 
 import { getPrayers } from '../actions/prayersAction';
 
@@ -47,7 +46,6 @@ const Prayers = props => {
         <CssBaseline />
         <NewPrayerButton />
         {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
-        <PrayerModal />
       </Container>
     </main>
   )

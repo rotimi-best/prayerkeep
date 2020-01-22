@@ -2,9 +2,20 @@ import axios from 'axios';
 import configs from '../configs';
 const { API_URL } = configs;
 
-export const getCollectionService = async (userId) => {
+export const getCollectionService = async (collectionId,userId) => {
   try {
-    const response = await axios.get(`${API_URL}/collection/${userId}`);
+    const response = await axios.get(`${API_URL}/collection/${collectionId}?userId=${userId}`);
+    return { response: response.data };
+  } catch (error) {
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
+  }
+};
+
+export const getCollectionsService = async (userId) => {
+  try {
+    const response = await axios.get(`${API_URL}/collection?userId=${userId}`);
     return { response: response.data };
   } catch (error) {
     const { data = {} } = error.response || {};

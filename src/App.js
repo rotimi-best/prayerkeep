@@ -8,6 +8,7 @@ import Home from "./components/Home";
 import Welcome from "./components/Welcome";
 import Prayers from "./components/Prayers";
 import Collections from "./components/Collections";
+import Collection from "./components/Collection";
 import PrivateRoute from "./containers/PrivateRoute";
 import ErrorWrapper from "./containers/ErrorWrapper";
 import Header from "./components/Header";
@@ -27,6 +28,7 @@ function App() {
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/prayers" component={Prayers} />
             <PrivateRoute path="/collections" component={Collections} />
+            <PrivateRoute path="/collection/:id" component={Collection} />
             <Redirect to="/" />
           </Switch>
           <BottomNavigation />

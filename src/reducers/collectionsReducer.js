@@ -8,11 +8,14 @@ import {
   COLLECTION_ADD_SUCCESS,
   COLLECTION_UPDATE_ERROR,
   COLLECTION_UPDATE_REQUEST,
-  COLLECTION_UPDATE_SUCCESS
+  COLLECTION_UPDATE_SUCCESS,
+  COLLECTION_FETCHING,
+  COLLECTION_FETCHED
 } from '../constants/actionsTypes';
 
 const initialState = {
   allCollection: [],
+  collectionInView: null,
   isFetching: false,
   isUpdating: false,
   isAdding: false,
@@ -28,12 +31,23 @@ export default function(state = initialState, action) {
     case COLLECTION_UPDATE_SUCCESS:
       return {
         allCollection: payload,
+        collectionInView: null,
         isFetching: false,
         isUpdating: false,
         isAdding: false,
         error: null,
       };
+    case COLLECTION_FETCHED:
+      return {
+        ...state,
+        isFetching: false,
+        isUpdating: false,
+        isAdding: false,
+        error: null,
+        collectionInView: payload,
+      };
     case COLLECTIONS_START_FETCHING:
+    case COLLECTION_FETCHING:
       return {
         ...state,
         isFetching: true,

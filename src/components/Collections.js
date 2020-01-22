@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { Grid } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import CollectionBox from './CollectionBox';
 import NewCollection from './NewCollection';
@@ -47,15 +47,12 @@ const Collections = props => {
     dispatch,
   } = props;
   const { allCollection, isLoading } = collections;
-  const [openNewCollection, setOpenNewCollection] = useState(false);
 
   useEffect(() => {
-    dispatch(getCollections(userId))
+    if (!allCollection.length) {
+      dispatch(getCollections(userId))
+    }
   }, []);
-
-  const toggleAddNewCollection = e => {
-    setOpenNewCollection(!openNewCollection);
-  }
 
   return (
     <main className={classes.root}>
@@ -78,6 +75,7 @@ const Collections = props => {
               : allCollection.map(({ _id, title, prayers }) => (
                   <CollectionBox
                     key={_id}
+                    id={_id}
                     title={title}
                     prayers={prayers}
                     collectionBoxRoot={classes.collectionBoxRoot}
