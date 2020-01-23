@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Container, CssBaseline } from '@material-ui/core';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Prayer from './Prayer';
@@ -23,7 +24,12 @@ const styles = theme => ({
 const Prayers = props => {
   const {
     classes,
-    prayers,
+    prayers: {
+      allPrayers: prayers,
+      isFetching,
+      isUpdating,
+      isAdding,
+    },
     dispatch,
     userId
   } = props;
@@ -43,6 +49,7 @@ const Prayers = props => {
           root: classes.containerRoot
         }}
       >
+        {(isAdding || isUpdating || isFetching) && <LinearProgress />}
         <CssBaseline />
         <NewPrayerButton />
         {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
@@ -53,12 +60,12 @@ const Prayers = props => {
 
 Prayers.propTypes = {
   classes: PropTypes.object.isRequired,
-  prayers: PropTypes.array.isRequired,
+  prayers: PropTypes.object.isRequired,
   userId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  prayers: state.prayers.allPrayers,
+  prayers: state.prayers,
   userId: state.authentication.user.userId
 });
 

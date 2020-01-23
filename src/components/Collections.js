@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
 import CollectionBox from './CollectionBox';
 import CollectionTitleModal from './CollectionTitleModal';
@@ -14,7 +15,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   root: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: `${theme.spacing(3)}px 0`,
   },
   collectionHeader: {
     display: 'flex',
@@ -46,7 +47,12 @@ const Collections = props => {
     collections,
     dispatch,
   } = props;
-  const { allCollection, isLoading } = collections;
+  const {
+    allCollection,
+    isFetching,
+    isUpdating,
+    isAdding,
+  } = collections;
 
   useEffect(() => {
     if (!allCollection.length) {
@@ -70,8 +76,8 @@ const Collections = props => {
             <CollectionTitleModal title="" isNew/>
           </Grid>
           <Grid item xs={12} className={classes.collections}>
-            {isLoading
-              ? "Loading.........."
+            {(isFetching || isUpdating || isAdding)
+              ? <LinearProgress />
               : allCollection.map(({ _id, title, prayers }) => (
                   <CollectionBox
                     key={_id}

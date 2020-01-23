@@ -5,22 +5,23 @@ import { Route, Redirect } from "react-router-dom";
 import SideBar from "../components/SideBar";
 import PrayerModal from '../components/PrayerModal';
 
-const Main = ({ component: Component, openSidebar, ...rest }) => (
+const Main = ({ component: Component, openPrayerModal, openSidebar, ...rest }) => (
   <div style={{ display: 'flex' }}>
     <SideBar openSidebar={openSidebar}/>
     <Component
       {...rest}
     />
-    <PrayerModal backUrl={rest.match.url} />
+    {openPrayerModal && <PrayerModal backUrl={rest.match.url} />}
   </div>
 );
 
-const PrivateRoute = ({ isLoggedIn, component, openSidebar, ...rest }) => {
+const PrivateRoute = ({ isLoggedIn, component, openPrayerModal, openSidebar, ...rest }) => {
   const componentToRender = props =>
     isLoggedIn
     ? <Main
         component={component}
         openSidebar={openSidebar}
+        openPrayerModal={openPrayerModal}
         {...props}
       />
     : <Redirect to="/welcome" />;
@@ -33,8 +34,9 @@ PrivateRoute.propTypes = {
   path: PropTypes.string.isRequired
 };
 
-const mapStateToProps = ({ authentication, sidebar }) => ({
+const mapStateToProps = ({ authentication, sidebar, modalListener }) => ({
   openSidebar: sidebar.open,
+  openPrayerModal: modalListener.prayerModal.open,
   isLoggedIn: authentication.isLoggedIn
 });
 

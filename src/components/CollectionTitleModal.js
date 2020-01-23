@@ -74,7 +74,6 @@ const CollectionTitleModal = props => {
     toggleModal()
   };
 
-  // TODO: Continue here. Edit throws an error on the backend
   return (
     <>
       {edittableByUser &&

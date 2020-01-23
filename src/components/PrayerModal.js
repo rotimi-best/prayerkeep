@@ -112,7 +112,7 @@ const PrayerModal = props => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
   const prayerToOpen = getPrayer(prayerModal.prayerId, prayers.allPrayers);
-  console.log("prayerToOpen", prayerToOpen)
+
   const [prayerRequest, setPrayerRequest] = useState('');
   const [collections, setCollection] = useState([]);
   const [answeredPrayer, setAnsweredPrayer] = useState(false);
@@ -127,8 +127,10 @@ const PrayerModal = props => {
 
   // componentDidMount - Get collections
   useEffect(() => {
-    dispatch(getCollections(userId))
-  }, []);
+    if (!allCollection && allCollection.length) {
+      dispatch(getCollections(userId))
+    }
+  }, [allCollection]);
 
   useEffect(() => {
     if (prayerModal.prayerId && !prayerToOpen) {

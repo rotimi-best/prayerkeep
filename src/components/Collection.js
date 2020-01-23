@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Prayer from './Prayer';
 import CollectionTitleModal from './CollectionTitleModal';
 
 import { getCollections } from '../actions/collectionsAction';
 import { getDateCreated } from '../helpers';
+// import { areTheyDifferent } from '../helpers/difference';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   root: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: `${theme.spacing(3)}px 0`,
   },
   collectionHeader: {
     display: 'flex',
@@ -32,22 +34,49 @@ const Collection = props => {
     userId,
     collections: {
       allCollection,
-      collectionInView,
-      isFetching
+      isFetching,
+      isUpdating,
+      isAdding,
+    },
+    prayers: {
+      allPrayers
     }
   } = props;
-  const collection = collectionInView && collectionInView._id === id
-    ? collectionInView
-    : allCollection.filter(c => c._id === id)[0];
+
+  const [collection, setCollection] = useState(null);
 
   useEffect(() => {
-    if (!collection) {
-      dispatch(getCollections(userId))
-    };
-  }, [collection]);
+    // Update our collection changes on prayer state
+    if (collection) {
+      const collectionPrayers = allPrayers.filter(p => p.collections.find(c => c._id === collection._id));
+      // const areDifferent = areTheyDifferent(collectionPrayers, collection.prayers);
+      if (collectionPrayers.length !== collection.prayers.length) {
+        setCollection({
+          ...collection,
+          prayers: collectionPrayers
+        });
+      }
+    }
+  }, [allPrayers, collection]);
 
-  if (!collection || isFetching) {
-    return null;
+  useEffect(() => {
+    const currentCollection = allCollection.filter(c => c._id === id)[0];
+    if (currentCollection) {
+      setCollection(currentCollection);
+    } else {
+      dispatch(getCollections(userId));
+    }
+  }, [allCollection]);
+
+  if (!collection || isFetching || isUpdating || isAdding) {
+    return (
+      <main className={classes.root}>
+        <div className={classes.toolbar} />
+        <Container maxWidth="md">
+          <LinearProgress />
+        </Container>
+      </main>
+    );
   }
 
   const { title, creator, prayers, createdAt, _id, edittableByUser } = collection;
@@ -90,6 +119,7 @@ const Collection = props => {
 
 const mapStateToProps = state => ({
   collections: state.collections,
+  prayers: state.prayers,
   userId: state.authentication.user.userId,
 });
 

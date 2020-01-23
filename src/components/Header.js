@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
@@ -9,6 +9,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { toggleSideBar } from "../actions/sidebarAction";
+import { getCollections } from "../actions/collectionsAction";
+import { getPrayers } from "../actions/prayersAction";
 
 const styles = theme => ({
   root: {
@@ -35,7 +37,13 @@ const styles = theme => ({
 
 const Header = props => {
   const { classes, dispatch, authentication } = props;
-  const { isLoggedIn } = authentication;
+  const { isLoggedIn, user } = authentication;
+
+  // componentDidMount - Get all collections and prayers
+  useEffect(() => {
+    dispatch(getCollections(user.userId));
+    dispatch(getPrayers(user.userId));
+  }, [])
 
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
