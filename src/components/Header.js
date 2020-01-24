@@ -46,7 +46,9 @@ const Header = props => {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   });
-
+  const isMobile = useMediaQuery({
+    query: "(max-width: 768px)"
+  });
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
     dispatch(getCollections(user.userId));
@@ -73,16 +75,17 @@ const Header = props => {
           elevation={0}
         >
           <Toolbar>
-            <IconButton
-              edge="start"
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="menu"
-              onClick={handleToggleSideBar}
-              onKeyDown={handleToggleSideBar}
-            >
-              <MenuIcon />
-            </IconButton>
+            {!isMobile &&
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="menu"
+                onClick={handleToggleSideBar}
+                onKeyDown={handleToggleSideBar}
+              >
+                <MenuIcon />
+              </IconButton>}
             <Typography variant="h6" className={classes.title}>
               Parchment Notebook
             </Typography>
