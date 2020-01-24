@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
+import Avatar from '@material-ui/core/Avatar';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -85,7 +86,7 @@ const Header = props => {
             <Typography variant="h6" className={classes.title}>
               Parchment Notebook
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Avatar alt={user.name} src={user.pictureUrl || ""} />
           </Toolbar>
         </AppBar>
       </div>
