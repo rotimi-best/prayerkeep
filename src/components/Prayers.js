@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Prayer from './Prayer';
 import NewPrayerButton from './NewPrayerButton';
+import Empty from './Empty';
 
 import { getPrayers } from '../actions/prayersAction';
 
@@ -52,7 +53,9 @@ const Prayers = props => {
         {(isAdding || isUpdating || isFetching) && <LinearProgress />}
         <CssBaseline />
         <NewPrayerButton />
-        {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
+        {prayers.length
+          ? prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)
+          : <Empty type="prayer" text="No prayer request added yet"/>}
       </Container>
     </main>
   )

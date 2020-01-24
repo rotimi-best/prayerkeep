@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Prayer from './Prayer';
 import CollectionTitleModal from './CollectionTitleModal';
+import Empty from './Empty';
 
 import { getCollections } from '../actions/collectionsAction';
 import { getDateCreated } from '../helpers';
@@ -109,7 +110,9 @@ const Collection = props => {
           </Grid>
           <div className={classes.toolbar} />
           <Grid item xs={12}>
-            {prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)}
+            {prayers.length
+              ? prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)
+              : <Empty type="prayer" text="No prayer request with this collection yet"/>}
           </Grid>
         </Grid>
       </Container>

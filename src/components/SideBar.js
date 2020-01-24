@@ -62,6 +62,7 @@ const styles = theme => ({
 
 const SideBar = props => {
   const { classes, openSidebar, dispatch, route } = props;
+  const rootRoute = route.match(/\/\w+/);
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   })
@@ -91,6 +92,7 @@ const SideBar = props => {
     paperAnchorDockedLeft: classes.mobilePaperAnchorDockedLeft,
     root: openSidebar ? classes.withWidth : classes.withoutWidth
   }
+  console.log("route", route)
 
   return (
     <Drawer
@@ -134,7 +136,7 @@ const SideBar = props => {
             <ListItemText primary={"Prayers"} />
           </ListItem>
           <ListItem
-            selected={route === routes.COLLECTIONS}
+            selected={routes.COLLECTIONS.includes(rootRoute)}
             button
             classes={{
               selected: classes.listItemSelected,
