@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
+import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -7,11 +9,14 @@ import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Prayer from './Prayer';
 import CollectionTitleModal from './CollectionTitleModal';
+import IconButton from '@material-ui/core/IconButton';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Empty from './Empty';
 
 import { getCollections } from '../actions/collectionsAction';
 import { getDateCreated } from '../helpers';
 // import { areTheyDifferent } from '../helpers/difference';
+import routes from '../constants/routes';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -43,6 +48,9 @@ const Collection = props => {
       allPrayers
     }
   } = props;
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  });
 
   const [collection, setCollection] = useState(null);
 
@@ -69,6 +77,10 @@ const Collection = props => {
     }
   }, [allCollection]);
 
+  const handleBack = () => {
+    dispatch(push(routes.COLLECTIONS));
+  }
+
   if (!collection || isFetching || isUpdating || isAdding) {
     return (
       <main className={classes.root}>
@@ -85,7 +97,7 @@ const Collection = props => {
 
   return (
     <main className={classes.root}>
-      <div className={classes.toolbar} />
+      {isDesktopOrLaptop && <div className={classes.toolbar} />}
       <Container maxWidth="md">
         <Grid container>
           <Grid
@@ -93,7 +105,10 @@ const Collection = props => {
             xs={12}
             className={classes.collectionHeader}
           >
-            <Typography variant="h4">
+            <Typography variant="h5">
+              <IconButton aria-label="back" className={classes.closeButton} onClick={handleBack}>
+                <KeyboardBackspaceIcon fontSize="large" />
+              </IconButton>
               {title}
             </Typography>
             <CollectionTitleModal

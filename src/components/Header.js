@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { useMediaQuery } from 'react-responsive';
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -31,13 +32,19 @@ const styles = theme => ({
     color: "#5f6368"
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '5vw'
+    }
   }
 });
 
 const Header = props => {
   const { classes, dispatch, authentication } = props;
   const { isLoggedIn, user } = authentication;
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  });
 
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
@@ -56,7 +63,7 @@ const Header = props => {
   return (
       <div className={classes.root}>
         <AppBar
-          position="fixed"
+          position={isDesktopOrLaptop ? "fixed" : "static"}
           className={classes.appBar}
           classes={{
             colorDefault: classes.colorDefault

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useMediaQuery } from 'react-responsive';
 import { Container, Paper, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
@@ -61,10 +62,13 @@ const styles = theme => ({
 
 const Home = props => {
   const { classes } = props;
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  });
 
   return (
     <main className={classes.content}>
-      <div className={classes.toolbar} />
+      {isDesktopOrLaptop && <div className={classes.toolbar} />}
       <Container
         maxWidth="sm"
         classes={{

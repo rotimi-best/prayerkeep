@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
   root: {
-    height: '60vh',
+    height: '100%',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
@@ -18,6 +18,9 @@ const styles = theme => ({
   iconRoot: {
     width: 120,
     height: 120
+  },
+  text: {
+    textAlign: 'center'
   }
 });
 
@@ -42,7 +45,7 @@ const Empty = props => {
   return (
     <div className={classes.root}>
       <EmptyIcon type={type} props={iconProps} />
-      <Typography variant="h4">
+      <Typography variant="h6" className={classes.text}>
         {text}
       </Typography>
     </div>

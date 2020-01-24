@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -53,6 +54,9 @@ const Collections = props => {
     isUpdating,
     isAdding,
   } = collections;
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)'
+  });
 
   useEffect(() => {
     if (!allCollection.length) {
@@ -62,7 +66,7 @@ const Collections = props => {
 
   return (
     <main className={classes.root}>
-      <div className={classes.toolbar} />
+      {isDesktopOrLaptop && <div className={classes.toolbar} />}
       <Container maxWidth="md">
         <Grid container>
           <Grid
