@@ -25,6 +25,7 @@ const Welcome = ({ dispatch }) => {
           fields="name,email,picture"
           callback={responseFacebook}
           redirectUri="https://parchmentnotebook.netlify.com"
+          disableMobileRedirect
         />
       </header>
     </div>
