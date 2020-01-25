@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useRef,
+  // useRef,
   forwardRef,
   useEffect,
   useCallback
@@ -30,8 +30,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Toolbar from '@material-ui/core/Toolbar';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
+// import InputLabel from '@material-ui/core/InputLabel';
+// import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
@@ -108,7 +108,7 @@ const PrayerModal = props => {
     prayers,
     backUrl
   } = props;
-  const inputLabel = useRef(null);
+  // const inputLabel = useRef(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
@@ -343,7 +343,7 @@ const PrayerModal = props => {
             fullWidth
           />
 
-          {/* REPEAT */}
+          {/* REPEAT
           <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel ref={inputLabel} htmlFor="outlined-age-native-simple">
               Repeat
@@ -364,7 +364,7 @@ const PrayerModal = props => {
               <option value="monthly">Monthly</option>
               <option value="yearly">Yearly</option>
             </Select>
-          </FormControl>
+          </FormControl> */}
 
           {/* Start and End Date */}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
