@@ -9,13 +9,17 @@ export const getDateCreated = (createdAt) => {
  * Get today's date in string
  * @returns {string} 2018-12-02
  */
-export const date = () => {
-  const today = new Date();
-  const day = today.getDate();
-  const month = today.getMonth() + 1;
+export const date = ({ toUTC, defDate = null }) => {
+  const today = defDate ? defDate : new Date();
+  const dateNumber = today.getDate();
+  const month = toUTC ? today.getMonth() : today.getMonth() + 1;
   const year = today.getFullYear();
 
+  if (toUTC) {
+    return Date.UTC(year, month, dateNumber);
+  }
+
   return `${year}-${month < 10 ? "0" + month : month}-${
-      day < 10 ? "0" + day : day
-    }`;
+    dateNumber < 10 ? "0" + dateNumber : dateNumber
+  }`;;
 };

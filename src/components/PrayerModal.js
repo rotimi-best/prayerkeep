@@ -39,6 +39,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/picker
 import CollectionTitleModal from './CollectionTitleModal';
 import { getCollections } from '../actions/collectionsAction';
 import { addPrayer, updatePrayer, getPrayers } from '../actions/prayersAction';
+import { date } from "../helpers";
 
 const styles = theme => ({
   root: {
@@ -205,9 +206,9 @@ const PrayerModal = props => {
     setPrayerRequest(e.target.value);
   };
 
-  const handleRepeat = e => {
-    setRepeat(e.target.value);
-  };
+  // const handleRepeat = e => {
+  //   setRepeat(e.target.value);
+  // };
 
   const handleNote = e => {
     setNote(e.target.value);
@@ -227,8 +228,8 @@ const PrayerModal = props => {
       note,
       answered: answeredPrayer,
       collections,
-      start: new Date(startDate).getTime(),
-      end: new Date(endDate).getTime(),
+      start: date({ toUTC: true, defDate: new Date(startDate) }),
+      end: date({ toUTC: true, defDate: new Date(endDate) }),
       userId,
     };
 

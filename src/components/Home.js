@@ -98,7 +98,7 @@ const Home = props => {
   const markPrayerAsPrayed = (prayerId) => {
     if (prayerId) {
       dispatch(updatePrayer(prayerId, {
-        lastDatePrayed: new Date(`${date()} 00:00:00`).getTime()
+        lastDatePrayed: date({ toUTC: true })
       }, prayers, () => dispatch(getFeed(userId))));
     }
   }
