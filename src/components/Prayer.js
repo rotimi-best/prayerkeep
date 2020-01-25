@@ -18,7 +18,8 @@ const styles = theme => ({
     marginBottom: 10
   },
   chipRoot: {
-    margin: 2
+    margin: 2,
+    backgroundColor: `rgba(0,0,0,0.08)`
   },
   chipLabel: {
     color: '#3c4043',
