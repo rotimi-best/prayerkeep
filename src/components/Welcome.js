@@ -24,6 +24,7 @@ const Welcome = ({ dispatch }) => {
           autoLoad={false}
           fields="name,email,picture"
           callback={responseFacebook}
+          redirectUri="https://parchmentnotebook.netlify.com"
         />
       </header>
     </div>
