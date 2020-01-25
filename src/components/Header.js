@@ -113,9 +113,10 @@ Header.propTypes = {
 const mapStateToProps = state => ({
   route: state.router.location.pathname,
   isLoggedIn: state.authentication.isLoggedIn,
-  userId: state.authentication.user.userId,
-  userName: state.authentication.user.name,
-  userPictureUrl: state.authentication.user.picture
+  userId: state.authentication.user && state.authentication.user.userId,
+  userName: state.authentication.user && state.authentication.user.name,
+  userPictureUrl: state.authentication.user
+    && state.authentication.user.picture
     && state.authentication.user.picture.data
     && state.authentication.user.picture.data.url,
   sidebar: state.sidebar
