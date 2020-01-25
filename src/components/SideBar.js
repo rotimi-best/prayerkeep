@@ -73,6 +73,7 @@ const SideBar = props => {
     } else if (!isDesktopOrLaptop && openSidebar) {
       dispatch(toggleSideBar())
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleToggleSideBar = () => {
@@ -92,7 +93,6 @@ const SideBar = props => {
     paperAnchorDockedLeft: classes.mobilePaperAnchorDockedLeft,
     root: openSidebar ? classes.withWidth : classes.withoutWidth
   }
-  console.log("route", route)
 
   return (
     <Drawer

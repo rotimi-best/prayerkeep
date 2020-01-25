@@ -75,7 +75,7 @@ const Collection = props => {
     } else {
       dispatch(getCollections(userId));
     }
-  }, [allCollection]);
+  }, [allCollection, dispatch, userId, id]);
 
   const handleBack = () => {
     dispatch(push(routes.COLLECTIONS));

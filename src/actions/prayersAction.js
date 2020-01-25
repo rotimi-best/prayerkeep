@@ -37,7 +37,6 @@ export const getPrayers = userId => async dispatch => {
   }
 
   const { prayers } = response || {};
-  console.log('get prayer', prayers)
 
   dispatch({
     type: PRAYERS_FETCHED,

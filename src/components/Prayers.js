@@ -40,9 +40,8 @@ const Prayers = props => {
   });
 
   useEffect(() => {
-    if (!prayers.length) {
-      dispatch(getPrayers(userId))
-    }
+    dispatch(getPrayers(userId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

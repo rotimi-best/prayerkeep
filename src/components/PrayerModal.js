@@ -2,11 +2,12 @@ import React, {
   useState,
   useRef,
   forwardRef,
-  useEffect
+  useEffect,
+  useCallback
 } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push, goBack } from 'connected-react-router';
+import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
@@ -125,19 +126,34 @@ const PrayerModal = props => {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  const handleClose = useCallback(() => {
+    dispatch(push(backUrl));
+    setPrayerRequest('');
+    setAnsweredPrayer(false);
+    setCollection([]);
+    setNote('');
+    setRepeat('never');
+    setStartDate(todaysDate());
+    setEndDate(todaysDate());
+    setFormSubmitted(false);
+    setErrors({
+      prayerRequest: false
+    });
+  }, [backUrl, dispatch]);
+
   // componentDidMount - Get collections
   useEffect(() => {
     if (!allCollection && allCollection.length) {
       dispatch(getCollections(userId))
     }
-  }, [allCollection]);
+  }, [allCollection, dispatch, userId]);
 
   useEffect(() => {
     if (prayerModal.prayerId && !prayerToOpen) {
       dispatch(getPrayers(userId))
     }
 
-  }, [prayerModal.prayerId, prayerToOpen]);
+  }, [prayerModal.prayerId, prayerToOpen, dispatch, userId]);
 
   // componentDidUpdate - Set fields
   useEffect(() => {
@@ -163,22 +179,7 @@ const PrayerModal = props => {
         handleClose()
       }
     }
-  }, [prayers.isAdding, prayers.error, prayers.isUpdating, formSubmitted]);
-
-  const handleClose = () => {
-    dispatch(push(backUrl));
-    setPrayerRequest('');
-    setAnsweredPrayer(false);
-    setCollection([]);
-    setNote('');
-    setRepeat('never');
-    setStartDate(todaysDate());
-    setEndDate(todaysDate());
-    setFormSubmitted(false);
-    setErrors({
-      prayerRequest: false
-    });
-  };
+  }, [prayers, formSubmitted, handleClose]);
 
   const handleCollection = e => {
     const newCollection = e.target.checked

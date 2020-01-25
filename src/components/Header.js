@@ -7,7 +7,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Avatar from '@material-ui/core/Avatar';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { toggleSideBar } from "../actions/sidebarAction";
@@ -53,7 +52,7 @@ const Header = props => {
   useEffect(() => {
     dispatch(getCollections(user.userId));
     dispatch(getPrayers(user.userId));
-  }, [])
+  }, [dispatch, user.userId])
 
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());

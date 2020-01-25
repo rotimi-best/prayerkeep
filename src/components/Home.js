@@ -96,7 +96,7 @@ const Home = props => {
                 Current Prayer Streak
               </Typography>
               {/* <span className={classes.daysPrayedStats}> */}
-              <Typography variant="h3">210</Typography>
+              <Typography variant="h3">0</Typography>
               {/* <Typography variant="caption">
                     days
                   </Typography> */}
