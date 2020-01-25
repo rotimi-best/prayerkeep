@@ -96,6 +96,7 @@ const Home = props => {
   });
 
   const markPrayerAsPrayed = (prayerId) => {
+    console.log("date({ toUTC: true })", date({ toUTC: true }))
     if (prayerId) {
       dispatch(updatePrayer(prayerId, {
         lastDatePrayed: date({ toUTC: true })
