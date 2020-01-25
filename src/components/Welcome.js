@@ -33,7 +33,7 @@ const Welcome = ({ dispatch }) => {
           fields="name,email,picture"
           callback={responseFacebook}
           onFailure={handleFailure}
-          redirectUri="https://parchmentnotebook.netlify.com"
+          // redirectUri="https://parchmentnotebook.netlify.com"
           disableMobileRedirect
         />
       </header>
