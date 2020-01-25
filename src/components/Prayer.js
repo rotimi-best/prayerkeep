@@ -34,8 +34,8 @@ const Prayer = props => {
     dispatch(push(`?prayerModal=open&prayerId=${_id}`))
   }
 
-  const handleClick = (e) => {
-    console.log('clicked chip', e)
+  const handleCollectionClick = collectionId => {
+    dispatch(push(`/collection/${collectionId}`))
   }
 
   return (
@@ -56,7 +56,7 @@ const Prayer = props => {
         {collections.map(list =>
           <Chip
             key={list._id}
-            onClick={handleClick}
+            onClick={() => handleCollectionClick(list._id)}
             label={list.title}
             classes={{
               root: classes.chipRoot,
