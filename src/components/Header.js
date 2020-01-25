@@ -40,19 +40,30 @@ const styles = theme => ({
 });
 
 const Header = props => {
-  const { classes, dispatch, authentication } = props;
-  const { isLoggedIn, user } = authentication;
+  const {
+    classes,
+    dispatch,
+    isLoggedIn,
+    userPictureUrl,
+    userName,
+    userId
+  } = props;
+
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   });
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
   });
+
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
-    dispatch(getCollections(user.userId));
-    dispatch(getPrayers(user.userId));
-  }, [dispatch, user.userId])
+    if (userId) {
+      dispatch(getCollections(userId));
+      dispatch(getPrayers(userId));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
@@ -88,7 +99,7 @@ const Header = props => {
             <Typography variant="h6" className={classes.title}>
               Parchment Notebook
             </Typography>
-            <Avatar alt={user.name} src={user.pictureUrl || ""} />
+            <Avatar alt={userName} src={userPictureUrl} />
           </Toolbar>
         </AppBar>
       </div>
@@ -101,7 +112,12 @@ Header.propTypes = {
 
 const mapStateToProps = state => ({
   route: state.router.location.pathname,
-  authentication: state.authentication,
+  isLoggedIn: state.authentication.isLoggedIn,
+  userId: state.authentication.user.userId,
+  userName: state.authentication.user.name,
+  userPictureUrl: state.authentication.user.picture
+    && state.authentication.user.picture.data
+    && state.authentication.user.picture.data.url,
   sidebar: state.sidebar
 });
 

@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useMediaQuery } from 'react-responsive';
 import { Container, Paper, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
+
 import colors from "../constants/colors";
+import { date } from "../helpers";
+import { getFeed } from '../actions/feedAction';
+import { updatePrayer } from '../actions/prayersAction';
 
 const styles = theme => ({
   toolbar: theme.mixins.toolbar,
@@ -57,14 +67,41 @@ const styles = theme => ({
   },
   bibleVerse: {
     color: colors.grey
+  },
+  prayersForToday: {
+    margin: '10px 0',
+    padding: 20
+  },
+  formLabel: {
+    paddingTop: '10px',
+    fontSize: 18,
+    fontStyle: 'normal',
+  },
+  formHelperText: {
+    paddingBottom: 15
   }
 });
 
 const Home = props => {
-  const { classes } = props;
+  const { classes, dispatch, userId, feed, prayers } = props;
+  const { prayersToday, prayersPrayedToday, streak } = feed;
+
+  useEffect(() => {
+    dispatch(getFeed(userId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   });
+
+  const markPrayerAsPrayed = (prayerId) => {
+    if (prayerId) {
+      dispatch(updatePrayer(prayerId, {
+        lastDatePrayed: new Date(`${date()} 00:00:00`).getTime()
+      }, prayers, () => dispatch(getFeed(userId))));
+    }
+  }
 
   return (
     <main className={classes.content}>
@@ -75,7 +112,7 @@ const Home = props => {
           root: classes.containerRoot
         }}
       >
-        <Paper variant="outlined" className={classes.userStatsRoot}>
+        <Paper variant="elevation" className={classes.userStatsRoot}>
           <Typography
             variant="h6"
             align="center"
@@ -96,7 +133,7 @@ const Home = props => {
                 Current Prayer Streak
               </Typography>
               {/* <span className={classes.daysPrayedStats}> */}
-              <Typography variant="h3">0</Typography>
+              <Typography variant="h3">{streak}</Typography>
               {/* <Typography variant="caption">
                     days
                   </Typography> */}
@@ -109,9 +146,31 @@ const Home = props => {
               >
                 Prayed Today
               </Typography>
-              <Typography variant="h3">0</Typography>
+              <Typography variant="h3">{prayersPrayedToday}</Typography>
             </div>
           </div>
+        </Paper>
+        <Paper variant="elevation" className={classes.prayersForToday}>
+          <FormControl component="fieldset" className={classes.formControl}>
+            <FormLabel component="legend" className={classes.formLabel}>Prayers for today</FormLabel>
+            <FormHelperText className={classes.formHelperText}>{!prayersToday.length
+              ? 'You don\'t have prayer requests for today'
+              : 'Select to mark as prayed today'}
+            </FormHelperText>
+            <FormGroup>
+            {prayersToday.map(p =>
+              <FormControlLabel
+                key={p._id}
+                control={<Checkbox
+                  checked={false}
+                  onChange={() => markPrayerAsPrayed(p._id)}
+                  inputProps={{ 'aria-label': p.description }}
+                  value={p._id} />}
+                label={p.description}
+              />
+            )}
+            </FormGroup>
+          </FormControl>
         </Paper>
       </Container>
     </main>
@@ -123,7 +182,9 @@ Home.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  state: state
+  userId: state.authentication.user.userId,
+  feed: state.feed,
+  prayers: state.prayers.allPrayers,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(Home));

@@ -59,7 +59,9 @@ const Collections = props => {
   });
 
   useEffect(() => {
-    dispatch(getCollections(userId))
+    if (!allCollection.length) {
+      dispatch(getCollections(userId))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -52,3 +52,12 @@ export const COLLECTION_FETCHED = 'COLLECTION_FETCHED';
  */
 export const OPEN_ALERT = 'OPEN_ALERT';
 export const CLOSE_ALERT = 'CLOSE_ALERT';
+
+/**
+ * FEED REDUCER
+ */
+export const FEED_FETCHED = 'FEED_FETCHED';
+export const FEED_ERROR = 'FEED_ERROR';
+export const FEED_START_FETCHING = 'FEED_START_FETCHING';
+export const FEED_RESET_ERROR = 'FEED_RESET_ERROR';
+export const FEED_STOP_REQUEST = 'FEED_STOP_REQUEST';

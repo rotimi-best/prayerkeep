@@ -24,14 +24,14 @@ const styles = theme => ({
 const navigation = Object.keys(routes).map(routeKey => routes[routeKey]);
 
 const SimpleBottomNavigation = props => {
-  const { classes, dispatch, route } = props;
+  const { classes, dispatch, route, isLoggedIn } = props;
   const [value, setValue] = useState(navigation.findIndex(navRoute => navRoute === route));
 
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
   });
 
-  if (!isMobile) {
+  if (!isMobile || !isLoggedIn) {
     return null;
   }
   return (
@@ -61,6 +61,7 @@ SimpleBottomNavigation.propTypes = {
 
 const mapStateToProps = state => ({
   route: state.router.location.pathname,
-})
+  isLoggedIn: state.authentication.isLoggedIn,
+});
 
 export default connect(mapStateToProps)(withStyles(styles)(SimpleBottomNavigation));

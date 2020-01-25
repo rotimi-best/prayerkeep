@@ -7,18 +7,17 @@ import { push } from "connected-react-router";
 import { authenticateUser } from "../services/authService";
 import routes from "../constants/routes"
 
-export const logIn = userParams => async dispatch => {
+export const logIn = fbData => async dispatch => {
   dispatch({ type: USER_LOGIN_REQUEST });
 
-  const { response: { data } } = await authenticateUser(userParams);
-  console.log("data", data)
+  const { response: { data } } = await authenticateUser({ userId: fbData.userId });
 
   if (data && data.success) {
-    localStorage.setItem('user', JSON.stringify(data.user));
+    localStorage.setItem('user', JSON.stringify(fbData));
 
     dispatch({
       type: USER_LOGIN_TOGGLE,
-      payload: data.user
+      payload: fbData
     })
 
     dispatch(push(routes.HOME))
