@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useMediaQuery } from 'react-responsive';
-import { Container, Paper, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -31,7 +34,7 @@ const styles = theme => ({
     justifyContent: "center",
     flexDirection: "column",
     alignItems: "center",
-    padding: "10px 5px"
+    padding: 10
   },
   userStatsBody: {
     display: "flex",
@@ -96,7 +99,6 @@ const Home = props => {
   });
 
   const markPrayerAsPrayed = (prayerId) => {
-    console.log("date({ toUTC: true })", date({ toUTC: true }))
     if (prayerId) {
       dispatch(updatePrayer(prayerId, {
         lastDatePrayed: date({ toUTC: true })
@@ -107,13 +109,18 @@ const Home = props => {
   return (
     <main className={classes.content}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
+      <CssBaseline />
       <Container
         maxWidth="sm"
         classes={{
           root: classes.containerRoot
         }}
       >
-        <Paper variant="elevation" className={classes.userStatsRoot}>
+        <Paper
+          variant="elevation"
+          className={classes.userStatsRoot}
+          elevation={2}
+        >
           <Typography
             variant="h6"
             align="center"
@@ -151,7 +158,11 @@ const Home = props => {
             </div>
           </div>
         </Paper>
-        <Paper variant="elevation" className={classes.prayersForToday}>
+        <Paper
+          variant="elevation"
+          className={classes.prayersForToday}
+          elevation={2}
+        >
           <FormControl component="fieldset" className={classes.formControl}>
             <FormLabel component="legend" className={classes.formLabel}>Prayers for today</FormLabel>
             <FormHelperText className={classes.formHelperText}>{!prayersToday.length

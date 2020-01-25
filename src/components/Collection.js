@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -98,6 +99,7 @@ const Collection = props => {
   return (
     <main className={classes.root}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
+      <CssBaseline />
       <Container maxWidth="md">
         <Grid container>
           <Grid

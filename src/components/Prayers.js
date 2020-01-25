@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
-import { Container, CssBaseline } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import Prayer from './Prayer';
