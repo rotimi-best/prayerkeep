@@ -303,6 +303,7 @@ const PrayerModal = props => {
                     }}
                     style={{
                         backgroundColor: list.color || `rgba(0,0,0,0.08)`,
+                        fontWeight: 600,
                         color: list.color
                           ? colorConstants.colorsBg[list.color]
                             ? '#000'

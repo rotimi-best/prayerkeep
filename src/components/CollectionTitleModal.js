@@ -140,6 +140,7 @@ const CollectionTitleModal = props => {
               label={title && title.length ? title : 'Collection preview'}
               style={{
                 backgroundColor: color || `rgba(0,0,0,0.08)`,
+                fontWeight: 600,
                 color: color
                   ? colorConstants.colorsBg[color]
                     ? '#000'
