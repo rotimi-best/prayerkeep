@@ -79,7 +79,7 @@ const CollectionTitleModal = props => {
         }, collections.allCollection)
       )
     } else {
-      dispatch(updateCollection(collectionId, { title }, collections.allCollection))
+      dispatch(updateCollection(collectionId, { title, color }, collections.allCollection))
     }
     setTitle('');
     setColor('');
