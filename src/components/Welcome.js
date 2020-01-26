@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import FacebookLogin from 'react-facebook-login';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
