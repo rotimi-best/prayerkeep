@@ -11,8 +11,8 @@ import alert from '../constants/alert';
 import '../styles/Welcome.css';
 
 firebase.initializeApp({
-  apiKey: config.firebase.apiKey,
-  authDomain: config.firebase.authDomain,
+  apiKey: configs.firebase.apiKey,
+  authDomain: configs.firebase.authDomain,
 });
 
 const Welcome = ({ dispatch }) => {
