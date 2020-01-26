@@ -78,16 +78,17 @@ const Collections = props => {
             <Typography variant="h4">
               Collections
             </Typography>
-            <CollectionTitleModal title="" isNew/>
+            <CollectionTitleModal isNew/>
           </Grid>
           <Grid item xs={12} className={classes.collections}>
             {(isFetching || isUpdating || isAdding)
               ? <LinearProgress />
-              : allCollection.map(({ _id, title, prayers }) => (
+              : allCollection.map(({ _id, title,color, prayers }) => (
                   <CollectionBox
                     key={_id}
                     id={_id}
                     title={title}
+                    color={color}
                     prayers={prayers}
                     collectionBoxRoot={classes.collectionBoxRoot}
                   />

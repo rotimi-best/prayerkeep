@@ -6,14 +6,14 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 
-const CollectionBox = ({ id, title, collectionBoxRoot, prayers, dispatch }) => {
+const CollectionBox = ({ id, title, color, collectionBoxRoot, prayers, dispatch }) => {
   const openCollection = () => {
     dispatch(push(`/collection/${id}`))
   }
 
   return (
     <Paper className={collectionBoxRoot} variant="outlined" onClick={openCollection}>
-      <FolderIcon />
+      <FolderIcon style={{ color: color || '' }}/>
       <span>
         <Typography variant="body2" color="textPrimary" component="p">
           {title.length >= 20 ? `${title.slice(0, 20)}...` : title}

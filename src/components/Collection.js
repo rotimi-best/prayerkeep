@@ -93,7 +93,7 @@ const Collection = props => {
     );
   }
 
-  const { title, creator, prayers, createdAt, _id, edittableByUser } = collection;
+  const { title, color, creator, prayers, createdAt, _id, edittableByUser } = collection;
   const dateCreated = getDateCreated(createdAt || creator.createdAt);
 
   return (
@@ -115,6 +115,7 @@ const Collection = props => {
             </Typography>
             <CollectionTitleModal
               title={title}
+              color={color}
               isNew={false}
               collectionId={_id}
               edittableByUser={edittableByUser}

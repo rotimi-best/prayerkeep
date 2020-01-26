@@ -40,6 +40,7 @@ import CollectionTitleModal from './CollectionTitleModal';
 import { getCollections } from '../actions/collectionsAction';
 import { addPrayer, updatePrayer, getPrayers } from '../actions/prayersAction';
 import { date } from "../helpers";
+import colorConstants from '../constants/colors';
 
 const styles = theme => ({
   root: {
@@ -77,6 +78,7 @@ const styles = theme => ({
   },
   choosenCollection: {
     display: 'flex',
+    flexWrap: 'wrap',
     marginBottom: 5
   }
 });
@@ -163,7 +165,7 @@ const PrayerModal = props => {
       setAnsweredPrayer(prayerToOpen.answered);
       const edittableByUserCol = prayerToOpen.collections
         .filter(c => c.edittableByUser)
-        .map(c => c.title)
+        // .map(c => c.title)
       setCollection(edittableByUserCol);
       setNote(prayerToOpen.note);
       setRepeat(prayerToOpen.repeat);
@@ -183,11 +185,14 @@ const PrayerModal = props => {
   }, [prayers, formSubmitted, handleClose]);
 
   const handleCollection = e => {
-    const newCollection = e.target.checked
-      ? [...collections, e.target.value]
-      : collections.filter(c => c !== e.target.value);
+    const [col] = collectionToPickFrom.filter(c => c._id === e.target.value);
+    if (col) {
+      const newCollection = e.target.checked
+        ? [...collections, col]
+        : collections.filter(c => c._id !== e.target.value);
 
-    setCollection(newCollection);
+      setCollection(newCollection);
+    }
   };
 
   const handleAnsweredPrayer = e => {
@@ -256,7 +261,7 @@ const PrayerModal = props => {
               <CloseIcon />
             </IconButton>
             <Typography id="prayer-request-modal" color="inherit" variant="h6" className={classes.title}>
-              New Prayer Request
+              {prayerRequest.length ? 'Edit' : 'New'} prayer request
             </Typography>
             <Button
               color="inherit"
@@ -290,7 +295,21 @@ const PrayerModal = props => {
           {collections.length
             ? <div className={classes.choosenCollection}>
                 {collections.map(list =>
-                  <Chip key={list} label={list} classes={{ root: classes.chipRoot }} />
+                  <Chip
+                    key={list._id}
+                    label={list.title}
+                    classes={{
+                      root: classes.chipRoot
+                    }}
+                    style={{
+                        backgroundColor: list.color || `rgba(0,0,0,0.08)`,
+                        color: list.color
+                          ? colorConstants.colorsBg[list.color]
+                            ? '#000'
+                            : '#fff'
+                          : '#000'
+                    }}
+                    />
                 )}
               </div>
             : null}
@@ -310,7 +329,11 @@ const PrayerModal = props => {
                 {collectionToPickFrom.map(({ _id, title }) =>
                   <FormControlLabel
                     control={
-                      <Checkbox checked={collections.includes(title)} onChange={handleCollection} value={title} />
+                      <Checkbox
+                        checked={collections.find(c => c.title === title) ? true : false}
+                        onChange={handleCollection}
+                        value={_id}
+                      />
                     }
                     label={title}
                     key={_id}

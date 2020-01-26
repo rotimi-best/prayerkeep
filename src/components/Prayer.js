@@ -9,6 +9,7 @@ import Chip from '@material-ui/core/Chip';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import colorConstants from '../constants/colors';
 
 const styles = theme => ({
   cardActionRoot: {
@@ -22,7 +23,7 @@ const styles = theme => ({
     backgroundColor: `rgba(0,0,0,0.08)`
   },
   chipLabel: {
-    color: '#3c4043',
+    // color: '#3c4043',
     fontSize: 11
   }
 });
@@ -63,6 +64,14 @@ const Prayer = props => {
               root: classes.chipRoot,
               label: classes.chipLabel
             }}
+            style={{
+                backgroundColor: list.color || `rgba(0,0,0,0.08)`,
+                color: list.color
+                  ? colorConstants.colorsBg[list.color]
+                    ? '#000'
+                    : '#fff'
+                  : '#000'
+              }}
           />
         )}
       </CardActions>
