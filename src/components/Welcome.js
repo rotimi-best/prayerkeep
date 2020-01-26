@@ -16,15 +16,17 @@ firebase.initializeApp({
 });
 
 const Welcome = ({ dispatch }) => {
+
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       // TODO: Use the users details here to login
+      console.log("authentication", user)
     });
   }, []);
 
   const uiConfig = {
     signInFlow: "popup",
-    signInSuccessUrl: '/',
+    signInSuccessUrl: '/welcome',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
@@ -32,6 +34,7 @@ const Welcome = ({ dispatch }) => {
     callbacks: {
       signInSuccessWithAuthResult: (res) => {
         // This is google or fb
+        console.log("resssssssssss", res)
         if (res.additionalUserInfo) {
           const { email, name, id, picture } = res.additionalUserInfo.profile;
           const user = {
