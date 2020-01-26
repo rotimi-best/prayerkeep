@@ -20,10 +20,10 @@ const Welcome = ({ dispatch }) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       // TODO: Use the users details here to login
-      console.log("authentication", user)
+      console.log("onAuthStateChanged")
       const localUser = JSON.parse(localStorage.getItem('user')) || null
       if (!!user && !localUser) {
-          console.log("nothing stored in local storage")
+          //console.log("nothing stored in local storage")
           // return dispatch(logIn({
           //   userId: id,
           //   picture: picture.data ? picture.data.url : picture,
@@ -45,7 +45,6 @@ const Welcome = ({ dispatch }) => {
     callbacks: {
       signInSuccessWithAuthResult: (res) => {
         // This is google or fb
-        console.log("resssssssssss", res)
         if (res.additionalUserInfo) {
           const { email, name, id, picture } = res.additionalUserInfo.profile;
           const user = {
