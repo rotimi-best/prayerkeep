@@ -37,6 +37,7 @@ const Welcome = ({ dispatch }) => {
     ],
     callbacks: {
       signInSuccessWithAuthResult: (res) => {
+        console.log("res", res)
         // This is google
         if (res.additionalUserInfo) {
           const { email, name, id, picture } = res.additionalUserInfo.profile;
