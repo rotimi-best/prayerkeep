@@ -1,5 +1,7 @@
-import React from 'react';
-import FacebookLogin from 'react-facebook-login';
+import React, { useEffect } from 'react';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { connect } from "react-redux";
 import configs from '../configs';
 import logo from '../logo.svg';
@@ -8,18 +10,56 @@ import { openAlert } from '../actions/alertAction';
 import alert from '../constants/alert';
 import '../styles/Welcome.css';
 
-const Welcome = ({ dispatch }) => {
-  const responseFacebook = fbData => {
-    dispatch(openAlert(`Sucessfully loggedin`, alert.SUCCESS));
-    Object.defineProperty(fbData, 'userId', Object.getOwnPropertyDescriptor(fbData, 'userID'));
-    delete fbData.userID;
-    dispatch(logIn(fbData));
-  }
+firebase.initializeApp({
+  apiKey: configs.firebase.apiKey,
+  authDomain: configs.firebase.authDomain,
+});
 
-  const handleFailure = response => {
-    const msg = JSON.stringify(response) || 'EMPTY';
-    dispatch(openAlert(`Failed to login ${msg}`, alert.ERROR));
-  }
+const Welcome = ({ dispatch }) => {
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      // TODO: Use the users details here to login
+      console.log("onAuthStateChanged")
+      const localUser = JSON.parse(localStorage.getItem('user')) || null
+      if (!!user && !localUser) {
+          //console.log("nothing stored in local storage")
+          // return dispatch(logIn({
+          //   userId: id,
+          //   picture: picture.data ? picture.data.url : picture,
+          //   name,
+          //   email,
+          //   ...user,
+          // }));
+      }
+    });
+  }, []);
+
+  const uiConfig = {
+    signInFlow: "popup",
+    // signInSuccessUrl: '/welcome',
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    ],
+    callbacks: {
+      signInSuccessWithAuthResult: (res) => {
+        // This is google or fb
+        if (res.additionalUserInfo) {
+          const { email, name, id, picture } = res.additionalUserInfo.profile;
+          const user = {
+            userId: id,
+            picture: picture.data ? picture.data.url : picture,
+            name,
+            email,
+            ...res,
+          };
+
+          return dispatch(logIn(user));
+        }
+      }
+    }
+  };
 
   return (
     <div className="Welcome">
@@ -27,14 +67,9 @@ const Welcome = ({ dispatch }) => {
         <img src={logo} className="App-logo" alt="logo" />
         <h1>Parchment Notebook</h1>
         <p>Manage your prayer requests in one place and enjoy your prayer time.</p>
-        <FacebookLogin
-          appId={configs.FB_APP_ID}
-          autoLoad={false}
-          fields="name,email,picture"
-          callback={responseFacebook}
-          onFailure={handleFailure}
-          // redirectUri="https://parchmentnotebook.netlify.com"
-          disableMobileRedirect={true}
+        <StyledFirebaseAuth
+          uiConfig={uiConfig}
+          firebaseAuth={firebase.auth()}
         />
       </header>
     </div>
