@@ -12,38 +12,32 @@ import alert from '../constants/alert';
 import '../styles/Welcome.css';
 
 firebase.initializeApp({
-  apiKey: "AIzaSyCx84H9bUx3cYdWsqChu6C50O_fLHbI038",
-  authDomain: "parchment-notebook.firebaseapp.com"
+  apiKey: config.firebase.apiKey,
+  authDomain: config.firebase.authDomain,
 });
 
 const Welcome = ({ dispatch }) => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       // TODO: Use the users details here to login
-      // this.setState({ isSignedIn: !!user })
-      //console.log("user", user)
-      // if (!!user) {
-      //   dispatch(openAlert(`Welcome in.`, alert.SUCCESS));
-      // }
     });
   }, []);
 
   const uiConfig = {
     signInFlow: "popup",
-    // signInSuccessUrl: '/',
+    signInSuccessUrl: '/',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
       signInSuccessWithAuthResult: (res) => {
-        console.log("res", res)
-        // This is google
+        // This is google or fb
         if (res.additionalUserInfo) {
           const { email, name, id, picture } = res.additionalUserInfo.profile;
           const user = {
             userId: id,
-            picture,
+            picture: picture.data ? picture.data.url : picture,
             name,
             email,
             ...res,
@@ -54,16 +48,6 @@ const Welcome = ({ dispatch }) => {
       }
     }
   };
-  const responseFacebook = fbData => {
-    Object.defineProperty(fbData, 'userId', Object.getOwnPropertyDescriptor(fbData, 'userID'));
-    delete fbData.userID;
-    dispatch(logIn(fbData));
-  }
-
-  const handleFailure = response => {
-    const msg = JSON.stringify(response) || 'EMPTY';
-    dispatch(openAlert(`Failed to login ${msg}`, alert.ERROR));
-  }
 
   return (
     <div className="Welcome">
@@ -71,15 +55,6 @@ const Welcome = ({ dispatch }) => {
         <img src={logo} className="App-logo" alt="logo" />
         <h1>Parchment Notebook</h1>
         <p>Manage your prayer requests in one place and enjoy your prayer time.</p>
-        {/*// <FacebookLogin
-        //   appId={configs.FB_APP_ID}
-        //   autoLoad={false}
-        //   fields="name,email,picture"
-        //   callback={responseFacebook}
-        //   onFailure={handleFailure}
-        //   // redirectUri="https://parchmentnotebook.netlify.com"
-        //   disableMobileRedirect={true}
-         />*/}
         <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
