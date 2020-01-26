@@ -30,7 +30,7 @@ const Welcome = ({ dispatch }) => {
 
   const uiConfig = {
     signInFlow: "popup",
-    signInSuccessUrl: '/',
+    // signInSuccessUrl: '/',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
