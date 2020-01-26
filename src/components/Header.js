@@ -116,9 +116,7 @@ const mapStateToProps = state => ({
   userId: state.authentication.user && state.authentication.user.userId,
   userName: state.authentication.user && state.authentication.user.name,
   userPictureUrl: state.authentication.user
-    && state.authentication.user.picture
-    && state.authentication.user.picture.data
-    && state.authentication.user.picture.data.url,
+    && state.authentication.user.picture,
   sidebar: state.sidebar
 });
 
