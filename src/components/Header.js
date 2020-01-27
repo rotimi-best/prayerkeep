@@ -99,7 +99,7 @@ const Header = props => {
             <Typography variant="h6" className={classes.title}>
               Parchment Notebook
             </Typography>
-            <Avatar alt={userName} src={userPictureUrl} />
+            <Avatar alt={userName} src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} />
           </Toolbar>
         </AppBar>
       </div>
