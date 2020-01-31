@@ -37,10 +37,12 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import CollectionTitleModal from './CollectionTitleModal';
+import DeleteModal from './DeleteModal';
 import { getCollections } from '../actions/collectionsAction';
 import { addPrayer, updatePrayer, getPrayers } from '../actions/prayersAction';
 import { date } from "../helpers";
 import colorConstants from '../constants/colors';
+import { DialogActions } from '@material-ui/core';
 
 const styles = theme => ({
   root: {
@@ -60,7 +62,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 5
+    margin: '5px 0'
   },
   expansionRoot: {
     width: '100%',
@@ -128,6 +130,7 @@ const PrayerModal = props => {
     prayerRequest: false
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const isEditMode = !!prayerToOpen;
 
   const handleClose = useCallback(() => {
     dispatch(push(backUrl));
@@ -261,18 +264,18 @@ const PrayerModal = props => {
               <CloseIcon />
             </IconButton>
             <Typography id="prayer-request-modal" color="inherit" variant="h6" className={classes.title}>
-              {prayerRequest.length ? 'Edit' : 'New'} prayer request
+              {isEditMode ? 'Edit' : 'New'} prayer request
             </Typography>
-            <Button
+            {/* <Button
               color="inherit"
               onClick={handleSave}
               startIcon={<SaveIcon />}
             >
               Save
-            </Button>
+            </Button> */}
           </Toolbar>
         </AppBar>
-        <DialogContent>
+        <DialogContent dividers>
           {/* Prayer Request */}
           <TextField
             id="your-prayer-request"
@@ -425,6 +428,19 @@ const PrayerModal = props => {
             </Grid>
           </MuiPickersUtilsProvider>
         </DialogContent>
+
+        {/* Delete and Save button */}
+        <DialogActions>
+          {isEditMode && <DeleteModal prayerId={prayerModal.prayerId} label="Delete" />}
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleSave}
+            startIcon={<SaveIcon />}
+          >
+            Save
+          </Button>
+        </DialogActions>
       </Dialog>
   );
 }

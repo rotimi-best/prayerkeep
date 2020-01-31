@@ -6,8 +6,6 @@ import { connect } from "react-redux";
 import configs from '../configs';
 import logo from '../logo.svg';
 import { logIn } from '../actions/authAction';
-import { openAlert } from '../actions/alertAction';
-import alert from '../constants/alert';
 import '../styles/Welcome.css';
 
 firebase.initializeApp({

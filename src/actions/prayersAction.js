@@ -14,7 +14,8 @@ import {
 import {
   getPrayersService,
   updatePrayerService,
-  addPrayerService
+  addPrayerService,
+  deletePrayerService
 } from '../services/prayersService';
 import alerts from '../constants/alert';
 import { openAlert } from './alertAction';
@@ -72,6 +73,28 @@ export const updatePrayer = (prayerId, prayerParams, prevPrayers, callback) => a
   if (callback) {
     callback();
   }
+};
+
+export const deletePrayer = (prayerId, prevPrayers) => async dispatch => {
+  dispatch({ type: PRAYER_UPDATE_REQUEST });
+
+  const { error = null } = await deletePrayerService(prayerId);
+
+  if (error) {
+    dispatch(openAlert(`Opps. Couldn't delete!! ${error}`, alerts.ERROR))
+
+    return dispatch({
+      type: PRAYER_UPDATE_ERROR,
+      payload: error
+    });
+  }
+
+  dispatch({
+    type: PRAYER_UPDATE_SUCCESS,
+    payload: prevPrayers.filter(p => p._id !== prayerId)
+  });
+
+  dispatch(openAlert("Successfully deleted!!!", alerts.SUCCESS));
 };
 
 export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {

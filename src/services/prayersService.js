@@ -55,3 +55,24 @@ export const updatePrayerService = async (prayerId, prayerParams) => {
     return { error: data.message || error.toString() };
   }
 };
+
+export const deletePrayerService = async prayerId => {
+  try {
+    const requestParams = {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+      url: `${API_URL}/prayer/${prayerId}`
+    }
+
+    const response = await axios(requestParams);
+    return { response: response.data };
+  } catch (error) {
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
+  }
+};
