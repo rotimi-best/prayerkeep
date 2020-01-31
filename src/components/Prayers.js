@@ -14,8 +14,8 @@ import { getPrayers } from '../actions/prayersAction';
 
 const styles = theme => ({
   containerRoot: {
-    paddingLeft: 5,
-    paddingRight: 5
+    paddingLeft: 20,
+    paddingRight: 20
   },
   toolbar: theme.mixins.toolbar,
   content: {

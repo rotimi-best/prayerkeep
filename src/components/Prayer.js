@@ -20,11 +20,24 @@ const styles = theme => ({
   },
   chipRoot: {
     margin: 2,
-    backgroundColor: `rgba(0,0,0,0.08)`
+    backgroundColor: `rgba(0,0,0,0.08)`,
+    fontFamily: `'Google Sans',Roboto,Arial,sans-serif`,
+    fontWeight: 500,
+    height: 20,
+    fontSize: 11,
+    borderRadius: 5,
   },
   chipLabel: {
     // color: '#3c4043',
-    fontSize: 11
+    fontSize: 11,
+    padding: '3px 5px'
+  },
+  description: {
+    color: '#202124',
+    letterSpacing: '.01428571em',
+    lineHeight: '1.25rem',
+    fontFamily: 'Roboto,Arial,sans-serif',
+    fontSize: 14,
   }
 });
 
@@ -44,7 +57,7 @@ const Prayer = props => {
     <Card className={classes.card}>
       <CardActionArea onClick={openPrayer}>
         <CardContent>
-          <Typography variant="body2" color="textPrimary" component="p">
+          <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
             {description}
           </Typography>
         </CardContent>
@@ -66,7 +79,7 @@ const Prayer = props => {
             }}
             style={{
                 backgroundColor: list.color || `rgba(0,0,0,0.08)`,
-                fontWeight: 600,
+                // fontWeight: 600,
                 color: list.color
                   ? colorConstants.colorsBg[list.color]
                     ? '#000'
