@@ -10,6 +10,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import colorConstants from '../constants/colors';
+import { getDateCreated } from '../helpers';
 
 const styles = theme => ({
   cardActionRoot: {
@@ -38,12 +39,17 @@ const styles = theme => ({
     lineHeight: '1.25rem',
     fontFamily: 'Roboto,Arial,sans-serif',
     fontSize: 14,
+  },
+  date: {
+    fontSize: 12
   }
 });
 
 const Prayer = props => {
   const { classes, prayer, dispatch } = props;
-  const { description, collections, _id } = prayer;
+  const { description, collections, _id, createdAt } = prayer;
+
+  const dateCreated = getDateCreated(createdAt);
 
   const openPrayer = () => {
     dispatch(push(`?prayerModal=open&prayerId=${_id}`))
@@ -59,6 +65,9 @@ const Prayer = props => {
         <CardContent>
           <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
             {description}
+          </Typography>
+          <Typography className={classes.date} color="textSecondary">
+            Praying since {dateCreated}
           </Typography>
         </CardContent>
       </CardActionArea>

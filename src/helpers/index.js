@@ -1,7 +1,7 @@
 import global from '../constants/global';
 
 export const getDateCreated = (createdAt) => {
-  const date = new Date();
+  const date = new Date(createdAt);
   return `${global.MONTHS.SHORT[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
 }
 
