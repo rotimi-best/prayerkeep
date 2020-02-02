@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import colors from "../constants/colors";
@@ -23,7 +24,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    padding: `${theme.spacing(3)}px 0`
+    padding: 20
   },
   containerRoot: {
     paddingLeft: 5,
@@ -82,6 +83,9 @@ const styles = theme => ({
   },
   formHelperText: {
     paddingBottom: 15
+  },
+  formControlRoot: {
+    width: '100%'
   }
 });
 
@@ -102,7 +106,7 @@ const Home = props => {
     if (prayerId) {
       dispatch(updatePrayer(prayerId, {
         lastDatePrayed: date({ toUTC: true })
-      }, prayers, () => dispatch(getFeed(userId))));
+      }, prayers.allPrayers, () => dispatch(getFeed(userId))));
     }
   }
 
@@ -116,6 +120,9 @@ const Home = props => {
           root: classes.containerRoot
         }}
       >
+      {feed.isFetching
+        ? <LinearProgress />
+        : null}
         <Paper
           variant="elevation"
           className={classes.userStatsRoot}
@@ -163,24 +170,26 @@ const Home = props => {
           className={classes.prayersForToday}
           elevation={2}
         >
-          <FormControl component="fieldset" className={classes.formControl}>
+          <FormControl component="fieldset" className={classes.formControl} classes={{ root: classes.formControlRoot}}>
             <FormLabel component="legend" className={classes.formLabel}>Prayers for today</FormLabel>
             <FormHelperText className={classes.formHelperText}>{!prayersToday.length
               ? 'You don\'t have prayer requests for today'
               : 'Select to mark as prayed today'}
             </FormHelperText>
             <FormGroup>
-            {prayersToday.map(p =>
-              <FormControlLabel
-                key={p._id}
-                control={<Checkbox
-                  checked={false}
-                  onChange={() => markPrayerAsPrayed(p._id)}
-                  inputProps={{ 'aria-label': p.description }}
-                  value={p._id} />}
-                label={p.description}
-              />
-            )}
+            {prayers.isUpdating ||prayers.isFetching
+                ? <LinearProgress />
+                : prayersToday.map(p =>
+                    <FormControlLabel
+                      key={p._id}
+                      control={<Checkbox
+                        checked={false}
+                        onChange={() => markPrayerAsPrayed(p._id)}
+                        inputProps={{ 'aria-label': p.description }}
+                        value={p._id} />}
+                      label={p.description}
+                    />
+                  )}
             </FormGroup>
           </FormControl>
         </Paper>
@@ -196,7 +205,7 @@ Home.propTypes = {
 const mapStateToProps = state => ({
   userId: state.authentication.user.userId,
   feed: state.feed,
-  prayers: state.prayers.allPrayers,
+  prayers: state.prayers,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(Home));
