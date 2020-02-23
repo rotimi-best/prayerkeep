@@ -14,6 +14,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Checkbox from '@material-ui/core/Checkbox';
+import CollectionMenu from './CollectionMenu';
 
 import colors from "../constants/colors";
 import { date } from "../helpers";
@@ -165,6 +166,7 @@ const Home = props => {
             </div>
           </div>
         </Paper>
+        <CollectionMenu />
         <Paper
           variant="elevation"
           className={classes.prayersForToday}

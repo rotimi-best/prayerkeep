@@ -6,7 +6,7 @@ import SideBar from "../components/SideBar";
 import PrayerModal from '../components/PrayerModal';
 
 const Main = ({ component: Component, openPrayerModal, openSidebar, ...rest }) => (
-  <div style={{ display: 'flex' }}>
+  <div>
     <SideBar openSidebar={openSidebar}/>
     <Component
       {...rest}
