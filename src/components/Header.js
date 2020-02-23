@@ -107,8 +107,13 @@ const Header = props => {
 };
 
 Header.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  userPictureUrl: PropTypes.string,
 };
+
+Header.defaultProps = {
+  userPictureUrl: {},
+}
 
 const mapStateToProps = state => ({
   route: state.router.location.pathname,

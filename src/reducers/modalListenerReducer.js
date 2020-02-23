@@ -6,7 +6,8 @@ import {
 const initialState = {
   prayerModal: {
     open: false,
-    prayerId: null
+    prayerId: null,
+    collectionId: null
   }
 };
 
@@ -20,7 +21,8 @@ export default function (state = initialState, action) {
         ...newState,
         prayerModal: {
           open: true,
-          prayerId: payload
+          prayerId: payload.prayerId,
+          collectionId: payload.collectionId,
         }
       };
     case CLOSE_PRAYER_MODAL:
@@ -28,7 +30,8 @@ export default function (state = initialState, action) {
         ...newState,
         prayerModal: {
           open: false,
-          prayerId: null
+          prayerId: null,
+          collectionId: null,
         }
       };
     default:

@@ -13,6 +13,7 @@ import CollectionTitleModal from './CollectionTitleModal';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Empty from './Empty';
+import NewPrayerButton from './NewPrayerButton';
 
 import { getCollections } from '../actions/collectionsAction';
 import { getDateCreated } from '../helpers';
@@ -127,6 +128,11 @@ const Collection = props => {
             </Typography>
           </Grid>
           <div className={classes.toolbar} />
+
+          <Grid item xs={12}>
+            <NewPrayerButton collectionId={_id} />
+          </Grid>
+
           <Grid item xs={12}>
             {prayers.length
               ? prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)

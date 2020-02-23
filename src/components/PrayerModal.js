@@ -89,9 +89,9 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const getPrayer = (prayerId, prayers) => {
-  if (prayerId) {
-    return prayers.filter(p => p._id === prayerId)[0] || null;
+const filterArrayById = (id, arrayToFilter) => {
+  if (id) {
+    return arrayToFilter.filter(a => a._id === id)[0] || null;
   }
 
   return null
@@ -117,7 +117,7 @@ const PrayerModal = props => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
-  const prayerToOpen = getPrayer(prayerModal.prayerId, prayers.allPrayers);
+  const prayerToOpen = filterArrayById(prayerModal.prayerId, prayers.allPrayers);
 
   const [prayerRequest, setPrayerRequest] = useState('');
   const [collections, setCollection] = useState([]);
@@ -174,6 +174,20 @@ const PrayerModal = props => {
       setRepeat(prayerToOpen.repeat);
       setStartDate(todaysDate(prayerToOpen.start))
       setEndDate(todaysDate(prayerToOpen.end));
+    }
+    if (prayerModal.open && prayerModal.collectionId) {
+      const collectionFromUrl = filterArrayById(prayerModal.collectionId, allCollection);
+
+      if (collectionFromUrl) {
+        if (collectionFromUrl.edittableByUser) {
+          setCollection([
+            ...collections,
+            collectionFromUrl
+          ]);
+        } else if (collectionFromUrl.status) {
+          setAnsweredPrayer(true);
+        }
+      }
     }
   }, [prayerModal.open, prayerToOpen]);
 
@@ -334,7 +348,7 @@ const PrayerModal = props => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={collections.find(c => c.title === title) ? true : false}
+                        checked={collections.find(c => c._id === _id) ? true : false}
                         onChange={handleCollection}
                         value={_id}
                       />

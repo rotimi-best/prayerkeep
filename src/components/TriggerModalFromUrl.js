@@ -3,16 +3,24 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as queryString from 'query-string';
 import { togglePrayerModal } from '../actions/modalListenerAction';
+import { isValidHex } from '../helpers/isValidHex';
 
 const TriggerModalFromUrl = props => {
   const { dispatch, search, modalListener } = props;
   const {
     prayerModal,
     prayerId,
+    collectionId,
   } = queryString.parse(search);
 
   if (prayerModal && !modalListener.prayerModal.open) {
-    dispatch(togglePrayerModal(prayerModal === "open", prayerId))
+    const modalOptions = { prayerId, collectionId: null };
+    if (collectionId && isValidHex(collectionId)) {
+      modalOptions.collectionId = collectionId;
+    }
+    console.log('TriggerModalFromUrl', modalOptions)
+
+    dispatch(togglePrayerModal(prayerModal === "open", modalOptions))
   } else if (!prayerModal && modalListener.prayerModal.open) {
     dispatch(togglePrayerModal(false))
   }

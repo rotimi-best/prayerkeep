@@ -25,9 +25,16 @@ const styles = theme => ({
 })
 
 const NewPrayerButton = props => {
-  const { classes, dispatch } = props;
+  const { classes, dispatch, pathname, collectionId } = props;
+
   const openNewPrayer = () => {
-    dispatch(push('/prayers?prayerModal=open&prayerId=null'))
+    let modalTriggerPath = `${pathname}/?prayerModal=open&prayerId=null`;
+
+    if (collectionId) {
+      modalTriggerPath += `&collectionId=${collectionId}`;
+    }
+
+    dispatch(push(modalTriggerPath));
   }
 
   return (
@@ -46,6 +53,16 @@ const NewPrayerButton = props => {
 NewPrayerButton.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
+  pathname: PropTypes.string.isRequired,
+  collectionId: PropTypes.string
 }
 
-export default connect()(withStyles(styles)(NewPrayerButton));
+NewPrayerButton.defaultProps = {
+  collectionId: null
+}
+
+const mapStateToProps = state => ({
+  pathname: state.router.location.pathname,
+});
+
+export default connect(mapStateToProps)(withStyles(styles)(NewPrayerButton));

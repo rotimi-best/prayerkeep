@@ -3,11 +3,11 @@ import {
   CLOSE_PRAYER_MODAL
 } from '../constants/actionsTypes';
 
-export const togglePrayerModal = (open, prayerId) => {
+export const togglePrayerModal = (open, payload) => {
   if (open) {
     return {
       type: OPEN_PRAYER_MODAL,
-      payload: prayerId
+      payload
     }
   }
 
