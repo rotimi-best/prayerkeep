@@ -6,8 +6,8 @@ const customMuiTheme = createMuiTheme({
         // fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue'",
         fontFamily: `'Lato',Helvetica,Arial,sans-serif`,
         h6: {
-          color: '#5f6368',
-          fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif;`
+            color: '#5f6368',
+            fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif;`
         }
         // "fontSize": 14,
         // "fontWeightLight": 300,
@@ -27,6 +27,18 @@ const customMuiTheme = createMuiTheme({
             contrastText: '#fff',
         },
     },
+    overrides: {
+        MuiFab: {
+            root: {
+                width: 40,
+                height: 40
+            },
+            primary: {
+                color: '#000',
+                backgroundColor: '#e0e0e0',
+            },
+        }
+    }
 });
 
 export default customMuiTheme;
