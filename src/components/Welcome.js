@@ -19,7 +19,7 @@ const Welcome = ({ dispatch }) => {
     firebase.auth().onAuthStateChanged(user => {
       // TODO: Use the users details here to login
       console.log("onAuthStateChanged")
-      const localUser = JSON.parse(localStorage.getItem('user')) || null
+      const localUser = JSON.parse(localStorage.getItem('user')) || null;
       if (!!user && !localUser) {
           //console.log("nothing stored in local storage")
           // return dispatch(logIn({

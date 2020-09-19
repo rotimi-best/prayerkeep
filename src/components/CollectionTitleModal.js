@@ -104,7 +104,7 @@ const CollectionTitleModal = props => {
           color="primary"
           aria-label="new-collection"
           onClick={toggleModal}
-          classes={{ root: classes.editRoot }}
+          // classes={{ root: classes.editRoot }}
         >
           {isNew ? <AddIcon /> : <EditIcon />}
         </Fab>}

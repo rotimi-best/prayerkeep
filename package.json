@@ -32,7 +32,8 @@
     "react-scroll-horizontal": "^1.6.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "serve": "^11.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
