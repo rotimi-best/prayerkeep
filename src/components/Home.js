@@ -111,6 +111,25 @@ const Home = props => {
     }
   }
 
+  const requestPermission = async () => {
+    const sw = await navigator.serviceWorker.ready;
+    console.log('sw', sw)
+    const subscription = await sw.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: process.env.REACT_APP_PUBLIC_PUSH_KEY
+    });
+
+    console.log('subscription', subscription)
+    await fetch('https://parchmentnotebook-api.glitch.me/subscription', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(subscription)
+    });
+  }
+
   return (
     <main className={classes.content}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
@@ -135,7 +154,7 @@ const Home = props => {
             className={classes.bibleQuote}
           >
             And he spake a parable unto them to this end, that men ought always
-            to pray, and not to faint
+            to pray, and not to faint <button onClick={requestPermission}>Trigger sw</button>
           </Typography>
           <Typography variant="caption" className={classes.bibleVerse}>
             Luke 18:1 KJV
