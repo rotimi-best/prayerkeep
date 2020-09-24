@@ -10,8 +10,10 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { toggleSideBar } from "../actions/sidebarAction";
-import { getCollections } from "../actions/collectionsAction";
-import { getPrayers } from "../actions/prayersAction";
+// import { getCollections } from "../actions/collectionsAction";
+// import { getPrayers } from "../actions/prayersAction";
+
+import ROUTES from "../constants/routes";
 
 const styles = theme => ({
   root: {
@@ -44,7 +46,8 @@ const Header = props => {
     classes,
     dispatch,
     isLoggedIn,
-    userPictureUrl,
+    route,
+    // userPictureUrl,
     userName,
     userId
   } = props;
@@ -59,8 +62,8 @@ const Header = props => {
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
     if (userId) {
-      dispatch(getCollections(userId));
-      dispatch(getPrayers(userId));
+      // dispatch(getCollections(userId));
+      // dispatch(getPrayers(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -69,7 +72,11 @@ const Header = props => {
     dispatch(toggleSideBar());
   };
 
-  if (!isLoggedIn) {
+  const pagesToHideHeader = [
+    ROUTES.PLANS
+  ];
+
+  if (!isLoggedIn || pagesToHideHeader.includes(route)) {
     return null;
   }
 
@@ -99,7 +106,9 @@ const Header = props => {
             <Typography variant="h6" className={classes.title}>
               Parchment Notebook
             </Typography>
-            <Avatar alt={userName} src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} />
+            {/* <Avatar alt={userName} src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} /> */}
+            <Avatar alt={userName} />
+
           </Toolbar>
         </AppBar>
       </div>
@@ -122,7 +131,6 @@ const mapStateToProps = state => ({
   userName: state.authentication.user && state.authentication.user.name,
   userPictureUrl: state.authentication.user
     && state.authentication.user.picture,
-  sidebar: state.sidebar
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(Header));

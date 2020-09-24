@@ -183,7 +183,6 @@ SideBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  // sidebar: state.sidebar,
   route: state.router.location.pathname,
 })
 

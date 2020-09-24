@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 
 import authenticationReducer from './authenticationReducer';
-import sidebarReducer from './sidebarReducer';
+import globalReducer from './globalReducer';
 import modalListenerReducer from './modalListenerReducer';
 import prayersReducer from './prayersReducer';
 import feedReducer from './feedReducer';
@@ -13,7 +13,7 @@ const createRootReducer = history => combineReducers({
   router: connectRouter(history),
   feed: feedReducer,
   authentication: authenticationReducer,
-  sidebar: sidebarReducer,
+  global: globalReducer,
   modalListener: modalListenerReducer,
   prayers: prayersReducer,
   collections: collectionsReducer,

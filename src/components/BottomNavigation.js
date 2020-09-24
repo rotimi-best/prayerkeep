@@ -9,6 +9,7 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import HomeIcon from '@material-ui/icons/Home';
 import NotesIcon from '@material-ui/icons/Notes';
 import FolderIcon from '@material-ui/icons/Folder';
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 import routes from '../constants/routes';
 
 const styles = theme => ({
@@ -22,7 +23,7 @@ const styles = theme => ({
 });
 
 const navigation = Object.keys(routes).map(routeKey => routes[routeKey]);
-
+console.log('navigation', navigation)
 const SimpleBottomNavigation = props => {
   const { classes, dispatch, route, isLoggedIn } = props;
   const [value, setValue] = useState(navigation.findIndex(navRoute => navRoute === route));
@@ -35,7 +36,7 @@ const SimpleBottomNavigation = props => {
     return null;
   }
   return (
-      <>
+      <React.Fragment>
         <div className={classes.toolbar} />
         <BottomNavigation
           value={value}
@@ -49,8 +50,9 @@ const SimpleBottomNavigation = props => {
           <BottomNavigationAction label="Home" icon={<HomeIcon />} />
           <BottomNavigationAction label="Prayers" icon={<NotesIcon />} />
           <BottomNavigationAction label="Collections" icon={<FolderIcon />} />
+          <BottomNavigationAction label="Plans" icon={<DoneAllIcon />} />
       </BottomNavigation>
-    </>
+    </React.Fragment>
   );
 };
 
