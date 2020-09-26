@@ -1,11 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { history } from "./configureStore";
 import customMuiTheme from "./customMuiTheme";
 import Home from "./components/Home";
-import Welcome from "./components/Welcome";
 import Prayers from "./components/Prayers";
 import Collections from "./components/Collections";
 import Collection from "./components/Collection";
@@ -15,6 +14,13 @@ import Header from "./components/Header";
 import TriggerModalFromUrl from "./components/TriggerModalFromUrl";
 import BottomNavigation from "./components/BottomNavigation";
 import Alert from "./components/Alert";
+
+const AsyncWelcome = React.lazy(() => import('./components/Welcome'));
+const Welcome = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <AsyncWelcome />
+  </Suspense>
+)
 
 function App() {
   return (

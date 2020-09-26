@@ -13,7 +13,7 @@ export default {
   API_URL: REACT_APP_API_URL,
   isProduction: REACT_APP_STAGE === 'production',
   firebase: {
-  	apiKey: REACT_APP_FIREBASE_API_KEY,
-  	authDomain: REACT_APP_FIREBASE_AUTH_DOMAIN
+    apiKey: REACT_APP_FIREBASE_API_KEY,
+    authDomain: REACT_APP_FIREBASE_AUTH_DOMAIN
   }
 }

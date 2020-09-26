@@ -14,11 +14,11 @@ firebase.initializeApp({
 });
 
 const Welcome = ({ dispatch }) => {
+  const [onSignInSuccess, setOnSignInSuccess] = React.useState(false);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       // TODO: Use the users details here to login
-      console.log("onAuthStateChanged")
       const localUser = JSON.parse(localStorage.getItem('user')) || null;
       if (!!user && !localUser) {
           //console.log("nothing stored in local storage")
@@ -35,13 +35,14 @@ const Welcome = ({ dispatch }) => {
 
   const uiConfig = {
     signInFlow: "popup",
-    // signInSuccessUrl: '/welcome',
+    signInSuccessUrl: '',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
       signInSuccessWithAuthResult: (res) => {
+        setOnSignInSuccess(true)
         // This is google or fb
         if (res.additionalUserInfo) {
           const { email, name, id, picture } = res.additionalUserInfo.profile;
@@ -65,10 +66,10 @@ const Welcome = ({ dispatch }) => {
         <img src={logo} className="App-logo" alt="logo" />
         <h1>Parchment Notebook</h1>
         <p>Manage your prayer requests in one place and enjoy your prayer time.</p>
-        <StyledFirebaseAuth
+        {!onSignInSuccess && <StyledFirebaseAuth
           uiConfig={uiConfig}
           firebaseAuth={firebase.auth()}
-        />
+        />}
       </header>
     </div>
   )
