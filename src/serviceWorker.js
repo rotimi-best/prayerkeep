@@ -96,20 +96,6 @@ function registerValidSW(swUrl, config) {
     .catch(error => {
       console.error('Error during service worker registration:', error);
     });
-
-  window.addEventListener('push', event => {
-    const data = event.data.json();
-    if ('serviceWorker' in navigator) {
-      console.log('Push received and about to be sent');
-      navigator.serviceWorker.ready.then(registration => {
-        console.log('registration found and sending')
-        registration.showNotification(data.title, {
-          body: 'You deserve a greater life',
-          icon: 'https://parchmentnotebook.netlify.app/images/icons/icon-128x128.png'
-        })
-      });
-    }
-  })
 }
 
 function checkValidServiceWorker(swUrl, config) {
@@ -149,3 +135,14 @@ export function unregister() {
     });
   }
 }
+
+/* eslint-disable-next-line no-restricted-globals */
+self.addEventListener('push', event => {
+  const data = event.data.json();
+  console.log('Push received and about to be sent', event);
+  /* eslint-disable-next-line no-restricted-globals */
+  self.registration.showNotification(data.title, {
+    body: 'You deserve a greater life',
+    icon: 'https://parchmentnotebook.netlify.app/images/icons/icon-128x128.png'
+  })
+})
