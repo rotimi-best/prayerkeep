@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { push } from 'connected-react-router';
 import { connect } from "react-redux";
 import ScrollMenu from 'react-horizontal-scrolling-menu';

@@ -189,6 +189,7 @@ const PrayerModal = props => {
         }
       }
     }
+    // eslint-disable-next-line
   }, [prayerModal.open, prayerToOpen]);
 
   // componentDidUpdate - Close modal
