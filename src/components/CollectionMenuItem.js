@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Avatar from '@material-ui/core/Avatar';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import { withStyles } from "@material-ui/core/styles";
 import colorConstants from '../constants/colors';
 
-const styles = theme => ({
+const styles = () => ({
   paperRoot: {
     minWidth: 120,
     margin: '10px 10px 10px 0',
