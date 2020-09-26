@@ -90,6 +90,21 @@ const styles = theme => ({
   }
 });
 
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
 const Home = props => {
   const { classes, dispatch, userId, feed, prayers } = props;
   const { prayersToday, prayersPrayedToday, streak } = feed;
@@ -113,13 +128,12 @@ const Home = props => {
 
   const requestPermission = async () => {
     const sw = await navigator.serviceWorker.ready;
-    console.log('sw', sw)
     const subscription = await sw.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: process.env.REACT_APP_PUBLIC_PUSH_KEY
+      applicationServerKey: urlBase64ToUint8Array(process.env.REACT_APP_PUBLIC_PUSH_KEY)
     });
+    console.log('Sending subscription');
 
-    console.log('subscription', subscription)
     await fetch('https://parchmentnotebook-api.glitch.me/subscription', {
       headers: {
         'Accept': 'application/json',
