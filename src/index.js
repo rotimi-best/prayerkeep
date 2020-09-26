@@ -35,6 +35,20 @@ const config = {
       console.log('Reloading page')
       window.location.reload();
     }
+  },
+  onSuccess: async registration => {
+    console.log('serice worker registered successfully', registration)
+    /* eslint-disable-next-line no-restricted-globals */
+    self.addEventListener('push', event => {
+      const data = event.data.json();
+      console.log('Push received and about to be sent', event);
+      /* eslint-disable-next-line no-restricted-globals */
+      registration.showNotification(data.title, {
+        body: 'You deserve a greater life',
+        icon: 'https://parchmentnotebook.netlify.app/images/icons/icon-128x128.png'
+      })
+    })
   }
 }
+
 serviceWorker.register(config);

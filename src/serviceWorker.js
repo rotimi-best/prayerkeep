@@ -135,14 +135,3 @@ export function unregister() {
     });
   }
 }
-
-/* eslint-disable-next-line no-restricted-globals */
-self.addEventListener('push', event => {
-  const data = event.data.json();
-  console.log('Push received and about to be sent', event);
-  /* eslint-disable-next-line no-restricted-globals */
-  self.registration.showNotification(data.title, {
-    body: 'You deserve a greater life',
-    icon: 'https://parchmentnotebook.netlify.app/images/icons/icon-128x128.png'
-  })
-})
