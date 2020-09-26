@@ -12,6 +12,7 @@ import PrivateRoute from "./containers/PrivateRoute";
 import ErrorWrapper from "./containers/ErrorWrapper";
 import Header from "./components/Header";
 import TriggerModalFromUrl from "./components/TriggerModalFromUrl";
+import RequestPermission from "./components/RequestPermission";
 import BottomNavigation from "./components/BottomNavigation";
 import Alert from "./components/Alert";
 
@@ -28,6 +29,7 @@ function App() {
       <MuiThemeProvider theme={customMuiTheme}>
         <ConnectedRouter history={history}>
           <TriggerModalFromUrl />
+          <RequestPermission />
           <Header />
           <Switch>
             <Route exact path="/welcome" component={Welcome} />

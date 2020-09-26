@@ -90,21 +90,6 @@ const styles = theme => ({
   }
 });
 
-function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
-
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
 const Home = props => {
   const { classes, dispatch, userId, feed, prayers } = props;
   const { prayersToday, prayersPrayedToday, streak } = feed;
@@ -124,24 +109,6 @@ const Home = props => {
         lastDatePrayed: date({ toUTC: true })
       }, prayers.allPrayers, () => dispatch(getFeed(userId))));
     }
-  }
-
-  const requestPermission = async () => {
-    const sw = await navigator.serviceWorker.ready;
-    const subscription = await sw.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(process.env.REACT_APP_PUBLIC_PUSH_KEY)
-    });
-    console.log('Sending subscription');
-
-    await fetch('https://parchmentnotebook-api.glitch.me/subscription', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify(subscription)
-    });
   }
 
   return (
@@ -168,7 +135,7 @@ const Home = props => {
             className={classes.bibleQuote}
           >
             And he spake a parable unto them to this end, that men ought always
-            to pray, and not to faint <button onClick={requestPermission}>Trigger sw</button>
+            to pray, and not to faint
           </Typography>
           <Typography variant="caption" className={classes.bibleVerse}>
             Luke 18:1 KJV
