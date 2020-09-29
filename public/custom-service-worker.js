@@ -6,7 +6,7 @@ self.addEventListener("push", e => {
     data: {
       url: data.url
     },
-
+    requireInteraction: true,
   });
 });
 
