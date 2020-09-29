@@ -28,7 +28,7 @@ const NewPrayerButton = props => {
   const { classes, dispatch, pathname, collectionId } = props;
 
   const openNewPrayer = () => {
-    let modalTriggerPath = `${pathname}/?prayerModal=open&prayerId=null`;
+    let modalTriggerPath = `${pathname}?prayerModal=open&prayerId=null`;
 
     if (collectionId) {
       modalTriggerPath += `&collectionId=${collectionId}`;
