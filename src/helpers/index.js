@@ -1,5 +1,7 @@
 import global from '../constants/global';
 
+export { default as getNextXDaysDate } from './getNextXDaysDate';
+
 export const getDateCreated = (createdAt) => {
   const date = new Date(createdAt);
   return `${global.MONTHS.SHORT[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
@@ -21,5 +23,5 @@ export const date = ({ toUTC, defDate = null }) => {
 
   return `${year}-${month < 10 ? "0" + month : month}-${
     dateNumber < 10 ? "0" + dateNumber : dateNumber
-  }`;;
+  }`;
 };
