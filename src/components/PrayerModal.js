@@ -40,7 +40,7 @@ import CollectionTitleModal from './CollectionTitleModal';
 import DeleteModal from './DeleteModal';
 import { getCollections } from '../actions/collectionsAction';
 import { addPrayer, updatePrayer, getPrayers } from '../actions/prayersAction';
-import { date } from "../helpers";
+import { date, getNextXDaysDate } from "../helpers";
 import colorConstants from '../constants/colors';
 import { DialogActions } from '@material-ui/core';
 
@@ -111,7 +111,7 @@ const PrayerModal = props => {
     classes,
     allCollection,
     prayers,
-    backUrl
+    location
   } = props;
   const repeatLabel = useRef(null);
   const theme = useTheme();
@@ -125,7 +125,7 @@ const PrayerModal = props => {
   const [note, setNote] = useState('');
   const [repeat, setRepeat] = useState('never');
   const [startDate, setStartDate] = useState(todaysDate());
-  const [endDate, setEndDate] = useState(todaysDate());
+  const [endDate, setEndDate] = useState(getNextXDaysDate(30));
   const [errors, setErrors] = useState({
     prayerRequest: false
   });
@@ -133,19 +133,19 @@ const PrayerModal = props => {
   const isEditMode = !!prayerToOpen;
 
   const handleClose = useCallback(() => {
-    dispatch(push(backUrl));
+    dispatch(push(location.pathname));
     setPrayerRequest('');
     setAnsweredPrayer(false);
     setCollection([]);
     setNote('');
     setRepeat('never');
     setStartDate(todaysDate());
-    setEndDate(todaysDate());
+    setEndDate(getNextXDaysDate(30));
     setFormSubmitted(false);
     setErrors({
       prayerRequest: false
     });
-  }, [backUrl, dispatch]);
+  }, [location.pathname, dispatch]);
 
   // componentDidMount - Get collections
   useEffect(() => {
@@ -303,6 +303,7 @@ const PrayerModal = props => {
             error={errors.prayerRequest}
             multiline
             fullWidth
+            autoFocus
           />
 
           <div className={classes.newCollection}>
@@ -464,7 +465,7 @@ PrayerModal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  search: state.router.location.search,
+  location: state.router.location,
   userId: state.authentication.user.userId,
   modalListener: state.modalListener,
   prayers: state.prayers,

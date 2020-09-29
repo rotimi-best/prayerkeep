@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Chip from '@material-ui/core/Chip';
+// import CardActions from '@material-ui/core/CardActions';
+// import Chip from '@material-ui/core/Chip';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import colorConstants from '../constants/colors';
+// import colorConstants from '../constants/colors';
 import { getDateCreated } from '../helpers';
 
 const styles = theme => ({
@@ -38,16 +38,25 @@ const styles = theme => ({
     letterSpacing: '.01428571em',
     lineHeight: '1.25rem',
     fontFamily: 'Roboto,Arial,sans-serif',
-    fontSize: 14,
+    fontSize: 16,
+    marginBottom: 5
   },
   date: {
-    fontSize: 12
+    fontSize: 13
+  },
+  classContentRoot: {
+    padding: '12px 16px 8px'
   }
 });
 
 const Prayer = props => {
   const { classes, prayer, dispatch } = props;
-  const { description, collections, _id, createdAt } = prayer;
+  const {
+    description,
+    // collections,
+    _id,
+    createdAt
+  } = prayer;
 
   const dateCreated = getDateCreated(createdAt);
 
@@ -55,14 +64,14 @@ const Prayer = props => {
     dispatch(push(`?prayerModal=open&prayerId=${_id}`))
   }
 
-  const handleCollectionClick = collectionId => {
-    dispatch(push(`/collection/${collectionId}`))
-  }
+  // const handleCollectionClick = collectionId => {
+  //   dispatch(push(`/collection/${collectionId}`))
+  // }
 
   return (
     <Card className={classes.card}>
       <CardActionArea onClick={openPrayer}>
-        <CardContent>
+        <CardContent classes={{ root: classes.classContentRoot }}>
           <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
             {description}
           </Typography>
@@ -71,7 +80,7 @@ const Prayer = props => {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions
+      {/* <CardActions
         disableSpacing
         classes={{
           root: classes.cardActionRoot
@@ -97,7 +106,7 @@ const Prayer = props => {
               }}
           />
         )}
-      </CardActions>
+      </CardActions> */}
     </Card>
   )
 }
