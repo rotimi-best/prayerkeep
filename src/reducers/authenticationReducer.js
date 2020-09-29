@@ -1,7 +1,8 @@
 import {
   USER_LOGIN_TOGGLE,
   USER_LOGIN_FAILED,
-  USER_LOGIN_REQUEST
+  USER_LOGIN_REQUEST,
+  SET_IS_SUBSCRIBED_TO_PUSH_NOTIFICATION
 } from '../constants/actionsTypes';
 
 const user = JSON.parse(localStorage.getItem('user')) || null;
@@ -9,7 +10,8 @@ const initialState = {
   isFetching: false,
   error: null,
   isLoggedIn: user !== null,
-  user
+  user,
+  isSubscribedToPushNotification: true
 };
 
 export default function (state = initialState, action) {
@@ -34,6 +36,11 @@ export default function (state = initialState, action) {
         ...newState,
         isFetching: false,
         error: payload
+      }
+    case SET_IS_SUBSCRIBED_TO_PUSH_NOTIFICATION:
+      return {
+        ...newState,
+        isSubscribedToPushNotification: payload
       }
     default:
       return newState;
