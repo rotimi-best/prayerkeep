@@ -44,6 +44,7 @@ const Header = props => {
     classes,
     dispatch,
     isLoggedIn,
+    // route,
     userPictureUrl,
     userName,
     userId
@@ -125,4 +126,6 @@ const mapStateToProps = state => ({
   sidebar: state.sidebar
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(Header));
+export default React.memo(
+  connect(mapStateToProps)(withStyles(styles)(Header))
+);

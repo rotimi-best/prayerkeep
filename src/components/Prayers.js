@@ -60,7 +60,7 @@ const Prayers = props => {
         <CssBaseline />
         <NewPrayerButton />
         {prayers.length
-          ? prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)
+          ? prayers.map((prayer, i) => <Prayer i={i} key={prayer._id} prayer={prayer} />)
           : <Empty type="prayer" text="No prayer request added yet"/>}
       </Container>
     </main>

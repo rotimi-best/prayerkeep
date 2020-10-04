@@ -34,6 +34,7 @@ const SimpleBottomNavigation = props => {
   if (!isMobile || !isLoggedIn) {
     return null;
   }
+
   return (
       <>
         <div className={classes.toolbar} />
@@ -49,6 +50,7 @@ const SimpleBottomNavigation = props => {
           <BottomNavigationAction label="Home" icon={<HomeIcon />} />
           <BottomNavigationAction label="Prayers" icon={<NotesIcon />} />
           <BottomNavigationAction label="Collections" icon={<FolderIcon />} />
+          {/* <BottomNavigationAction label="Plans" icon={<DoneAllIcon />} /> */}
       </BottomNavigation>
     </>
   );

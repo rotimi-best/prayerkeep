@@ -6,6 +6,8 @@ import { history } from "./configureStore";
 import customMuiTheme from "./customMuiTheme";
 import Home from "./components/Home";
 import Prayers from "./components/Prayers";
+// import Plans from "./components/Plans";
+// import Plan from "./components/Plan";
 import Collections from "./components/Collections";
 import Collection from "./components/Collection";
 import PrivateRoute from "./containers/PrivateRoute";
@@ -35,6 +37,8 @@ function App() {
             <Route exact path="/welcome" component={Welcome} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/prayers" component={Prayers} />
+            {/* <PrivateRoute exact path="/plans" component={Plans} />
+            <PrivateRoute exact path="/plan/:id" component={Plan} /> */}
             <PrivateRoute path="/collections" component={Collections} />
             <PrivateRoute path="/collection/:id" component={Collection} />
             <Redirect to="/" />
