@@ -1,6 +1,7 @@
 import {
   FEED_ERROR,
   FEED_FETCHED,
+  QUOTE_UPDATED,
   FEED_START_FETCHING,
   FEED_STOP_REQUEST,
   FEED_RESET_ERROR
@@ -10,6 +11,7 @@ const initialState = {
   streak: 0,
   prayersToday: [],
   prayersPrayedToday: 0,
+  quote: {},
   isFetching: false,
   error: null,
 }
@@ -20,9 +22,9 @@ export default function(state = initialState, action) {
   switch(type) {
     case FEED_FETCHED:
       return {
-        streak: payload.streak,
+        // streak: payload.streak,
         prayersToday: payload.prayersToday,
-        prayersPrayedToday: payload.prayersPrayedToday,
+        quote: payload.quote,
         isFetching: false,
         error: null,
       };
@@ -48,6 +50,11 @@ export default function(state = initialState, action) {
         ...state,
         error: null,
       };
+    case QUOTE_UPDATED:
+      return {
+        ...state,
+        quote: payload
+      }
     default:
       return state;
   }

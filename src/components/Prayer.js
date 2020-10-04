@@ -17,7 +17,8 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   card: {
-    marginBottom: 10
+    marginBottom: 10,
+    boxShadow: 'none'
   },
   chipRoot: {
     margin: 2,
