@@ -54,10 +54,11 @@ export default makeStyles(theme => ({
     lineHeight: '1.25rem',
     fontFamily: 'Roboto,Arial,sans-serif',
     textAlign: 'start',
-    marginBottom: 5
+    marginBottom: 5,
+    fontSize: 16,
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#000',
     fontWeight: 'bold'
   },
