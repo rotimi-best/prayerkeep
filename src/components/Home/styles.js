@@ -1,6 +1,7 @@
 import colors from "../../constants/colors";
+import { makeStyles } from "@material-ui/core/styles";
 
-export default theme => ({
+export default makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
   root: {
     flexGrow: 1,
@@ -48,13 +49,15 @@ export default theme => ({
     borderRight: `1px solid #dadada`
   },
   bibleQuote: {
-    color: "black",
-    fontFamily: `"Lato script=all rev=1"`,
+    color: '#202124',
+    letterSpacing: '.01428571em',
+    lineHeight: '1.25rem',
+    fontFamily: 'Roboto,Arial,sans-serif',
     textAlign: 'start',
     marginBottom: 5
   },
   title: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#000',
     fontWeight: 'bold'
   },
@@ -94,4 +97,4 @@ export default theme => ({
   inline: {
     display: 'inline'
   }
-});
+}));

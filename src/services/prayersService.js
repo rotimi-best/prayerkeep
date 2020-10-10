@@ -13,6 +13,17 @@ export const getPrayersService = async (userId) => {
   }
 };
 
+export const getPrayerService = async (userId, prayerId) => {
+  try {
+    const response = await axios.get(`${API_URL}/prayer/${userId}/${prayerId}`);
+    return { response: response.data };
+  } catch (error) {
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
+  }
+};
+
 export const addPrayerService = async (prayerParams) => {
   try {
     const requestParams = {
@@ -34,7 +45,7 @@ export const addPrayerService = async (prayerParams) => {
   }
 };
 
-export const updatePrayerService = async (prayerId, prayerParams) => {
+export const updatePrayerService = async (userId, prayerId, prayerParams) => {
   try {
     const requestParams = {
       method: 'PUT',
@@ -44,7 +55,7 @@ export const updatePrayerService = async (prayerId, prayerParams) => {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      url: `${API_URL}/prayer/${prayerId}`
+      url: `${API_URL}/prayer/${userId}/${prayerId}`
     }
 
     const response = await axios(requestParams);

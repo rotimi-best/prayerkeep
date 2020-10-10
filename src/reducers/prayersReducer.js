@@ -10,10 +10,15 @@ import {
   PRAYER_UPDATE_REQUEST,
   PRAYER_UPDATE_SUCCESS,
   PRAYER_RESET_ERROR,
+  PRAYER_START_FETCHING,
+  PRAYER_FETCHED
 } from '../constants/actionsTypes';
 
 const initialState = {
   allPrayers: [],
+  prayer: null,
+  interceedingPrayers: [],
+  isPrayerFetching: false,
   isFetching: false,
   isUpdating: false,
   isAdding: false,
@@ -28,12 +33,26 @@ export default function(state = initialState, action) {
     case PRAYER_ADD_SUCCESS:
     case PRAYER_UPDATE_SUCCESS:
       return {
-        allPrayers: payload,
+        ...state,
+        allPrayers: payload.allPrayers ? payload.allPrayers : state.allPrayers,
+        interceedingPrayers: payload.interceedingPrayers ? payload.interceedingPrayers : state.interceedingPrayers,
+        prayer: payload.prayer || state.prayer,
         isFetching: false,
         isUpdating: false,
         isAdding: false,
         error: null,
       };
+    case PRAYER_START_FETCHING:
+      return {
+        ...state,
+        isPrayerFetching: true,
+      };
+    case PRAYER_FETCHED:
+      return {
+        ...state,
+        prayer: payload,
+        isPrayerFetching: false,
+      }
     case PRAYERS_START_FETCHING:
       return {
         ...state,

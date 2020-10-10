@@ -2,7 +2,7 @@ import axios from 'axios';
 import configs from '../configs';
 const { API_URL } = configs;
 
-export const getFeedService = async (userId, quoteId) => {
+export const getFeedService = async (userId, quoteId = '') => {
   try {
     const response = await axios.get(`${API_URL}/feed/${userId}?quoteId=${quoteId}`);
     return { response: response.data };

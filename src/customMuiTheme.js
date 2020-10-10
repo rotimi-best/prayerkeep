@@ -28,6 +28,13 @@ const customMuiTheme = createMuiTheme({
         },
     },
     overrides: {
+        MuiCssBaseline: {
+            '@global': {
+                body: {
+                    backgroundColor: '#fff'
+                }
+            }
+        },
         MuiFab: {
             root: {
                 width: 40,
@@ -37,6 +44,11 @@ const customMuiTheme = createMuiTheme({
                 color: '#000',
                 backgroundColor: '#e0e0e0',
             },
+        },
+        MuiIconButton: {
+            root: {
+                padding: 5
+            }
         }
     }
 });

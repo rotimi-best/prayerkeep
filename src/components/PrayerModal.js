@@ -259,7 +259,7 @@ const PrayerModal = props => {
     // Send to server
     setFormSubmitted(true);
     if (prayerToOpen) {
-      dispatch(updatePrayer(prayerToOpen._id, newPrayerRequest, props.prayers.allPrayers))
+      dispatch(updatePrayer(userId, prayerToOpen._id, newPrayerRequest, props.prayers.allPrayers))
     } else dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers))
   }
 
