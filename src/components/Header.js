@@ -10,8 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { toggleSideBar } from "../actions/sidebarAction";
-import { getCollections } from "../actions/collectionsAction";
-import { getPrayers } from "../actions/prayersAction";
+// import { getCollections } from "../actions/collectionsAction";
+// import { getPrayers } from "../actions/prayersAction";
 
 const styles = theme => ({
   root: {
@@ -60,8 +60,8 @@ const Header = props => {
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
     if (userId) {
-      dispatch(getCollections(userId));
-      dispatch(getPrayers(userId));
+      // dispatch(getCollections(userId));
+      // dispatch(getPrayers(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

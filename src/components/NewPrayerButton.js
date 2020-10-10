@@ -3,25 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
+import Fab from '@material-ui/core/Fab';
 
-const styles = theme => ({
-  root: {
-    boxShadow: '0 1px 2px 0 rgba(60,64,67,0.302), 0 2px 6px 2px rgba(60,64,67,0.149)',
-    width: '100%',
-    height: 46,
-    backgroundColor: '#fff',
-    borderColor: '#e0e0e0',
-    borderRadius: 8,
-    marginBottom: 10,
-    transitionDuration: '.218s',
+const styles = () => ({
+  fabButton: {
+    position: 'fixed',
+    zIndex: 1,
+    right: 30,
+    bottom: 70,
+    margin: '0 auto',
   },
-  cardContent: {
-    padding: '13px 16px'
-  }
 })
 
 const NewPrayerButton = props => {
@@ -38,15 +30,14 @@ const NewPrayerButton = props => {
   }
 
   return (
-    <Card className={classes.root} onClick={openNewPrayer}>
-      <CardActionArea>
-        <CardContent className={classes.cardContent}>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Add a Prayer request...
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+    <Fab
+      color="primary"
+      aria-label="new-collection"
+      className={classes.fabButton}
+      onClick={openNewPrayer}
+    >
+      <AddIcon />
+    </Fab>
   )
 }
 

@@ -1,7 +1,9 @@
 import {
   PRAYERS_FETCHED,
+  PRAYER_FETCHED,
   PRAYERS_ERROR,
   PRAYERS_START_FETCHING,
+  PRAYER_START_FETCHING,
   PRAYERS_STOP_REQUEST,
   PRAYER_UPDATE_ERROR,
   PRAYER_UPDATE_REQUEST,
@@ -13,6 +15,7 @@ import {
 } from '../constants/actionsTypes';
 import {
   getPrayersService,
+  getPrayerService,
   updatePrayerService,
   addPrayerService,
   deletePrayerService
@@ -36,21 +39,49 @@ export const getPrayers = userId => async dispatch => {
     });
   }
 
-  const { prayers } = response || {};
+  const { prayers, interceedingPrayers } = response || {};
 
   dispatch({
     type: PRAYERS_FETCHED,
-    payload: prayers,
+    payload: {
+      allPrayers: prayers,
+      interceedingPrayers
+    },
   });
 };
 
-export const updatePrayer = (prayerId, prayerParams, prevPrayers, callback) => async dispatch => {
+export const getPrayer = (userId, prayerId) => async dispatch => {
+  dispatch({ type: PRAYER_START_FETCHING });
+
+  const {
+    response = {},
+    error = null
+  } = await getPrayerService(userId, prayerId);
+
+  if (error) {
+    dispatch(openAlert(error, alerts.ERROR))
+    return dispatch({
+      type: PRAYERS_ERROR,
+      payload: error
+    });
+  }
+
+  const { prayer } = response || {};
+  prayer.comments = prayer?.comments?.reverse();
+
+  dispatch({
+    type: PRAYER_FETCHED,
+    payload: prayer,
+  });
+};
+export const updatePrayer = (userId, prayerId, prayerParams, prevPrayers, callback) =>
+  async (dispatch, getState) => {
   dispatch({ type: PRAYER_UPDATE_REQUEST });
 
   const {
     response = {},
     error = null
-  } = await updatePrayerService(prayerId, prayerParams);
+  } = await updatePrayerService(userId, prayerId, prayerParams);
 
   if (error) {
     dispatch(openAlert(`Failed!! ${error}`, alerts.ERROR))
@@ -62,13 +93,18 @@ export const updatePrayer = (prayerId, prayerParams, prevPrayers, callback) => a
   }
 
   const { prayer } = response || {};
+  prayer.comments = prayer?.comments?.reverse();
+  const payload = {
+    prayer
+  }
+  const {prayers} = getState();
+
+  payload.allPrayers = prayers.allPrayers.map(p => p._id === prayer._id ? prayer : p);
 
   dispatch({
     type: PRAYER_UPDATE_SUCCESS,
-    payload: prevPrayers.map(p => p._id === prayer._id ? prayer : p)
+    payload
   });
-
-  dispatch(openAlert("Successfully updated!!!", alerts.SUCCESS));
 
   if (callback) {
     callback();
@@ -118,7 +154,9 @@ export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
 
   dispatch({
     type: PRAYER_ADD_SUCCESS,
-    payload: [prayer, ...prevPrayers],
+    payload: {
+      allPrayers: [prayer, ...prevPrayers]
+    },
   });
 
   dispatch(openAlert("Successfully added!!!", alerts.SUCCESS))

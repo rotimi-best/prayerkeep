@@ -23,9 +23,8 @@ export default function (state = initialState, action) {
       };
     case CLOSE_ALERT:
       return {
+        ...state,
         open: false,
-        message: '',
-        type: alerts.SUCCESS
       };
     default:
       return state;

@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useMediaQuery } from 'react-responsive';
-import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
@@ -31,11 +30,10 @@ import SendIcon from '@material-ui/icons/Send';
 import { date } from "../../helpers";
 import { getFeed, updateQuote } from '../../actions/feedAction';
 import { updatePrayer } from '../../actions/prayersAction';
-import styles from './styles';
+import useStyles from './styles';
 
 const Home = props => {
   const {
-    classes,
     quoteId = '',
     dispatch,
     userId,
@@ -44,6 +42,7 @@ const Home = props => {
     userPictureUrl
   } = props;
   const { prayersToday, quote } = feed;
+  const classes = useStyles();
   const [isLoved, setIsLoved] = React.useState(quote.isLovedByMe);
   const [comment, setComment] = React.useState('');
 
@@ -53,7 +52,9 @@ const Home = props => {
   }, []);
 
   useEffect(() => {
-    setIsLoved(quote.isLovedByMe);
+    if (quote.isLovedByMe !== isLoved)
+      setIsLoved(quote.isLovedByMe);
+      // eslint-disable-next-line
   }, [quote.isLovedByMe]);
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -62,7 +63,7 @@ const Home = props => {
 
   const markPrayerAsPrayed = (prayerId) => {
     if (prayerId) {
-      dispatch(updatePrayer(prayerId, {
+      dispatch(updatePrayer(userId, prayerId, {
         lastDatePrayed: date({ toUTC: true })
       }, prayers.allPrayers, () => dispatch(getFeed(userId))));
     }
@@ -105,11 +106,7 @@ const Home = props => {
           <Typography className={classes.title} color="textSecondary" gutterBottom>
             Prayer Quote
           </Typography>
-          <Typography
-            variant="h6"
-            align="center"
-            className={classes.bibleQuote}
-          >
+          <Typography className={classes.bibleQuote} variant="body2" color="textPrimary">
             {quote.title}
           </Typography>
 
@@ -169,7 +166,7 @@ const Home = props => {
                 </ListItem>
               </List>
             </React.Fragment>
-        ))}
+          ))}
 
         </Paper>
         <CollectionMenu />
@@ -219,4 +216,4 @@ const mapStateToProps = state => ({
     && state.authentication.user.picture,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(Home));
+export default connect(mapStateToProps)(Home);
