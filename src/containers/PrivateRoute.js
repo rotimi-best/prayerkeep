@@ -24,7 +24,7 @@ const PrivateRoute = ({ isLoggedIn, component, openPrayerModal, openSidebar, ...
         openPrayerModal={openPrayerModal}
         {...props}
       />
-    : <Redirect to="/welcome" />;
+    : <Redirect to={`/welcome?goTo=${props.match.url}`} />;
 
   return <Route render={componentToRender} {...rest} />;
 };

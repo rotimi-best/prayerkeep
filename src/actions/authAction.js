@@ -21,16 +21,25 @@ export const logIn = user => async (dispatch, getState) => {
       payload: user
     })
 
-    dispatch(push(routes.HOME))
-
     const sw = await navigator.serviceWorker.ready;
     const subscription = await sw.pushManager.getSubscription();
 
-    const { isSubscribedToPushNotification } = getState().authentication;
+    const {
+      authentication: {
+        isSubscribedToPushNotification
+      },
+      router: {
+        location
+      }
+    } = getState();
 
     if (!subscription && isSubscribedToPushNotification) {
       dispatch(setIsSubscribedToPushNotification(false));
     }
+
+    const goTo = location.query.goTo || routes.HOME;
+    dispatch(push(goTo))
+
   } else {
     dispatch({
       type: USER_LOGIN_FAILED,

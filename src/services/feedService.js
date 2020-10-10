@@ -4,7 +4,13 @@ const { API_URL } = configs;
 
 export const getFeedService = async (userId, quoteId = '') => {
   try {
-    const response = await axios.get(`${API_URL}/feed/${userId}?quoteId=${quoteId}`);
+    const response = await axios.get(`${API_URL}/feed/${userId}?quoteId=${quoteId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      }
+    });
     return { response: response.data };
   } catch (error) {
     const { data = {} } = error.response || {};

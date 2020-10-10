@@ -4,7 +4,13 @@ const { API_URL } = configs;
 
 export const getCollectionService = async (collectionId,userId) => {
   try {
-    const response = await axios.get(`${API_URL}/collection/${collectionId}?userId=${userId}`);
+    const response = await axios.get(`${API_URL}/collection/${collectionId}?userId=${userId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      }
+    });
     return { response: response.data };
   } catch (error) {
     const { data = {} } = error.response || {};

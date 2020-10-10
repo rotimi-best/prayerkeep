@@ -4,7 +4,13 @@ const { API_URL } = configs;
 
 export const getPrayersService = async (userId) => {
   try {
-    const response = await axios.get(`${API_URL}/prayer/${userId}`);
+    const response = await axios.get(`${API_URL}/prayer/${userId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      }
+    });
     return { response: response.data };
   } catch (error) {
     const { data = {} } = error.response || {};
@@ -15,7 +21,13 @@ export const getPrayersService = async (userId) => {
 
 export const getPrayerService = async (userId, prayerId) => {
   try {
-    const response = await axios.get(`${API_URL}/prayer/${userId}/${prayerId}`);
+    const response = await axios.get(`${API_URL}/prayer/${userId}/${prayerId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      }
+    });
     return { response: response.data };
   } catch (error) {
     const { data = {} } = error.response || {};
