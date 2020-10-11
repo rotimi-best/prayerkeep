@@ -9,7 +9,7 @@ import {
   PRAYER_UPDATE_ERROR,
   PRAYER_UPDATE_REQUEST,
   PRAYER_UPDATE_SUCCESS,
-  PRAYER_RESET_ERROR,
+  PRAYER_RESET,
   PRAYER_START_FETCHING,
   PRAYER_FETCHED
 } from '../constants/actionsTypes';
@@ -88,10 +88,10 @@ export default function(state = initialState, action) {
         isUpdating: true,
         error: null
       };
-    case PRAYER_RESET_ERROR:
+    case PRAYER_RESET:
       return {
         ...state,
-        error: null,
+        prayer: null,
       }
     default:
       return state;

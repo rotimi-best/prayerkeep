@@ -99,12 +99,12 @@ const Prayers = props => {
         </AppBar>
         <TabPanel value={value} index={0}>
           {prayers && prayers.length
-            ? prayers.map((prayer, i) => <PrayerCard userId={userId} i={i} key={prayer._id} prayer={prayer} />)
+            ? prayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
             : <Empty type="prayer" text="No prayer request added yet"/>}
         </TabPanel>
         <TabPanel value={value} index={1}>
           {interceedingPrayers && interceedingPrayers.length
-            ? interceedingPrayers.map((prayer, i) => <PrayerCard userId={userId} i={i} key={prayer._id} prayer={prayer} />)
+            ? interceedingPrayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
             : <Empty type="prayer" text="No prayer request added yet"/>}
         </TabPanel>
       </Container>

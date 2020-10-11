@@ -65,6 +65,10 @@ export const getCollection = (collectionId, userId) => async dispatch => {
 
   const { collection } = response || {};
 
+  collection.prayers.forEach(prayer => {
+    prayer.owner = collection.owner
+  });
+
   dispatch({
     type: COLLECTION_FETCHED,
     payload: collection,

@@ -5,9 +5,9 @@ import React, {
   useEffect,
   useCallback
 } from 'react';
+import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import Button from '@material-ui/core/Button';
@@ -111,13 +111,13 @@ const PrayerModal = props => {
     classes,
     allCollection,
     prayers,
-    location
   } = props;
   const repeatLabel = useRef(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
   const prayerToOpen = filterArrayById(prayerModal.prayerId, prayers.allPrayers);
+  const history = useHistory();
 
   const [prayerRequest, setPrayerRequest] = useState('');
   const [collections, setCollection] = useState([]);
@@ -133,7 +133,7 @@ const PrayerModal = props => {
   const isEditMode = !!prayerToOpen;
 
   const handleClose = useCallback(() => {
-    dispatch(push(location.pathname));
+    history.goBack();
     setPrayerRequest('');
     setAnsweredPrayer(false);
     setCollection([]);
@@ -145,7 +145,7 @@ const PrayerModal = props => {
     setErrors({
       prayerRequest: false
     });
-  }, [location.pathname, dispatch]);
+  }, [history]);
 
   // componentDidMount - Get collections
   useEffect(() => {

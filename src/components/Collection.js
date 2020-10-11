@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { push } from 'connected-react-router';
@@ -8,14 +8,15 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Prayer from './Prayer';
+// import Prayer from './Prayer';
 import CollectionTitleModal from './CollectionTitleModal';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Empty from './Empty';
 import NewPrayerButton from './NewPrayerButton';
+import PrayerCard from './PrayerCard';
 
-import { getCollections } from '../actions/collectionsAction';
+import { getCollection } from '../actions/collectionsAction';
 import { getDateCreated } from '../helpers';
 // import { areTheyDifferent } from '../helpers/difference';
 import routes from '../constants/routes';
@@ -31,6 +32,11 @@ const styles = theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 15
+  },
+  prayerContainer: {
+    borderLeft: '1px solid rgb(230, 236, 240)',
+    borderRight: '1px solid rgb(230, 236, 240)',
+    borderTop: '1px solid rgb(230, 236, 240)',
   }
 });
 
@@ -41,49 +47,25 @@ const Collection = props => {
     dispatch,
     userId,
     collections: {
-      allCollection,
+      collectionInView,
       isFetching,
       isUpdating,
       isAdding,
     },
-    prayers: {
-      allPrayers
-    }
   } = props;
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   });
 
-  const [collection, setCollection] = useState(null);
-
   useEffect(() => {
-    // Update our collection changes on prayer state
-    if (collection) {
-      const collectionPrayers = allPrayers.filter(p => p.collections.find(c => c._id === collection._id));
-      // const areDifferent = areTheyDifferent(collectionPrayers, collection.prayers);
-      if (collectionPrayers.length !== collection.prayers.length) {
-        setCollection({
-          ...collection,
-          prayers: collectionPrayers
-        });
-      }
-    }
-  }, [allPrayers, collection]);
-
-  useEffect(() => {
-    const currentCollection = allCollection.filter(c => c._id === id)[0];
-    if (currentCollection) {
-      setCollection(currentCollection);
-    } else {
-      dispatch(getCollections(userId));
-    }
-  }, [allCollection, dispatch, userId, id]);
+    dispatch(getCollection(id, userId));
+  }, [dispatch, userId, id]);
 
   const handleBack = () => {
     dispatch(push(routes.COLLECTIONS));
   }
 
-  if (!collection || isFetching || isUpdating || isAdding) {
+  if (!collectionInView || isFetching || isUpdating || isAdding) {
     return (
       <main className={classes.root}>
         <div className={classes.toolbar} />
@@ -94,14 +76,14 @@ const Collection = props => {
     );
   }
 
-  const { title, color, creator, prayers, createdAt, _id, edittableByUser } = collection;
-  const dateCreated = getDateCreated(createdAt || creator.createdAt);
+  const { title, color, owner, prayers, createdAt, _id, edittableByUser } = collectionInView;
+  const dateCreated = getDateCreated(createdAt || owner.createdAt);
 
   return (
     <main className={classes.root}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
       <CssBaseline />
-      <Container maxWidth="md">
+      <Container maxWidth="sm">
         <Grid container>
           <Grid
             item
@@ -109,7 +91,7 @@ const Collection = props => {
             className={classes.collectionHeader}
           >
             <Typography variant="h5">
-              <IconButton aria-label="back" className={classes.closeButton} onClick={handleBack}>
+              <IconButton aria-label="back" onClick={handleBack}>
                 <KeyboardBackspaceIcon fontSize="large" />
               </IconButton>
               {title}
@@ -124,7 +106,7 @@ const Collection = props => {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="caption" color="textSecondary" component="p">
-              Created by {creator.userId === userId ? 'You' : creator.name} on {dateCreated}
+              Created by {owner.userId === userId ? 'You' : owner.googleAuthUser.name} on {dateCreated}
             </Typography>
           </Grid>
           <div className={classes.toolbar} />
@@ -133,9 +115,9 @@ const Collection = props => {
             <NewPrayerButton collectionId={_id} />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.prayerContainer}>
             {prayers.length
-              ? prayers.map(prayer => <Prayer key={prayer._id} prayer={prayer} />)
+              ? prayers.map(prayer => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
               : <Empty type="prayer" text="No prayer request with this collection yet"/>}
           </Grid>
         </Grid>

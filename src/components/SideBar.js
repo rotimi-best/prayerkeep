@@ -66,7 +66,8 @@ const SideBar = props => {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   })
-
+  console.log('openSidebar', openSidebar)
+  console.log('isDesktopOrLaptop', isDesktopOrLaptop)
   useEffect(() => {
     if (isDesktopOrLaptop && !openSidebar) {
       dispatch(toggleSideBar())
@@ -74,7 +75,7 @@ const SideBar = props => {
       dispatch(toggleSideBar())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isDesktopOrLaptop])
 
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar())

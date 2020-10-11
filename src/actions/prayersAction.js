@@ -11,7 +11,7 @@ import {
   PRAYER_ADD_REQUEST,
   PRAYER_ADD_SUCCESS,
   PRAYER_ADD_ERROR,
-  PRAYER_RESET_ERROR
+  PRAYER_RESET
 } from '../constants/actionsTypes';
 import {
   getPrayersService,
@@ -164,4 +164,4 @@ export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
 
 export const stopRequest = () => dispatch => dispatch({ type: PRAYERS_STOP_REQUEST });
 
-export const resetPrayerError = () => dispatch => dispatch({ type: PRAYER_RESET_ERROR });
+export const resetPrayer= () => dispatch => dispatch({ type: PRAYER_RESET });

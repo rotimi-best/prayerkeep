@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
+import { push } from 'connected-react-router';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -15,10 +16,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 import PrayerCard from '../PrayerCard';
 
-import { getPrayer, updatePrayer } from '../../actions/prayersAction';
+import { getPrayer, updatePrayer, resetPrayer } from '../../actions/prayersAction';
+import routes from '../../constants/routes';
 import useStyles from './style';
 
 const Prayer = () => {
@@ -32,14 +35,19 @@ const Prayer = () => {
       && state.authentication.user.picture,
   }))
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [comment, setComment] = React.useState('');
 
   useEffect(() => {
-    if (!prayer && prayerId) {
+    if (prayerId) {
       dispatch(getPrayer(userId, prayerId))
     }
-  }, [dispatch, userId, prayerId, prayer]);
+
+    return () => {
+      dispatch(resetPrayer())
+    }
+  }, [dispatch, userId, prayerId]);
 
   const handleComment = (e) => {
     setComment(e.target.value);
@@ -49,6 +57,13 @@ const Prayer = () => {
     dispatch(updatePrayer(userId, prayerId, {
       comment
     }))
+  }
+  const handleBack = () => {
+    if (window.history.length > 2) {
+      history.goBack();
+    } else {
+      dispatch(push(routes.PRAYERS));
+    }
   }
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -66,7 +81,12 @@ const Prayer = () => {
       >
         {isPrayerFetching && <LinearProgress />}
         <CssBaseline />
-        {/* <NewPrayerButton /> */}
+        <Typography variant="h5">
+          <IconButton aria-label="back" onClick={handleBack}>
+            <KeyboardBackspaceIcon fontSize="large" />
+          </IconButton>
+          Prayer
+        </Typography>
         {prayer && <PrayerCard userId={userId} prayer={prayer} isPrayerClickable={false}/>}
         {!isPrayerFetching && (
           <List className={classes.listRoot}>

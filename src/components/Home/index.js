@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import { useMediaQuery } from 'react-responsive';
 import { connect } from "react-redux";
 import Paper from '@material-ui/core/Paper';
@@ -201,10 +200,6 @@ const Home = props => {
       </Container>
     </main>
   );
-};
-
-Home.propTypes = {
-  classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

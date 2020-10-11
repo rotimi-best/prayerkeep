@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom'
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
@@ -15,8 +17,15 @@ firebase.initializeApp({
 
 const Welcome = ({ dispatch }) => {
   const [onSignInSuccess, setOnSignInSuccess] = React.useState(false);
+  const history = useHistory();
+  const { isLoggedIn } = useSelector(state => ({
+    isLoggedIn: state.authentication.isLoggedIn
+  }));
 
   useEffect(() => {
+    if (isLoggedIn) {
+      history.push('/')
+    }
     firebase.auth().onAuthStateChanged(user => {
       // TODO: Use the users details here to login
       const localUser = JSON.parse(localStorage.getItem('user')) || null;
@@ -31,7 +40,7 @@ const Welcome = ({ dispatch }) => {
           // }));
       }
     });
-  }, []);
+  }, [isLoggedIn, history]);
 
   const uiConfig = {
     signInFlow: "popup",

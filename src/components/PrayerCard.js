@@ -102,6 +102,13 @@ const PrayerCard = props => {
     dispatch(push(`/prayer/${_id}`))
   }
 
+  const handleComment = () => {
+    if (window.location.pathname !== `/prayer/${_id}`) {
+      return openPrayer();
+    }
+    return;
+  }
+
   const handleEdit = () => {
     dispatch(push(`?prayerModal=open&prayerId=${_id}`));
   }
@@ -184,7 +191,7 @@ const PrayerCard = props => {
         }}
       />
       <CustomCardContent />
-      <CardActions
+      {isOwner && Array.isArray(collections) && <CardActions
         disableSpacing
         classes={{
           root: classes.cardActionRoot
@@ -201,7 +208,7 @@ const PrayerCard = props => {
             }}
           />
         )}
-      </CardActions>
+      </CardActions>}
       <CardActions
         classes={{ root: classes.cardActionButtonsRoot }}
         disableSpacing
@@ -213,7 +220,7 @@ const PrayerCard = props => {
           <Count count={totalIntercessors} />
         </div>
         <div className={classes.iconWithCount}>
-          <IconButton aria-label="comment">
+          <IconButton aria-label="comment" onClick={handleComment}>
             <ChatBubbleOutlineIcon />
           </IconButton>
           <Count count={totalComments} />

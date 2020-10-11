@@ -21,9 +21,6 @@ export const logIn = user => async (dispatch, getState) => {
       payload: user
     })
 
-    const sw = await navigator.serviceWorker.ready;
-    const subscription = await sw.pushManager.getSubscription();
-
     const {
       authentication: {
         isSubscribedToPushNotification
@@ -33,12 +30,17 @@ export const logIn = user => async (dispatch, getState) => {
       }
     } = getState();
 
-    if (!subscription && isSubscribedToPushNotification) {
-      dispatch(setIsSubscribedToPushNotification(false));
-    }
-
     const goTo = location.query.goTo || routes.HOME;
     dispatch(push(goTo))
+
+    setTimeout(async () => {
+      const sw = await navigator.serviceWorker.ready;
+      const subscription = await sw.pushManager.getSubscription();
+
+      if (!subscription && isSubscribedToPushNotification) {
+        dispatch(setIsSubscribedToPushNotification(false));
+      }
+    }, 2000);
 
   } else {
     dispatch({

@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { toggleSideBar } from "../actions/sidebarAction";
-// import { getCollections } from "../actions/collectionsAction";
+import { getCollections } from "../actions/collectionsAction";
 // import { getPrayers } from "../actions/prayersAction";
 
 const styles = theme => ({
@@ -39,15 +39,21 @@ const styles = theme => ({
   }
 });
 
+
+function hideHeader(route, isMobile) {
+  return route.includes('prayer') && isMobile
+}
+
 const Header = props => {
   const {
     classes,
     dispatch,
     isLoggedIn,
-    // route,
+    route,
     userPictureUrl,
     userName,
-    userId
+    userId,
+    collections
   } = props;
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -59,8 +65,8 @@ const Header = props => {
 
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
-    if (userId) {
-      // dispatch(getCollections(userId));
+    if (userId && (!collections || !collections.length)) {
+      dispatch(getCollections(userId));
       // dispatch(getPrayers(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +76,7 @@ const Header = props => {
     dispatch(toggleSideBar());
   };
 
-  if (!isLoggedIn) {
+  if (!isLoggedIn || hideHeader(route, isMobile)) {
     return null;
   }
 
@@ -118,6 +124,7 @@ Header.defaultProps = {
 
 const mapStateToProps = state => ({
   route: state.router.location.pathname,
+  collections: state?.collections?.allCollections,
   isLoggedIn: state.authentication.isLoggedIn,
   userId: state.authentication.user && state.authentication.user.userId,
   userName: state.authentication.user && state.authentication.user.name,
