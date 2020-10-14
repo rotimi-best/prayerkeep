@@ -215,7 +215,7 @@ const PrayerCard = props => {
       >
         <div className={classes.iconWithCount}>
           <IconButton aria-label="add to your intercessions" onClick={handleIsInterceding}>
-            <PrayerIcon fill={isInterceding && "#f8b400"} />
+            <PrayerIcon fill={isInterceding && "#17bf63"} />
           </IconButton>
           <Count count={totalIntercessors} />
         </div>

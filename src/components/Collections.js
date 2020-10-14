@@ -68,7 +68,7 @@ const Collections = props => {
   return (
     <main className={classes.root}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
-      <Container maxWidth="md">
+      <Container maxWidth="sm">
         <Grid container>
           <Grid
             item

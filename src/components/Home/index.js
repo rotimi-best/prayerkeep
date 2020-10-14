@@ -69,11 +69,14 @@ const Home = props => {
   }
 
   const handleLoveClick = () => {
-    const newIsLoved = !isLoved;
-    setIsLoved(newIsLoved);
-    dispatch(
-      updateQuote(userId, quote._id, { loved: newIsLoved })
-    );
+    setIsLoved(isLoved => {
+      const newIsLoved = !isLoved;
+      dispatch(
+        updateQuote(userId, quote._id, { loved: newIsLoved })
+      );
+
+      return newIsLoved;
+    });
   }
 
   const handleComment = (e) => {

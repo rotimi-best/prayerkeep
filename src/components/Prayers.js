@@ -87,7 +87,7 @@ const Prayers = props => {
         <AppBar position="static" color="default">
           <Tabs
             value={value}
-            indicatorColor="secondary"
+            indicatorColor="primary"
             textColor="inherit"
             onChange={handleChange}
             aria-label="prayers in sections"
