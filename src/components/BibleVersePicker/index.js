@@ -160,11 +160,11 @@ export default function BibleVersePicker() {
         let formattedChapter = title + ` ${chapter.selected}`
         if (verses?.length) {
           const sortedVerses = verses.sort((a, b) => a - b);
-          return formattedChapter + `: ${formatVerses(sortedVerses)}`;
+          return formattedChapter + `: ${formatVerses(sortedVerses)} (KJV)`;
         }
-        return formattedChapter;
+        return formattedChapter + ' (KJV)';
       }
-      return title;
+      return title + ' (KJV)';
     }
 
     return 'Bible verse picker';
