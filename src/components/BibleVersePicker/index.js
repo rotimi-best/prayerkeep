@@ -22,7 +22,7 @@ import useStyles from './style';
 const books = getBooks();
 
 const GUTTER_SIZE = 5;
-const COLUMN_WIDTH = 71;
+const COLUMN_WIDTH = 70;
 const ELEMENT_PER_COLUMN = 5;
 const HEIGHT = 330;
 const WIDTH = 400;
@@ -44,41 +44,43 @@ const Books = React.memo(props => (
 ))
 
 const NumberList = React.memo(({ classes, itemSize, onClick, selected }) => (
-  <Grid
-    columnCount={ELEMENT_PER_COLUMN}
-    columnWidth={COLUMN_WIDTH + GUTTER_SIZE}
-    height={HEIGHT}
-    innerElementType={innerElementType}
-    rowCount={Math.ceil(itemSize / ELEMENT_PER_COLUMN)}
-    rowHeight={50}
-    width={WIDTH}
-  >
-    {({ columnIndex, rowIndex, style }) => {
-      const index = ((rowIndex * ELEMENT_PER_COLUMN) + 1) + columnIndex;
-      if (index > itemSize) {
-        return null;
-      }
-      const colorClassName = Array.isArray(selected) && selected.includes(index)
-        ? classes.selectedNumber
-        : '';
-      return (
-        <div
-          className={classes.numberList}
-          style={{
-            ...style,
-            left: style.left + GUTTER_SIZE,
-            top: style.top + GUTTER_SIZE,
-            width: style.width - GUTTER_SIZE,
-            height: style.height - GUTTER_SIZE
-          }}
-        >
-          <IconButton key={`chapter-${rowIndex}-${columnIndex}`} className={classes.clickableNumber + ` ${colorClassName}`} onClick={onClick(index)}>
-            {index}
-          </IconButton>
-        </div>
-      )
-    }}
-  </Grid>
+  <React.Fragment>
+    <Grid
+      columnCount={ELEMENT_PER_COLUMN}
+      columnWidth={COLUMN_WIDTH + GUTTER_SIZE}
+      height={HEIGHT}
+      innerElementType={innerElementType}
+      rowCount={Math.ceil(itemSize / ELEMENT_PER_COLUMN)}
+      rowHeight={50}
+      width={WIDTH}
+    >
+      {({ columnIndex, rowIndex, style }) => {
+        const index = ((rowIndex * ELEMENT_PER_COLUMN) + 1) + columnIndex;
+        if (index > itemSize) {
+          return null;
+        }
+        const colorClassName = Array.isArray(selected) && selected.includes(index)
+          ? classes.selectedNumber
+          : '';
+        return (
+          <div
+            className={classes.numberList}
+            style={{
+              ...style,
+              left: style.left + GUTTER_SIZE,
+              top: style.top + GUTTER_SIZE,
+              width: style.width - GUTTER_SIZE,
+              height: style.height - GUTTER_SIZE
+            }}
+          >
+            <IconButton key={`chapter-${rowIndex}-${columnIndex}`} className={classes.clickableNumber + ` ${colorClassName}`} onClick={onClick(index)}>
+              {index}
+            </IconButton>
+          </div>
+        )
+      }}
+    </Grid>
+  </React.Fragment>
 ));
 
 const innerElementType = React.forwardRef(({ style, ...rest }, ref) => (
@@ -116,8 +118,9 @@ export default function BibleVersePicker() {
   const handleTabChange = (event, newValue) => {
     if (newValue === 0) {
       setChapter({
-        ...chapter,
-        chapters: []
+        book: '',
+        chapters: [],
+        selected: '',
       })
       setVerses([])
     }
@@ -146,10 +149,11 @@ export default function BibleVersePicker() {
   }
 
   const handleVersesClick = verseNumber => () => {
-    setVerses([
-      ...verses,
-      verseNumber
-    ]);
+    setVerses(verses =>
+      verses.includes(verseNumber)
+        ? verses.filter(verse => verse !== verseNumber)
+        : [...verses, verseNumber]
+      );
     // handleDialog()
   }
 
@@ -218,13 +222,11 @@ export default function BibleVersePicker() {
               <Tab label="VERSES" {...a11yProps(2)} disabled={!chapter.book || !chapter.selected}/>
             </Tabs>
           </AppBar>
+
           <div
             role="tabpanel"
             id={`scrollable-tabpanel`}
             aria-labelledby={`scrollable-tab`}
-            style={{
-              marginTop: 10
-            }}
           >
             {tabs[tabValue]}
           </div>

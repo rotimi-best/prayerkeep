@@ -7,6 +7,9 @@ export default makeStyles(theme => ({
     '& .MuiDialogContent-root': {
       padding: 0,
       width: 400,
+      '& #scrollable-tabpanel': {
+        marginTop: 10,
+      },
       '& .MuiTab-root': {
         minWidth: 100
       },
@@ -46,6 +49,7 @@ export default makeStyles(theme => ({
     justifyContent: 'center',
   },
   clickableNumber: {
+    color: '#000',
     fontSize: 14,
     width: 40,
     height: 40
@@ -53,5 +57,11 @@ export default makeStyles(theme => ({
   selectedNumber: {
     backgroundColor: theme.palette.primary.main,
     color: '#fff'
+  },
+  hint: {
+    width: '80%',
+    marginLeft: 15,
+    fontStyle: 'italic',
+    fontSize: 15
   }
 }));
