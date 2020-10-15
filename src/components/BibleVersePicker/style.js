@@ -26,8 +26,16 @@ export default makeStyles(theme => ({
         backgroundColor: theme.palette.primary.main,
         borderRadius: 20,
         border: 'unset'
-      }
+      },
     },
+    '& .MuiFab-root.Mui-disabled': {
+      color: 'rgba(0, 0, 0, 0.26)',
+      backgroundColor: 'rgba(0, 0, 0, 0.12)'
+    },
+    '& .MuiFab-primary': {
+      color: '#fff',
+      backgroundColor: theme.palette.primary.main
+    }
   },
   numberList: {
     display: 'grid',
@@ -41,5 +49,9 @@ export default makeStyles(theme => ({
     fontSize: 14,
     width: 40,
     height: 40
+  },
+  selectedNumber: {
+    backgroundColor: theme.palette.primary.main,
+    color: '#fff'
   }
 }));

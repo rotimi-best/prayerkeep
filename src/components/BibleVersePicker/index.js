@@ -8,19 +8,27 @@ import DialogActions from '@material-ui/core/DialogActions';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import List from '@material-ui/core/List';
+import Fab from '@material-ui/core/Fab';
 import ListItem from '@material-ui/core/ListItem';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemText from '@material-ui/core/ListItemText';
+import DoneIcon from '@material-ui/icons/Done';
 
 import getBooks from '../../helpers/getBooks';
+import formatVerses from '../../helpers/formatVerses';
 import getChapters from '../../helpers/getChapters';
 import useStyles from './style';
 
 const books = getBooks();
 
+const GUTTER_SIZE = 5;
+const COLUMN_WIDTH = 71;
+const ELEMENT_PER_COLUMN = 5;
+const HEIGHT = 330;
+const WIDTH = 400;
+
 const Books = React.memo(props => (
-  <FixedSizeList height={330} width={400} itemSize={50} itemCount={books.length + 1}>
+  <FixedSizeList height={HEIGHT} width={WIDTH} itemSize={50} itemCount={books.length + 1}>
     {({ index, style }) => {
       const book = books[index];
       if (!book) return null;
@@ -35,27 +43,24 @@ const Books = React.memo(props => (
   </FixedSizeList>
 ))
 
-const GUTTER_SIZE = 5;
-const COLUMN_WIDTH = 71;
-const ELEMENT_PER_COLUMN = 5;
-
-const NumberList = ({ classes, itemSize, onClick }) => (
+const NumberList = React.memo(({ classes, itemSize, onClick, selected }) => (
   <Grid
-    className="Grid"
     columnCount={ELEMENT_PER_COLUMN}
     columnWidth={COLUMN_WIDTH + GUTTER_SIZE}
-    height={330}
+    height={HEIGHT}
     innerElementType={innerElementType}
     rowCount={Math.ceil(itemSize / ELEMENT_PER_COLUMN)}
     rowHeight={50}
-    width={400}
+    width={WIDTH}
   >
     {({ columnIndex, rowIndex, style }) => {
-      console.log("itemSize", itemSize)
       const index = ((rowIndex * ELEMENT_PER_COLUMN) + 1) + columnIndex;
       if (index > itemSize) {
         return null;
       }
+      const colorClassName = Array.isArray(selected) && selected.includes(index)
+        ? classes.selectedNumber
+        : '';
       return (
         <div
           className={classes.numberList}
@@ -67,14 +72,14 @@ const NumberList = ({ classes, itemSize, onClick }) => (
             height: style.height - GUTTER_SIZE
           }}
         >
-          <IconButton key={`chapter-${rowIndex}-${columnIndex}`} className={classes.clickableNumber} onClick={onClick(index)}>
+          <IconButton key={`chapter-${rowIndex}-${columnIndex}`} className={classes.clickableNumber + ` ${colorClassName}`} onClick={onClick(index)}>
             {index}
           </IconButton>
         </div>
       )
     }}
   </Grid>
-);
+));
 
 const innerElementType = React.forwardRef(({ style, ...rest }, ref) => (
   <div
@@ -106,8 +111,16 @@ export default function BibleVersePicker() {
     selected: '',
   });
   const [verses, setVerses] = React.useState([]);
+  const title = getTitle();
 
   const handleTabChange = (event, newValue) => {
+    if (newValue === 0) {
+      setChapter({
+        ...chapter,
+        chapters: []
+      })
+      setVerses([])
+    }
     setTabValue(newValue);
   };
 
@@ -129,6 +142,32 @@ export default function BibleVersePicker() {
       selected: chapterNumber
     });
     setTabValue(2)
+    setVerses([])
+  }
+
+  const handleVersesClick = verseNumber => () => {
+    setVerses([
+      ...verses,
+      verseNumber
+    ]);
+    // handleDialog()
+  }
+
+  function getTitle() {
+    if (chapter.book) {
+      let title = chapter.book
+      if (chapter.selected) {
+        let formattedChapter = title + ` ${chapter.selected}`
+        if (verses?.length) {
+          const sortedVerses = verses.sort((a, b) => a - b);
+          return formattedChapter + `: ${formatVerses(sortedVerses)}`;
+        }
+        return formattedChapter;
+      }
+      return title;
+    }
+
+    return 'Bible verse picker';
   }
 
   const tabs = [
@@ -142,8 +181,9 @@ export default function BibleVersePicker() {
     />,
     <NumberList
       classes={classes}
+      selected={verses}
       itemSize={chapter.chapters[chapter.selected - 1]}
-      onClick={handleChapterClick}
+      onClick={handleVersesClick}
     />
   ]
 
@@ -161,12 +201,7 @@ export default function BibleVersePicker() {
         }}
       >
         <DialogTitle id="customized-dialog-title">
-          {!!chapter.book
-            ? chapter.selected
-              ? `${chapter.book}: ${chapter.selected}`
-              : chapter.book
-            : `Bible verse picker`
-          }
+          {title}
         </DialogTitle>
         <DialogContent>
           <AppBar position="sticky" color="inherit">
@@ -180,7 +215,7 @@ export default function BibleVersePicker() {
             >
               <Tab label="BOOKS" {...a11yProps(0)} />
               <Tab label="CHAPTERS" {...a11yProps(1)} disabled={!chapter.book}/>
-              <Tab label="VERSES" {...a11yProps(2)} />
+              <Tab label="VERSES" {...a11yProps(2)} disabled={!chapter.book || !chapter.selected}/>
             </Tabs>
           </AppBar>
           <div
@@ -195,9 +230,9 @@ export default function BibleVersePicker() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleDialog} color="primary">
-            Save changes
-          </Button>
+          <Fab color="primary" onClick={handleDialog} aria-label="save-verse-selection" disabled={!verses?.length}>
+            <DoneIcon />
+          </Fab>
         </DialogActions>
       </Dialog>
     </div>
