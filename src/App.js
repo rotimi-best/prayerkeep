@@ -9,6 +9,7 @@ import Prayers from "./components/Prayers";
 import Prayer from "./components/Prayer";
 // import Plans from "./components/Plans";
 // import Plan from "./components/Plan";
+import BibleVersePicker from "./components/BibleVersePicker";
 import Collections from "./components/Collections";
 import Collection from "./components/Collection";
 import PrivateRoute from "./containers/PrivateRoute";
@@ -33,18 +34,19 @@ function App() {
         <ConnectedRouter history={history}>
           <TriggerModalFromUrl />
           <RequestPermission />
-          <Header />
-          <Switch>
+          {/* <Header /> */}
+          <BibleVersePicker />
+          {/* <Switch>
             <Route exact path="/welcome" component={Welcome} />
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/prayers" component={Prayers} />
-            <PrivateRoute exact path="/prayer/:prayerId" component={Prayer} />
+            <PrivateRoute exact path="/prayer/:prayerId" component={Prayer} /> */}
             {/* <PrivateRoute exact path="/plans" component={Plans} />
             <PrivateRoute exact path="/plan/:id" component={Plan} /> */}
-            <PrivateRoute path="/collections" component={Collections} />
+            {/* <PrivateRoute path="/collections" component={Collections} />
             <PrivateRoute path="/collection/:id" component={Collection} />
             <Redirect to="/" />
-          </Switch>
+          </Switch> */}
           <BottomNavigation />
           <Alert />
         </ConnectedRouter>
