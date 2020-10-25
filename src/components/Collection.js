@@ -25,7 +25,9 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   root: {
     flexGrow: 1,
-    padding: `${theme.spacing(3)}px 0`,
+    '& .MuiContainer-root': {
+      padding: 5
+    }
   },
   collectionHeader: {
     display: 'flex',
@@ -33,10 +35,12 @@ const styles = theme => ({
     alignItems: 'center',
     marginBottom: 15
   },
-  prayerContainer: {
-    borderLeft: '1px solid rgb(230, 236, 240)',
-    borderRight: '1px solid rgb(230, 236, 240)',
-    borderTop: '1px solid rgb(230, 236, 240)',
+  headerText: {
+    fontWeight: 'bold',
+    display: 'flex',
+    alignItems: 'flex-start',
+    flexDirection: 'column',
+    paddingLeft: 5
   }
 });
 
@@ -90,9 +94,9 @@ const Collection = props => {
             xs={12}
             className={classes.collectionHeader}
           >
-            <Typography variant="h5">
+            <Typography variant="h5" className={classes.headerText}>
               <IconButton aria-label="back" onClick={handleBack}>
-                <KeyboardBackspaceIcon fontSize="large" />
+                <KeyboardBackspaceIcon />
               </IconButton>
               {title}
             </Typography>
@@ -109,13 +113,13 @@ const Collection = props => {
               Created by {owner.userId === userId ? 'You' : owner.googleAuthUser.name} on {dateCreated}
             </Typography>
           </Grid>
-          <div className={classes.toolbar} />
+          {/* <div className={classes.toolbar} /> */}
 
           <Grid item xs={12}>
             <NewPrayerButton collectionId={_id} />
           </Grid>
 
-          <Grid item xs={12} className={classes.prayerContainer}>
+          <Grid item xs={12}>
             {prayers.length
               ? prayers.map(prayer => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
               : <Empty type="prayer" text="No prayer request with this collection yet"/>}

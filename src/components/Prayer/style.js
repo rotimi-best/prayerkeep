@@ -3,8 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 export default makeStyles(theme => ({
   containerRoot: {
     padding: 0,
-    borderLeft: '1px solid rgb(230, 236, 240)',
-    borderRight: '1px solid rgb(230, 236, 240)',
   },
   toolbar: theme.mixins.toolbar,
   content: {
@@ -24,4 +22,12 @@ export default makeStyles(theme => ({
       marginRight: 10
     }
   },
+  headerText: {
+    fontWeight: 'bold',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: 150,
+    margin: '15px 0'
+  }
 }));

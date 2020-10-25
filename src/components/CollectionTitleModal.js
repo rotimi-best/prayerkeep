@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMediaQuery } from "react-responsive";
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { CirclePicker  } from 'react-color';
@@ -58,11 +59,15 @@ const CollectionTitleModal = props => {
     collectionId,
     title: defaultTitle = '',
     color: defaultColor = '',
-    edittableByUser
+    edittableByUser,
+    renderButton,
   } = props;
   const [title, setTitle] = useState(defaultTitle);
   const [color, setColor] = useState(defaultColor);
   const [openModal, setOpenModal] = useState(false);
+  const isMobile = useMediaQuery({
+    query: "(max-width: 768px)"
+  });
 
   const toggleModal = e => {
     setOpenModal(!openModal);
@@ -100,18 +105,21 @@ const CollectionTitleModal = props => {
   return (
     <>
       {edittableByUser &&
-        <Fab
+        (typeof renderButton === 'function'
+          ? renderButton({ onClick: toggleModal })
+          : <Fab
           color="primary"
           aria-label="new-collection"
           onClick={toggleModal}
           // classes={{ root: classes.editRoot }}
         >
           {isNew ? <AddIcon /> : <EditIcon />}
-        </Fab>}
+        </Fab>)}
       <Dialog
         open={openModal}
         onClose={handleClose}
         aria-labelledby="prayer-request-modal"
+        fullScreen={isMobile}
         classes={{
           paper: classes.dialogPaper
         }}

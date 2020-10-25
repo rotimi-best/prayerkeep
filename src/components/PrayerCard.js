@@ -16,6 +16,7 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
 
+import BiblePasssageCard from './BiblePasssageCard';
 import PrayerIcon from './Icons/Prayer';
 import { getDateCreated } from '../helpers';
 import { openAlert } from '../actions/alertAction';
@@ -27,10 +28,10 @@ const useStyles = makeStyles(() => ({
     flexWrap: 'wrap',
   },
   card: {
-    marginBottom: 5,
+    margin: 5,
     boxShadow: 'none',
-    borderBottom: '1px solid rgb(230, 236, 240)',
-    borderRadius: 0
+    border: '1px solid rgb(230, 236, 240)',
+    borderRadius: 8
   },
   cardHeaderRoot: {
     padding: '6px 16px 0px 16px'
@@ -52,8 +53,7 @@ const useStyles = makeStyles(() => ({
   description: {
     color: '#202124',
     letterSpacing: '.01428571em',
-    lineHeight: '1.25rem',
-    fontFamily: 'Roboto,Arial,sans-serif',
+    lineHeight: '1.5rem',
     fontSize: 16,
     marginBottom: 5
   },
@@ -91,6 +91,7 @@ const PrayerCard = props => {
     comments,
     intercessors,
     interceeding,
+    formattedPassages = []
   } = prayer;
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -152,6 +153,7 @@ const PrayerCard = props => {
         <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
           {description}
         </Typography>
+        {formattedPassages.map((passage, i) => <BiblePasssageCard key={`passage-${i}`} passage={passage} />)}
       </CardContent>
     );
 

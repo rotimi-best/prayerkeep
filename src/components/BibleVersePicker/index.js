@@ -1,6 +1,6 @@
 import React from 'react';
 import { FixedSizeList, FixedSizeGrid as Grid } from 'react-window';
-import Button from '@material-ui/core/Button';
+import { useMediaQuery } from "react-responsive";
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from './DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,10 +22,10 @@ import useStyles from './style';
 const books = getBooks();
 
 const GUTTER_SIZE = 5;
-const COLUMN_WIDTH = 70;
+const COLUMN_WIDTH = 50;
 const ELEMENT_PER_COLUMN = 5;
 const HEIGHT = 330;
-const WIDTH = 400;
+const WIDTH = 300;
 
 const Books = React.memo(props => (
   <FixedSizeList height={HEIGHT} width={WIDTH} itemSize={50} itemCount={books.length + 1}>
@@ -43,7 +43,7 @@ const Books = React.memo(props => (
   </FixedSizeList>
 ))
 
-const NumberList = React.memo(({ classes, itemSize, onClick, selected }) => (
+const NumberList = React.memo(({ classes, itemSize, onClick, selected, multiSelectable }) => (
   <React.Fragment>
     <Grid
       columnCount={ELEMENT_PER_COLUMN}
@@ -103,9 +103,55 @@ function a11yProps(index) {
   };
 }
 
-export default function BibleVersePicker() {
+async function getDefaultState(passage) {
+  if (!passage) {
+    return {
+      book: '',
+      chapters: [],
+      selected: '',
+      verses: [],
+      tabValue: 0
+    }
+  }
+
+  const isMultipleBooks = /^\d/.test(passage);
+  const passageFragments = passage.split(' ');
+  const book = isMultipleBooks ? passageFragments[0] + ` ${passageFragments[1]}` : passageFragments[0];
+  const selected = passageFragments[isMultipleBooks ? 2 : 1].replace(':', '');
+  const rawVerses = passageFragments.slice(isMultipleBooks ? 3 : 2, passageFragments.length - 1);
+  const verses = [];
+
+  const chapter = await getChapters(book.replace(/\s/g, ''));
+
+  for (const rawVerse of rawVerses) {
+    const number = rawVerse.replace(',', '');
+    if (number.includes('-')) {
+      const [startNo, endNo] = number.split('-');
+      for (let i = parseInt(startNo); i <= parseInt(endNo); i++) {
+        verses.push(i)
+      }
+    } else {
+      verses.push(parseInt(number))
+    }
+  }
+
+  return {
+    ...chapter.default,
+    selected,
+    verses,
+    tabValue: 2
+  }
+}
+
+export default function BibleVersePicker(props) {
+  const {
+    value,
+    visible,
+    onComplete,
+    handleVisibility
+  } = props;
+
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
   const [tabValue, setTabValue] = React.useState(0);
   const [chapter, setChapter] = React.useState({
     book: '',
@@ -114,6 +160,39 @@ export default function BibleVersePicker() {
   });
   const [verses, setVerses] = React.useState([]);
   const title = getTitle();
+  const isMobile = useMediaQuery({
+    query: "(max-width: 768px)"
+  });
+
+  React.useEffect(() => {
+    async function setDefaultState() {
+      const defaultState = await getDefaultState(value);
+      setChapter({
+        book: defaultState.book,
+        chapters: defaultState.chapters,
+        selected: defaultState.selected,
+      });
+      setVerses([
+        ...defaultState.verses
+      ]);
+      setTabValue(defaultState.tabValue);
+    }
+
+    if (visible) {
+      setDefaultState()
+    }
+  }, [visible, value]);
+
+  const handleComplete = () => {
+    onComplete(title)
+    setChapter({
+      book: '',
+      chapters: [],
+      selected: '',
+    });
+    setVerses([])
+    setTabValue(0)
+  }
 
   const handleTabChange = (event, newValue) => {
     if (newValue === 0) {
@@ -127,10 +206,6 @@ export default function BibleVersePicker() {
     setTabValue(newValue);
   };
 
-  const handleDialog = () => {
-    setOpen(open => !open);
-  };
-
   const handleBookSelected = (book) => async () => {
     setTabValue(1)
     const chapter = await getChapters(book.replace(/\s/g, ''));
@@ -139,14 +214,14 @@ export default function BibleVersePicker() {
     });
   };
 
-  const handleChapterClick = chapterNumber => () => {
-    setChapter({
+  const handleChapterClick = React.useCallback(chapterNumber => () => {
+    setChapter(chapter => ({
       ...chapter,
       selected: chapterNumber
-    });
+    }));
     setTabValue(2)
     setVerses([])
-  }
+  }, [])
 
   const handleVersesClick = verseNumber => () => {
     setVerses(verses =>
@@ -154,7 +229,7 @@ export default function BibleVersePicker() {
         ? verses.filter(verse => verse !== verseNumber)
         : [...verses, verseNumber]
       );
-    // handleDialog()
+    // handleVisibility()
   }
 
   function getTitle() {
@@ -174,12 +249,13 @@ export default function BibleVersePicker() {
     return 'Bible verse picker';
   }
 
-  const tabs = [
+  const tabs = React.useMemo(() => [
     <Books
       handleBookSelected={handleBookSelected}
     />,
     <NumberList
       classes={classes}
+      selected={[chapter.selected]}
       itemSize={chapter.chapters.length}
       onClick={handleChapterClick}
     />,
@@ -189,22 +265,20 @@ export default function BibleVersePicker() {
       itemSize={chapter.chapters[chapter.selected - 1]}
       onClick={handleVersesClick}
     />
-  ]
+  ], [verses, chapter.chapters, classes, chapter.selected, handleChapterClick])
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleDialog}>
-        Open dialog
-      </Button>
       <Dialog
-        onClose={handleDialog}
+        onClose={handleVisibility}
         aria-labelledby="customized-dialog-title"
-        open={open}
+        open={visible}
+        fullScreen={isMobile}
         classes={{
           paper: classes.dialogRoot
         }}
       >
-        <DialogTitle id="customized-dialog-title">
+        <DialogTitle id="customized-dialog-title" onClick={handleVisibility}>
           {title}
         </DialogTitle>
         <DialogContent>
@@ -232,7 +306,7 @@ export default function BibleVersePicker() {
           </div>
         </DialogContent>
         <DialogActions>
-          <Fab color="primary" onClick={handleDialog} aria-label="save-verse-selection" disabled={!verses?.length}>
+          <Fab color="primary" onClick={handleComplete} aria-label="save-verse-selection" disabled={!verses?.length}>
             <DoneIcon />
           </Fab>
         </DialogActions>

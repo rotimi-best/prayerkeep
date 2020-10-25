@@ -81,9 +81,9 @@ const Prayer = () => {
       >
         {isPrayerFetching && <LinearProgress />}
         <CssBaseline />
-        <Typography variant="h5">
+        <Typography variant="h5" className={classes.headerText}>
           <IconButton aria-label="back" onClick={handleBack}>
-            <KeyboardBackspaceIcon fontSize="large" />
+            <KeyboardBackspaceIcon />
           </IconButton>
           Prayer
         </Typography>

@@ -2,11 +2,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(theme => ({
   dialogRoot: {
-    width: 400,
+    width: 300,
     height: 500,
     '& .MuiDialogContent-root': {
       padding: 0,
-      width: 400,
+      width: 300,
       '& #scrollable-tabpanel': {
         marginTop: 10,
       },

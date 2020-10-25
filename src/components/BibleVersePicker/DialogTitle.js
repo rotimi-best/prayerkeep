@@ -21,10 +21,10 @@ const styles = (theme) => ({
 });
 
 export default withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
+  const { children, classes, onClick, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <IconButton aria-label="close" className={classes.backButton} onClick={onClose}>
+      <IconButton aria-label="close" className={classes.backButton} onClick={onClick}>
         <KeyboardBackspaceIcon />
       </IconButton>
       <Typography className={classes.header} variant="subtitle1">{children}</Typography>
