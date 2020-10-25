@@ -26,6 +26,8 @@ import UnLovedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import LovedIcon from '@material-ui/icons/Favorite';
 import SendIcon from '@material-ui/icons/Send';
 
+import PrayerInput from '../PrayerInput';
+
 import { date } from "../../helpers";
 import { getFeed, updateQuote } from '../../actions/feedAction';
 import { updatePrayer } from '../../actions/prayersAction';
@@ -100,6 +102,9 @@ const Home = props => {
         }}
       >
       {feed.isFetching ? <LinearProgress /> : null}
+        <PrayerInput
+
+        />
         <Paper
           variant="elevation"
           className={classes.userStatsRoot}

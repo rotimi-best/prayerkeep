@@ -36,54 +36,17 @@ import Chip from '@material-ui/core/Chip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import CollectionTitleModal from './CollectionTitleModal';
-import DeleteModal from './DeleteModal';
-import { getCollections } from '../actions/collectionsAction';
-import { addPrayer, updatePrayer, getPrayers } from '../actions/prayersAction';
-import { date, getNextXDaysDate } from "../helpers";
-import colorConstants from '../constants/colors';
 import { DialogActions } from '@material-ui/core';
 
-const styles = theme => ({
-  root: {
-    flexWrap: 'wrap',
-  },
-  appBar: {
-    position: 'relative',
-  },
-  title: {
-    marginLeft: theme.spacing(2),
-    flex: 1,
-  },
-  margin: {
-    margin: `${theme.spacing(1)}px 0`,
-  },
-  newCollection: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    margin: '5px 0'
-  },
-  expansionRoot: {
-    width: '100%',
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  chipRoot: {
-    margin: 2
-  },
-  choosenCollection: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    marginBottom: 5
-  }
-});
+import CollectionTitleModal from '../CollectionTitleModal';
+import BibleVersePicker from "../BibleVersePicker";
+import DeleteModal from '../DeleteModal';
+
+import { date, getNextXDaysDate } from "../../helpers";
+import colorConstants from '../../constants/colors';
+import { addPrayer, updatePrayer, getPrayers } from '../../actions/prayersAction';
+import { getCollections } from '../../actions/collectionsAction';
+import styles from './style';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -388,7 +351,7 @@ const PrayerModal = props => {
           />
 
           {/* REPEAT */}
-          <FormControl variant="outlined" className={classes.formControl}>
+          {/* <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel ref={repeatLabel} htmlFor="outlined-age-native-simple">
               Repeat
             </InputLabel>
@@ -408,10 +371,10 @@ const PrayerModal = props => {
               <option value="monthly">Monthly</option>
               <option value="yearly">Yearly</option>
             </Select>
-          </FormControl>
+          </FormControl> */}
 
           {/* Start and End Date */}
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
               <KeyboardDatePicker
                 margin="normal"
@@ -442,7 +405,7 @@ const PrayerModal = props => {
                 }}
               />
             </Grid>
-          </MuiPickersUtilsProvider>
+          </MuiPickersUtilsProvider> */}
         </DialogContent>
 
         {/* Delete and Save button */}

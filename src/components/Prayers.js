@@ -4,9 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 
@@ -19,13 +17,20 @@ import { getPrayers } from '../actions/prayersAction';
 const styles = theme => ({
   containerRoot: {
     padding: 0,
-    borderLeft: '1px solid rgb(230, 236, 240)',
-    borderRight: '1px solid rgb(230, 236, 240)',
   },
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
   },
+  filters: {
+    display: 'flex',
+    margin: '10px 5px',
+    '& .MuiChip-root': {
+      marginRight: 15,
+      fontSize: 16,
+      fontWeight: 'bold'
+    }
+  }
 });
 
 function TabPanel(props) {
@@ -47,6 +52,8 @@ const Prayers = props => {
     classes,
     prayers: {
       allPrayers: prayers,
+      answeredPrayers,
+      unAnsweredPrayers,
       interceedingPrayers,
       isFetching,
       isUpdating,
@@ -57,7 +64,7 @@ const Prayers = props => {
   } = props;
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = newValue => () => {
     setValue(newValue);
   };
 
@@ -84,19 +91,12 @@ const Prayers = props => {
         {(isAdding || isUpdating || isFetching) && <LinearProgress />}
         <CssBaseline />
         <NewPrayerButton />
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            indicatorColor="primary"
-            textColor="inherit"
-            onChange={handleChange}
-            aria-label="prayers in sections"
-            variant="fullWidth"
-          >
-            <Tab label="My prayers" />
-            <Tab label="Intercessions" />
-          </Tabs>
-        </AppBar>
+        <div className={classes.filters}>
+          <Chip label="All My Prayers" color={value === 0 ? 'primary' : 'default'} onClick={handleChange(0)}/>
+          <Chip label="Intercessions" color={value === 1 ? 'primary' : 'default'} onClick={handleChange(1)}/>
+          <Chip label="Answered" color={value === 2 ? 'primary' : 'default'} onClick={handleChange(2)}/>
+          <Chip label="Unanswered" color={value === 3 ? 'primary' : 'default'} onClick={handleChange(3)}/>
+        </div>
         <TabPanel value={value} index={0}>
           {prayers && prayers.length
             ? prayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
@@ -105,7 +105,17 @@ const Prayers = props => {
         <TabPanel value={value} index={1}>
           {interceedingPrayers && interceedingPrayers.length
             ? interceedingPrayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
-            : <Empty type="prayer" text="No prayer request added yet"/>}
+            : <Empty type="prayer" text="You are not interceeding for anyone yet. Ask your friends for prayers"/>}
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          {answeredPrayers && answeredPrayers.length
+            ? answeredPrayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
+            : <Empty type="prayer" text="No answered prayer yet, God is working."/>}
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          {unAnsweredPrayers && unAnsweredPrayers.length
+            ? unAnsweredPrayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
+            : <Empty type="prayer" text="All your prayers are answered :) Ask God for more"/>}
         </TabPanel>
       </Container>
     </main>

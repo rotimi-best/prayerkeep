@@ -40,11 +40,16 @@ export const getPrayers = userId => async dispatch => {
   }
 
   const { prayers, interceedingPrayers } = response || {};
+  const allPrayers = prayers;
+  const answeredPrayers = allPrayers.filter(prayer => prayer.answered);
+  const unAnsweredPrayers = allPrayers.filter(prayer => !prayer.answered);
 
   dispatch({
     type: PRAYERS_FETCHED,
     payload: {
-      allPrayers: prayers,
+      allPrayers,
+      answeredPrayers,
+      unAnsweredPrayers,
       interceedingPrayers
     },
   });
@@ -151,11 +156,16 @@ export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
   }
 
   const { prayer } = response || {};
+  const allPrayers = [prayer, ...prevPrayers];
+  const answeredPrayers = allPrayers.filter(prayer => prayer.answered);
+  const unAnsweredPrayers = allPrayers.filter(prayer => !prayer.answered);
 
   dispatch({
     type: PRAYER_ADD_SUCCESS,
     payload: {
-      allPrayers: [prayer, ...prevPrayers]
+      allPrayers,
+      answeredPrayers,
+      unAnsweredPrayers,
     },
   });
 

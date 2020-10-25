@@ -11,10 +11,6 @@ export default makeStyles(theme => ({
       width: '100%',
     },
   },
-  containerRoot: {
-    paddingLeft: 5,
-    paddingRight: 5
-  },
   userStatsRoot: {
     display: "flex",
     justifyContent: "center",

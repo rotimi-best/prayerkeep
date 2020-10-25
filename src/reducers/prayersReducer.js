@@ -16,6 +16,8 @@ import {
 
 const initialState = {
   allPrayers: [],
+  answeredPrayers: [],
+  unAnsweredPrayers: [],
   prayer: null,
   interceedingPrayers: [],
   isPrayerFetching: false,
@@ -35,6 +37,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         allPrayers: payload.allPrayers ? payload.allPrayers : state.allPrayers,
+        answeredPrayers: payload.answeredPrayers ? payload.answeredPrayers : state.answeredPrayers,
+        unAnsweredPrayers: payload.unAnsweredPrayers ? payload.unAnsweredPrayers : state.unAnsweredPrayers,
         interceedingPrayers: payload.interceedingPrayers ? payload.interceedingPrayers : state.interceedingPrayers,
         prayer: payload.prayer || state.prayer,
         isFetching: false,
