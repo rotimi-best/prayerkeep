@@ -22,12 +22,16 @@ const styles = theme => ({
   containerRoot: {
     padding: 0,
     "& .horizontal-menu": {
-      // display: "flex",
       margin: "10px 5px",
       "& .MuiChip-root": {
         marginRight: 15,
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        cursor: "pointer"
+      },
+      "& .arrow": {
+        backgroundColor: '#fff',
+        boxShadow: '0 1px 5px 0 rgba(0,0,0,0.16), 0 1px 2px 0 rgba(0,0,0,0.26)'
       }
     }
   },
@@ -51,8 +55,8 @@ const Arrow = ({ text, className }) => {
   );
 };
 
-const ArrowLeft = Arrow({ text: <NavigateBeforeIcon />, className: "arrow-prev" });
-const ArrowRight = Arrow({ text: <NavigateNextIcon />, className: "arrow-next" });
+const ArrowLeft = Arrow({ text: <NavigateBeforeIcon />, className: "arrow-prev arrow" });
+const ArrowRight = Arrow({ text: <NavigateNextIcon />, className: "arrow-next arrow" });
 
 const Prayers = props => {
   const {
@@ -77,6 +81,9 @@ const Prayers = props => {
 
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
+  });
+  const isMobile = useMediaQuery({
+    query: "(max-width: 768px)"
   });
 
   useEffect(() => {
@@ -126,6 +133,8 @@ const Prayers = props => {
       />
     ));
 
+  const hideArrow = !isMobile && tabData.length <= 4
+
   return (
     <main className={classes.content}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
@@ -141,8 +150,8 @@ const Prayers = props => {
         {/* <div className={classes.filters}> */}
         <ScrollMenu
           data={Menu(value)}
-          arrowLeft={ArrowLeft}
-          arrowRight={ArrowRight}
+          arrowLeft={!hideArrow && ArrowLeft}
+          arrowRight={!hideArrow && ArrowRight}
           selected={value}
           onSelect={handleChange}
         />

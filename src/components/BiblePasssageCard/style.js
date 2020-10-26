@@ -5,7 +5,7 @@ export default makeStyles(() => ({
     margin: '5px 0',
     padding: 10,
     boxShadow: 'none',
-    border: '1px solid rgb(230, 236, 240)',
+    border: '1px solid #dadce0',
     borderRadius: 8,
   },
   title: {
