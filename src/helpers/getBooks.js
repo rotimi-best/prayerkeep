@@ -19,7 +19,7 @@ export default function getBooks() {
     'Nehemiah',
     'Esther',
     'Job',
-    'Psalm',
+    'Psalms',
     'Proverbs',
     'Ecclesiastes',
     'Song of Solomon',
