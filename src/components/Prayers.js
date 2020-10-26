@@ -7,6 +7,10 @@ import Container from '@material-ui/core/Container';
 import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import ScrollMenu from "react-horizontal-scrolling-menu";
+import IconButton from "@material-ui/core/IconButton";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 
 import PrayerCard from './PrayerCard';
 import NewPrayerButton from './NewPrayerButton';
@@ -17,35 +21,38 @@ import { getPrayers } from '../actions/prayersAction';
 const styles = theme => ({
   containerRoot: {
     padding: 0,
+    "& .horizontal-menu": {
+      // display: "flex",
+      margin: "10px 5px",
+      "& .MuiChip-root": {
+        marginRight: 15,
+        fontSize: 16,
+        fontWeight: "bold"
+      }
+    }
   },
   toolbar: theme.mixins.toolbar,
   content: {
-    flexGrow: 1,
+    flexGrow: 1
   },
-  filters: {
-    display: 'flex',
-    margin: '10px 5px',
-    '& .MuiChip-root': {
-      marginRight: 15,
-      fontSize: 16,
-      fontWeight: 'bold'
-    }
-  }
+  filters: {}
 });
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+const Arrow = ({ text, className }) => {
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      {...other}
+    <IconButton
+      edge="start"
+      color="inherit"
+      aria-label="arrow"
+      className={className}
     >
-      {value === index && children}
-    </div>
+      {text}
+    </IconButton>
   );
-}
+};
+
+const ArrowLeft = Arrow({ text: <NavigateBeforeIcon />, className: "arrow-prev" });
+const ArrowRight = Arrow({ text: <NavigateNextIcon />, className: "arrow-next" });
 
 const Prayers = props => {
   const {
@@ -64,8 +71,8 @@ const Prayers = props => {
   } = props;
   const [value, setValue] = React.useState(0);
 
-  const handleChange = newValue => () => {
-    setValue(newValue);
+  const handleChange = newValue => {
+    setValue(parseInt(newValue, 10));
   };
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -79,6 +86,46 @@ const Prayers = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const tabData = [
+    {
+      label: "All My Prayers",
+      value: 0,
+      textIfNoData: "No prayer request added yet",
+      data: prayers
+    },
+    {
+      label: "For others",
+      value: 1,
+      textIfNoData:
+        "You are not interceeding for anyone yet. Ask your friends for prayers",
+      data: interceedingPrayers
+    },
+    {
+      label: "Answered",
+      value: 2,
+      textIfNoData: "No answered prayer yet, God is working.",
+      data: answeredPrayers
+    },
+    {
+      label: "Unanswered",
+      value: 3,
+      textIfNoData: "All your prayers are answered :) Ask God for more",
+      data: unAnsweredPrayers
+    }
+  ];
+
+  const currentTab = tabData[value];
+
+  const Menu = selected =>
+    tabData.map(tab => (
+      <Chip
+        key={tab.value}
+        label={tab.label}
+        color={selected === tab.value ? "primary" : "default"}
+        variant={selected === tab.value ? "default" : "outlined"}
+      />
+    ));
+
   return (
     <main className={classes.content}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
@@ -91,35 +138,28 @@ const Prayers = props => {
         {(isAdding || isUpdating || isFetching) && <LinearProgress />}
         <CssBaseline />
         <NewPrayerButton />
-        <div className={classes.filters}>
-          <Chip label="All My Prayers" color={value === 0 ? 'primary' : 'default'} onClick={handleChange(0)}/>
-          <Chip label="Intercessions" color={value === 1 ? 'primary' : 'default'} onClick={handleChange(1)}/>
-          <Chip label="Answered" color={value === 2 ? 'primary' : 'default'} onClick={handleChange(2)}/>
-          <Chip label="Unanswered" color={value === 3 ? 'primary' : 'default'} onClick={handleChange(3)}/>
+        {/* <div className={classes.filters}> */}
+        <ScrollMenu
+          data={Menu(value)}
+          arrowLeft={ArrowLeft}
+          arrowRight={ArrowRight}
+          selected={value}
+          onSelect={handleChange}
+        />
+        {/* </div> */}
+
+        <div role="tabpanel">
+          {currentTab.data && currentTab.data.length ? (
+            currentTab.data.map((prayer, i) => (
+              <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />
+            ))
+          ) : (
+            <Empty type="prayer" text={currentTab.textIfNoData} />
+          )}
         </div>
-        <TabPanel value={value} index={0}>
-          {prayers && prayers.length
-            ? prayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
-            : <Empty type="prayer" text="No prayer request added yet"/>}
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          {interceedingPrayers && interceedingPrayers.length
-            ? interceedingPrayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
-            : <Empty type="prayer" text="You are not interceeding for anyone yet. Ask your friends for prayers"/>}
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          {answeredPrayers && answeredPrayers.length
-            ? answeredPrayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
-            : <Empty type="prayer" text="No answered prayer yet, God is working."/>}
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          {unAnsweredPrayers && unAnsweredPrayers.length
-            ? unAnsweredPrayers.map((prayer, i) => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
-            : <Empty type="prayer" text="All your prayers are answered :) Ask God for more"/>}
-        </TabPanel>
       </Container>
     </main>
-  )
+  );
 }
 
 Prayers.propTypes = {
