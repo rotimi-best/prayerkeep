@@ -11,7 +11,8 @@ import {
   PRAYER_ADD_REQUEST,
   PRAYER_ADD_SUCCESS,
   PRAYER_ADD_ERROR,
-  PRAYER_RESET
+  PRAYER_RESET,
+  SET_PRAYERS_TAB_VALUE
 } from '../constants/actionsTypes';
 import {
   getPrayersService,
@@ -22,6 +23,11 @@ import {
 } from '../services/prayersService';
 import alerts from '../constants/alert';
 import { openAlert } from './alertAction';
+
+export const setPrayersTabValue = payload => dispatch => dispatch({
+  type: SET_PRAYERS_TAB_VALUE,
+  payload
+})
 
 export const getPrayers = userId => async dispatch => {
   dispatch({ type: PRAYERS_START_FETCHING });
@@ -116,7 +122,7 @@ export const updatePrayer = (userId, prayerId, prayerParams, prevPrayers, callba
   }
 };
 
-export const deletePrayer = (prayerId, prevPrayers) => async dispatch => {
+export const deletePrayer = (prayerId) => async (dispatch, getState) => {
   dispatch({ type: PRAYER_UPDATE_REQUEST });
 
   const { error = null } = await deletePrayerService(prayerId);
@@ -129,16 +135,19 @@ export const deletePrayer = (prayerId, prevPrayers) => async dispatch => {
       payload: error
     });
   }
+  const {prayers} = getState();
 
   dispatch({
     type: PRAYER_UPDATE_SUCCESS,
-    payload: prevPrayers.filter(p => p._id !== prayerId)
+    payload: {
+      allPrayers: prayers.allPrayers.filter(p => p._id !== prayerId)
+    }
   });
 
   dispatch(openAlert("Successfully deleted!!!", alerts.SUCCESS));
 };
 
-export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
+export const addPrayer = (prayerParams, prevPrayers, callback) => async dispatch => {
   dispatch({ type: PRAYER_ADD_REQUEST });
 
   const {
@@ -168,6 +177,9 @@ export const addPrayer = (prayerParams, prevPrayers) => async dispatch => {
       unAnsweredPrayers,
     },
   });
+  if (callback && typeof(callback) === "function") {
+    callback();
+  }
 
   dispatch(openAlert("Successfully added!!!", alerts.SUCCESS))
 };

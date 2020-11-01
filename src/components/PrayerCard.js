@@ -132,6 +132,8 @@ const PrayerCard = props => {
 
     if (newisInterceding) {
       dispatch(openAlert('Added to your Intercessions', alerts.INFO))
+    } else {
+      dispatch(openAlert('Removed from your Intercessions', alerts.INFO))
     }
   }
 

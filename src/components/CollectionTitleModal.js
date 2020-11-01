@@ -18,6 +18,7 @@ import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { addCollection, updateCollection } from '../actions/collectionsAction';
 import colorConstants from '../constants/colors';
@@ -68,12 +69,15 @@ const CollectionTitleModal = props => {
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
   });
+  const { isUpdating, isAdding } = collections;
 
   const toggleModal = e => {
     setOpenModal(!openModal);
   }
 
   const handleSave = () => {
+    if (!title?.length) return;
+
     if (isNew) {
       dispatch(
         addCollection({
@@ -84,11 +88,9 @@ const CollectionTitleModal = props => {
         }, collections.allCollection)
       )
     } else {
-      dispatch(updateCollection(collectionId, { title, color }, collections.allCollection))
+      dispatch(updateCollection(collectionId, { title, color, userId }, collections.allCollection))
     }
-    setTitle('');
-    setColor('');
-    toggleModal();
+    toggleModal()
   }
 
   const handleChange = (e) => {
@@ -180,9 +182,13 @@ const CollectionTitleModal = props => {
         </Grid>
         </DialogContent>
         <DialogActions>
+          {isUpdating || isAdding ? (
+            <CircularProgress size={20} />
+          ) : (
           <Button onClick={handleSave} color="primary" style={{ textTransform: 'none' }}>
             Save
           </Button>
+          )}
         </DialogActions>
       </Dialog>
     </>

@@ -16,7 +16,7 @@ import PrayerCard from './PrayerCard';
 import NewPrayerButton from './NewPrayerButton';
 import Empty from './Empty';
 
-import { getPrayers } from '../actions/prayersAction';
+import { getPrayers, setPrayersTabValue } from '../actions/prayersAction';
 
 const styles = theme => ({
   containerRoot: {
@@ -69,14 +69,14 @@ const Prayers = props => {
       isFetching,
       isUpdating,
       isAdding,
+      prayersTabValue
     },
     dispatch,
     userId
   } = props;
-  const [value, setValue] = React.useState(0);
 
   const handleChange = newValue => {
-    setValue(parseInt(newValue, 10));
+    dispatch(setPrayersTabValue(parseInt(newValue, 10)));
   };
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -121,7 +121,7 @@ const Prayers = props => {
     }
   ];
 
-  const currentTab = tabData[value];
+  const currentTab = tabData[prayersTabValue];
 
   const Menu = selected =>
     tabData.map(tab => (
@@ -149,10 +149,10 @@ const Prayers = props => {
         <NewPrayerButton />
         {/* <div className={classes.filters}> */}
         <ScrollMenu
-          data={Menu(value)}
+          data={Menu(prayersTabValue)}
           arrowLeft={!hideArrow && ArrowLeft}
           arrowRight={!hideArrow && ArrowRight}
-          selected={value}
+          selected={prayersTabValue}
           onSelect={handleChange}
         />
         {/* </div> */}

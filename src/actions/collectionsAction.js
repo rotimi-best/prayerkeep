@@ -38,11 +38,14 @@ export const getCollections = userId => async dispatch => {
     });
   }
 
-  const { collections } = response || {};
+  const { collections, sharedWithMe } = response || {};
 
   dispatch({
     type: COLLECTIONS_FETCHED,
-    payload: collections,
+    payload: {
+      allCollection: collections,
+      sharedWithMe
+    },
   });
 };
 
@@ -93,10 +96,18 @@ export const updateCollection = (collectionId, collectionParams, prevCollections
   }
 
   const { collection } = response || {};
+  collection.prayers.forEach(prayer => {
+    prayer.owner = collection.owner
+  });
+
+  const payload = {
+    allCollection: prevCollections.map(p => p._id === collection._id ? collection : p),
+    collectionInView: collection
+  }
 
   dispatch({
     type: COLLECTION_UPDATE_SUCCESS,
-    payload: prevCollections.map(p => p._id === collection._id ? collection : p),
+    payload
   });
 };
 

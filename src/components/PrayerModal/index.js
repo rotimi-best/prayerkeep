@@ -39,7 +39,7 @@ import DeleteModal from '../DeleteModal';
 import { date, getNextXDaysDate } from "../../helpers";
 import colorConstants from '../../constants/colors';
 import { addPrayer, updatePrayer, getPrayers } from '../../actions/prayersAction';
-import { getCollections } from '../../actions/collectionsAction';
+import { getCollections, getCollection } from '../../actions/collectionsAction';
 import styles from './style';
 
 const ITEM_HEIGHT = 48;
@@ -137,7 +137,7 @@ const PrayerModal = props => {
   }, [allCollection, dispatch, userId]);
 
   useEffect(() => {
-    if (prayerModal.prayerId && !prayerToOpen) {
+    if (prayerModal.prayerId && prayerModal.prayerId !== 'null' && !prayerToOpen) {
       dispatch(getPrayers(userId))
     }
 
@@ -236,7 +236,13 @@ const PrayerModal = props => {
     setFormSubmitted(true);
     if (prayerToOpen) {
       dispatch(updatePrayer(userId, prayerToOpen._id, newPrayerRequest, props.prayers.allPrayers))
-    } else dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers))
+    } else {
+      const callback = () => {
+        dispatch(getCollection(prayerModal.collectionId, userId));
+      }
+
+      dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers, callback))
+    }
   }
 
   const handleBibleVerses = _passage => {

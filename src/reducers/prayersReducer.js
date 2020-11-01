@@ -11,7 +11,8 @@ import {
   PRAYER_UPDATE_SUCCESS,
   PRAYER_RESET,
   PRAYER_START_FETCHING,
-  PRAYER_FETCHED
+  PRAYER_FETCHED,
+  SET_PRAYERS_TAB_VALUE
 } from '../constants/actionsTypes';
 
 const initialState = {
@@ -25,6 +26,7 @@ const initialState = {
   isUpdating: false,
   isAdding: false,
   error: null,
+  prayersTabValue: 0,
 }
 
 export default function(state = initialState, action) {
@@ -96,6 +98,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         prayer: null,
+      }
+    case SET_PRAYERS_TAB_VALUE:
+      return {
+        ...state,
+        prayersTabValue: payload
       }
     default:
       return state;
