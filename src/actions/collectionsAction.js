@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router';
 import {
   COLLECTIONS_FETCHED,
   COLLECTIONS_ERROR,
@@ -16,7 +17,8 @@ import {
   getCollectionsService,
   updateCollectionService,
   addCollectionService,
-  getCollectionService
+  getCollectionService,
+  deleteCollectionService
 } from '../services/collectionService';
 import alerts from '../constants/alert';
 import { openAlert } from './alertAction';
@@ -140,6 +142,31 @@ export const addCollection = (collectionParams, prevCollections) => async dispat
     type: COLLECTION_ADD_SUCCESS,
     payload: [collection, ...prevCollections],
   });
+};
+
+export const deleteCollection = (collectionId) => async (dispatch, getState) => {
+  dispatch({ type: COLLECTION_UPDATE_REQUEST });
+
+  const { error = null } = await deleteCollectionService(collectionId);
+
+  if (error) {
+    dispatch(openAlert(`Opps. Couldn't delete!! ${error}`, alerts.ERROR))
+
+    return dispatch({
+      type: COLLECTION_UPDATE_ERROR,
+      payload: error
+    });
+  }
+  const {collections} = getState();
+
+  dispatch({
+    type: COLLECTION_UPDATE_SUCCESS,
+    payload: {
+      allCollection: collections.allCollection.filter(c => c._id !== collectionId)
+    }
+  });
+  dispatch(push('/collections'))
+  dispatch(openAlert("Successfully deleted!!!", alerts.SUCCESS));
 };
 
 export const stopRequest = () => dispatch => dispatch({ type: COLLECTIONS_STOP_REQUEST });

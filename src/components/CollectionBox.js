@@ -36,15 +36,15 @@ const CollectionBox = ({ collectionBoxRoot, collection, dispatch }) => {
             {title}
           </Typography>
           <Typography variant="caption" color="textSecondary" component="p">
-            {owner.googleAuthUser.name}
+            {owner?.googleAuthUser?.name}
           </Typography>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="caption" color="textSecondary" component="p">
-              {prayers.length} {prayers.length > 1 ? 'prayers' : 'prayer'}
+              {prayers?.length} {prayers?.length > 1 ? 'prayers' : 'prayer'}
             </Typography>
               <span style={{ margin: '0 5px'}}>•</span>
             <Typography variant="caption" color="textSecondary" component="p">
-              {people.length} {people.length > 1 ? 'people' : 'person'}
+              {people?.length} {people?.length > 1 ? 'people' : 'person'}
             </Typography>
           </div>
         </span>

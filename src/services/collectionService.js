@@ -72,3 +72,25 @@ export const updateCollectionService = async (collectionId, collectionParams) =>
     return { error: data.message || error.toString() };
   }
 };
+
+
+export const deleteCollectionService = async collectionId => {
+  try {
+    const requestParams = {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+      url: `${API_URL}/collection/${collectionId}`
+    }
+
+    const response = await axios(requestParams);
+    return { response: response.data };
+  } catch (error) {
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
+  }
+};

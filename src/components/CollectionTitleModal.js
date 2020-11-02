@@ -24,7 +24,7 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { addCollection, updateCollection } from '../actions/collectionsAction';
+import { addCollection, updateCollection, deleteCollection } from '../actions/collectionsAction';
 import colorConstants from '../constants/colors';
 
 const styles = theme => ({
@@ -101,6 +101,11 @@ const CollectionTitleModal = props => {
       ))
     }
     toggleModal()
+  }
+
+  const handleDelete = () => {
+    dispatch(deleteCollection(collectionId, collections.allCollection))
+    toggleModal();
   }
 
   const handleChange = (e) => {
@@ -210,9 +215,14 @@ const CollectionTitleModal = props => {
           {isUpdating || isAdding ? (
             <CircularProgress size={20} />
           ) : (
-          <Button onClick={handleSave} color="primary" style={{ textTransform: 'none' }}>
-            Save
-          </Button>
+          <React.Fragment>
+            {!isNew && <Button onClick={handleDelete} color="default" style={{ textTransform: 'none' }}>
+              Delete
+            </Button>}
+            <Button onClick={handleSave} color="primary" style={{ textTransform: 'none' }}>
+              Save
+            </Button>
+          </React.Fragment>
           )}
         </DialogActions>
       </Dialog>
