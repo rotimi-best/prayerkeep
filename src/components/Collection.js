@@ -55,7 +55,11 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'flex-start',
     flexDirection: 'column',
-    paddingLeft: 5
+    paddingLeft: 5,
+    width: '85%',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 16
+    }
   },
   groupAvatars: {
     paddingLeft: 15,
@@ -67,7 +71,9 @@ const styles = theme => ({
   },
   tab: {
     marginTop: 10,
-    boxShadow: 'none'
+    boxShadow: 'none',
+    border: '1px solid #dadce0',
+    borderRadius: 8
   }
 });
 
@@ -123,7 +129,7 @@ const Collection = props => {
     );
   }
 
-  const { title, color, owner, prayers, createdAt, _id, edittableByUser, people } = collectionInView;
+  const { title, color, owner, prayers, public: isPublic, createdAt, _id, edittableByUser, people } = collectionInView;
   const dateCreated = getDateCreated(createdAt || owner.createdAt);
   const alreadyJoined = userAlreadyJoined(people, userId);
 
@@ -159,6 +165,7 @@ const Collection = props => {
               color={color}
               isNew={false}
               collectionId={_id}
+              public={isPublic}
               edittableByUser={edittableByUser}
             />
           </Grid>
@@ -194,7 +201,7 @@ const Collection = props => {
               textColor="primary"
               onChange={handleTabChange}
               aria-label="collection-tabs"
-              variant="fullWidth"
+              centered
             >
               <Tab label="Prayers" {...a11yProps(0)} />
               <Tab label="People" {...a11yProps(1)} />

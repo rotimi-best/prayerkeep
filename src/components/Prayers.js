@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import AppBar from '@material-ui/core/AppBar';
 import ScrollMenu from "react-horizontal-scrolling-menu";
 import IconButton from "@material-ui/core/IconButton";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
@@ -148,14 +149,19 @@ const Prayers = props => {
         <CssBaseline />
         <NewPrayerButton />
         {/* <div className={classes.filters}> */}
-        <ScrollMenu
-          data={Menu(prayersTabValue)}
-          arrowLeft={!hideArrow && ArrowLeft}
-          arrowRight={!hideArrow && ArrowRight}
-          selected={prayersTabValue}
-          onSelect={handleChange}
-        />
-        {/* </div> */}
+        <AppBar
+          position="sticky"
+          color="inherit"
+          style={{ boxShadow: 'none' }}
+        >
+          <ScrollMenu
+            data={Menu(prayersTabValue)}
+            arrowLeft={!hideArrow && ArrowLeft}
+            arrowRight={!hideArrow && ArrowRight}
+            selected={prayersTabValue}
+            onSelect={handleChange}
+          />
+        </AppBar>
 
         <div role="tabpanel">
           {currentTab.data && currentTab.data.length ? (

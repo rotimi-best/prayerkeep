@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Masonry from 'react-masonry-css'
 import { useMediaQuery } from 'react-responsive';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
@@ -25,26 +26,39 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5
+    marginBottom: 5,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 16
+    }
   },
   collections: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))',
-    gridGap: '1rem'
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-evenly'
+  },
+  collection: {
+    width: '45% !important',
+    [theme.breakpoints.down('sm')]: {
+      width: '100% !important'
+    }
   },
   collectionBoxRoot: {
+    width: '100%',
+    verticalAlign: 'top',
     display: 'flex',
+    marginBottom: 10,
     '&:hover': {
       cursor: 'pointer'
     },
     '& > *': {
       margin: theme.spacing(2),
     },
-    width: '100%',
   },
   tab: {
     margin: '10px 0',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    border: '1px solid #dadce0',
+    borderRadius: 8
   }
 });
 
@@ -65,7 +79,7 @@ const Collections = props => {
   } = props;
   const {
     allCollection,
-    sharedWithMe,
+    suggestedCollections,
     isFetching,
     isUpdating,
     isAdding,
@@ -74,7 +88,6 @@ const Collections = props => {
     query: '(min-width: 1224px)'
   });
   const [tabValue, setTabValue] = React.useState(0);
-  const currentCollections = tabValue === 0 ? allCollection : sharedWithMe;
 
   useEffect(() => {
     // if (!allCollection.length) {
@@ -89,7 +102,7 @@ const Collections = props => {
   return (
     <main className={classes.root}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Grid container>
           <Grid
             item
@@ -110,24 +123,46 @@ const Collections = props => {
               textColor="primary"
               onChange={handleTabChange}
               aria-label="collections-tabs"
-              variant="fullWidth"
+              centered
             >
               <Tab label="My Collections" {...a11yProps(0)} />
-              <Tab label="Shared with me" {...a11yProps(1)} />
+              <Tab label="Explore" {...a11yProps(1)} />
             </Tabs>
           </AppBar>
-          <Grid item xs={12} className={classes.collections}>
-            {currentCollections.map(({ _id, title,color, prayers }) => (
+          {/* <Grid item xs={12} className={classes.collections}> */}
+          {tabValue === 0 && <Masonry
+            breakpointCols={{
+              'default': 2,
+              500: 1
+            }}
+            className={classes.collections}
+            columnClassName={classes.collection}
+          >
+            {allCollection.map((collection) => (
               <CollectionBox
-                key={_id}
-                id={_id}
-                title={title}
-                color={color}
-                prayers={prayers}
+                key={collection._id}
+                collection={collection}
                 collectionBoxRoot={classes.collectionBoxRoot}
               />
               ))}
-          </Grid>
+          </Masonry>}
+          {tabValue === 1 && <Masonry
+            breakpointCols={{
+              'default': 2,
+              500: 1
+            }}
+            className={classes.collections}
+            columnClassName={classes.collection}
+          >
+            {suggestedCollections.map((collection) => (
+              <CollectionBox
+                key={collection._id}
+                collection={collection}
+                collectionBoxRoot={classes.collectionBoxRoot}
+              />
+              ))}
+          </Masonry>}
+          {/* </Grid> */}
         </Grid>
       </Container>
     </main>

@@ -41,7 +41,8 @@ const styles = theme => ({
 
 
 function hideHeader(route, isMobile) {
-  return route.includes('prayer') && isMobile
+  return false
+  // return route.includes('prayer') && isMobile
 }
 
 const Header = props => {

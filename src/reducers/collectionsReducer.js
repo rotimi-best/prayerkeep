@@ -15,7 +15,7 @@ import {
 
 const initialState = {
   allCollection: [],
-  sharedWithMe: [],
+  suggestedCollections: [],
   collectionInView: null,
   isFetching: false,
   isUpdating: false,
@@ -33,7 +33,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         allCollection: payload.allCollection || payload,
-        sharedWithMe: payload.sharedWithMe || state.sharedWithMe,
+        suggestedCollections: payload.suggestedCollections || state.suggestedCollections,
         collectionInView: payload.collectionInView || state.collectionInView,
         isFetching: false,
         isUpdating: false,

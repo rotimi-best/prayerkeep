@@ -38,13 +38,19 @@ export const getCollections = userId => async dispatch => {
     });
   }
 
-  const { collections, sharedWithMe } = response || {};
-
+  const { collections, sharedWithMe, suggestedCollections } = response || {};
+  const allCollection = [
+    ...collections,
+    ...(sharedWithMe.map(collection => {
+      collection.shared = true
+      return collection
+    }))
+  ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   dispatch({
     type: COLLECTIONS_FETCHED,
     payload: {
-      allCollection: collections,
-      sharedWithMe
+      allCollection,
+      suggestedCollections
     },
   });
 };

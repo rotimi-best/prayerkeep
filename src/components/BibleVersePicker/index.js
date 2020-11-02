@@ -289,7 +289,7 @@ export default function BibleVersePicker(props) {
               textColor="primary"
               onChange={handleTabChange}
               aria-label="bible verse picker"
-              variant="fullWidth"
+              centered
             >
               <Tab label="BOOKS" {...a11yProps(0)} />
               <Tab label="CHAPTERS" {...a11yProps(1)} disabled={!chapter.book}/>

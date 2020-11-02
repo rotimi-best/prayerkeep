@@ -4,6 +4,10 @@ import { useMediaQuery } from "react-responsive";
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { CirclePicker  } from 'react-color';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -43,7 +47,6 @@ const styles = theme => ({
     marginBottom: 20,
     display: 'flex',
     flexDirection: 'column',
-    maxWidth: 'fit-content'
   },
   collectionName: {
     marginBottom: 20
@@ -60,12 +63,14 @@ const CollectionTitleModal = props => {
     collectionId,
     title: defaultTitle = '',
     color: defaultColor = '',
+    public: defaultIsPublic = false,
     edittableByUser,
     renderButton,
   } = props;
   const [title, setTitle] = useState(defaultTitle);
   const [color, setColor] = useState(defaultColor);
   const [openModal, setOpenModal] = useState(false);
+  const [isPublic, setIsPublic] = useState(defaultIsPublic);
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
   });
@@ -84,17 +89,27 @@ const CollectionTitleModal = props => {
           userId: userId,
           title,
           color,
+          public: isPublic,
           prayers: []
         }, collections.allCollection)
       )
     } else {
-      dispatch(updateCollection(collectionId, { title, color, userId }, collections.allCollection))
+      dispatch(updateCollection(
+        collectionId,
+        { title, color, public: isPublic, userId },
+        collections.allCollection
+      ))
     }
     toggleModal()
   }
 
   const handleChange = (e) => {
     setTitle(e.target.value)
+  }
+  const handleIsPublic = (event) => {
+    if (event.target.value === 'yes') {
+      setIsPublic(true)
+    } else setIsPublic(false)
   }
 
   const handleClose = () => {
@@ -151,6 +166,7 @@ const CollectionTitleModal = props => {
               style={{
                 backgroundColor: color || `rgba(0,0,0,0.08)`,
                 fontWeight: 600,
+                width: 'fit-content',
                 color: color
                   ? colorConstants.colorsBg[color]
                     ? '#000'
@@ -160,7 +176,7 @@ const CollectionTitleModal = props => {
             />
           </Grid>
           <Grid item xs={12} className={classes.collectionName}>
-            <Typography variant="caption" style={{ fontWeight: 'bold' }}>
+            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
               Collection name
             </Typography>
             <TextField
@@ -174,11 +190,20 @@ const CollectionTitleModal = props => {
             />
           </Grid>
           <Grid item xs={12} className={classes.colorPallete}>
-            <Typography variant="caption" style={{ fontWeight: 'bold' }}>
+            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
               Color
             </Typography>
             <CirclePicker color={color} onChange={handleColorChange} />
           </Grid>
+          <FormControl component="fieldset">
+            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+              Do you want to make this collection public?
+            </Typography>
+            <RadioGroup aria-label="quiz" name="quiz" value={isPublic ? 'yes' : 'no'} onChange={handleIsPublic}>
+              <FormControlLabel value="yes" control={<Radio color="primary" />} label="Yes, sure" />
+              <FormControlLabel value="no" control={<Radio color="primary" />} label="No, it's private" />
+            </RadioGroup>
+          </FormControl>
         </Grid>
         </DialogContent>
         <DialogActions>
