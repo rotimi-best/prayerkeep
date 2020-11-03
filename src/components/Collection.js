@@ -28,6 +28,7 @@ import PrayerCard from './PrayerCard';
 import GroupAvatars from './GroupAvatars';
 import { openAlert } from '../actions/alertAction';
 import alerts from '../constants/alert';
+import Dot from './Dot';
 
 import { getCollection, updateCollection } from '../actions/collectionsAction';
 import { getDateCreated } from '../helpers';
@@ -49,7 +50,10 @@ const styles = theme => ({
     padding: '0 5px'
   },
   authorAndCreatedAt: {
-    paddingLeft: 10
+    paddingLeft: 10,
+    '& .MuiTypography-caption': {
+      fontSize: 14
+    }
   },
   headerText: {
     fontWeight: 'bold',
@@ -74,7 +78,11 @@ const styles = theme => ({
     marginTop: 10,
     boxShadow: 'none',
     border: '1px solid #dadce0',
-    borderRadius: 8
+    borderRadius: 8,
+    top: 60,
+    [theme.breakpoints.down('sm')]: {
+      top: 0
+    }
   },
   description: {
     color: '#202124',
@@ -176,6 +184,12 @@ const Collection = props => {
     return Parser(description.replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> '))
   }
 
+  const getPrayerSummary = () => {
+    const totalPrayers = prayers?.length;
+
+    return `${totalPrayers} ${totalPrayers > 1 ? 'prayers' : 'prayer'}`
+  }
+
   return (
     <main className={classes.root}>
       {isDesktopOrLaptop && <div className={classes.toolbar} />}
@@ -205,7 +219,7 @@ const Collection = props => {
           </Grid>
           <Grid item xs={12} className={classes.authorAndCreatedAt}>
             <Typography variant="caption" color="textSecondary" component="p">
-              {owner.googleAuthUser.name} | {dateCreated}
+            {getPrayerSummary()} <Dot /> {owner.googleAuthUser.name} <Dot /> {dateCreated}
             </Typography>
           </Grid>
           <Grid item xs={12} className={classes.groupAvatars}>
@@ -223,11 +237,11 @@ const Collection = props => {
             </Button>
           </Grid>
           {/* <div className={classes.toolbar} /> */}
-          {description?.length > 0 && <Grid item xs={12}>
+          <Grid item xs={12}>
             <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
               {getDescription()}
             </Typography>
-            <Button
+            {description?.length > 100 && <Button
               variant="text"
               color="primary"
               onClick={() => setShowMore(s => !s)}
@@ -237,8 +251,8 @@ const Collection = props => {
               }}
             >
               {showMore ? 'Show more' : 'Show less'}
-            </Button>
-          </Grid>}
+            </Button>}
+          </Grid>
 
           <Grid item xs={12}>
             <NewPrayerButton collectionId={_id} />

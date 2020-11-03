@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import FolderSharedIcon from '@material-ui/icons/FolderShared';
 import Tooltip from '@material-ui/core/Tooltip';
+import Dot from './Dot';
 
 const CollectionBox = ({ collectionBoxRoot, collection, dispatch }) => {
   const {
@@ -31,7 +32,7 @@ const CollectionBox = ({ collectionBoxRoot, collection, dispatch }) => {
       )}
       <Tooltip title={title} aria-label={title}>
         <span>
-          <Typography variant="body2" color="textPrimary" component="p">
+          <Typography variant="body2" color="textPrimary" style={{ fontWeight: 500 }} component="p">
             {/* {title.length >= 20 ? `${title.slice(0, 20)}...` : title} */}
             {title}
           </Typography>
@@ -42,7 +43,7 @@ const CollectionBox = ({ collectionBoxRoot, collection, dispatch }) => {
             <Typography variant="caption" color="textSecondary" component="p">
               {prayers?.length} {prayers?.length > 1 ? 'prayers' : 'prayer'}
             </Typography>
-              <span style={{ margin: '0 5px'}}>•</span>
+              <Dot />
             <Typography variant="caption" color="textSecondary" component="p">
               {people?.length} {people?.length > 1 ? 'people' : 'person'}
             </Typography>

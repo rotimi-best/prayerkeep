@@ -40,7 +40,14 @@ const styles = theme => ({
   content: {
     flexGrow: 1
   },
-  filters: {}
+  filters: {},
+  tab: {
+    top: 60,
+    boxShadow: 'none',
+    [theme.breakpoints.down('sm')]: {
+      top: 0
+    }
+  }
 });
 
 const Arrow = ({ text, className }) => {
@@ -152,7 +159,7 @@ const Prayers = props => {
         <AppBar
           position="sticky"
           color="inherit"
-          style={{ boxShadow: 'none' }}
+          className={classes.tab}
         >
           <ScrollMenu
             data={Menu(prayersTabValue)}
