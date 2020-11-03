@@ -32,7 +32,7 @@ const CollectionBox = ({ collectionBoxRoot, collection, dispatch }) => {
       )}
       <Tooltip title={title} aria-label={title}>
         <span>
-          <Typography variant="body2" color="textPrimary" style={{ fontWeight: 500 }} component="p">
+          <Typography variant="body2" color="textPrimary" style={{ fontSize: 15 }} component="p">
             {/* {title.length >= 20 ? `${title.slice(0, 20)}...` : title} */}
             {title}
           </Typography>

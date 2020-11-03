@@ -37,6 +37,7 @@ const styles = theme => ({
     justifyContent: 'space-evenly'
   },
   collection: {
+    margin: '0 5px',
     width: '45% !important',
     [theme.breakpoints.down('sm')]: {
       width: '100% !important'

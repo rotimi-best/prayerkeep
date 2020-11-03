@@ -56,15 +56,11 @@ const styles = theme => ({
     }
   },
   headerText: {
-    fontWeight: 'bold',
     display: 'flex',
     alignItems: 'flex-start',
     flexDirection: 'column',
     paddingLeft: 5,
     width: '85%',
-    [theme.breakpoints.down('sm')]: {
-      fontSize: 16
-    }
   },
   groupAvatars: {
     paddingLeft: 15,
