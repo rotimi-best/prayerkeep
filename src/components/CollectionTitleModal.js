@@ -40,16 +40,21 @@ const styles = theme => ({
   editRoot: {
     minWidth: 56
   },
+  chip: {
+    fontWeight: 600,
+    width: 'fit-content',
+    maxWidth: '100%'
+  },
   colorPallete: {
-    marginBottom: 20
+    marginBottom: 10
   },
   preview: {
-    marginBottom: 20,
+    marginBottom: 10,
     display: 'flex',
     flexDirection: 'column',
   },
   collectionName: {
-    marginBottom: 20
+    marginBottom: 10
   }
 });
 
@@ -64,13 +69,19 @@ const CollectionTitleModal = props => {
     title: defaultTitle = '',
     color: defaultColor = '',
     public: defaultIsPublic = false,
+    description: defaultDescription = '',
     edittableByUser,
     renderButton,
   } = props;
   const [title, setTitle] = useState(defaultTitle);
+  const [description, setDescription] = useState(defaultDescription);
   const [color, setColor] = useState(defaultColor);
   const [openModal, setOpenModal] = useState(false);
   const [isPublic, setIsPublic] = useState(defaultIsPublic);
+  const [error, setError] = useState({
+    title: false,
+    description: false,
+  });
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
   });
@@ -88,6 +99,7 @@ const CollectionTitleModal = props => {
         addCollection({
           userId: userId,
           title,
+          description,
           color,
           public: isPublic,
           prayers: []
@@ -96,7 +108,7 @@ const CollectionTitleModal = props => {
     } else {
       dispatch(updateCollection(
         collectionId,
-        { title, color, public: isPublic, userId },
+        { title, description, color, public: isPublic, userId },
         collections.allCollection
       ))
     }
@@ -108,8 +120,40 @@ const CollectionTitleModal = props => {
     toggleModal();
   }
 
-  const handleChange = (e) => {
+  const handleTitleChange = (e) => {
+    if (e.target.value.length > 100) {
+      setError({
+        ...error,
+        title: true
+      })
+      return
+    }
+
+    if (error.title) {
+      setError({
+        ...error,
+        title: false
+      })
+    }
     setTitle(e.target.value)
+  }
+  const handleDescription = (e) => {
+    if (e.target.value.length > 500) {
+      setError({
+        ...error,
+        description: true
+      })
+      return
+    }
+
+    if (error.description) {
+      setError({
+        ...error,
+        description: false
+      })
+    }
+
+    setDescription(e.target.value)
   }
   const handleIsPublic = (event) => {
     if (event.target.value === 'yes') {
@@ -168,10 +212,9 @@ const CollectionTitleModal = props => {
             </Typography>
             <Chip
               label={title && title.length ? title : 'Collection preview'}
+              className={classes.chip}
               style={{
                 backgroundColor: color || `rgba(0,0,0,0.08)`,
-                fontWeight: 600,
-                width: 'fit-content',
                 color: color
                   ? colorConstants.colorsBg[color]
                     ? '#000'
@@ -191,7 +234,28 @@ const CollectionTitleModal = props => {
               placeholder="New collection name"
               type="text"
               value={title}
-              onChange={handleChange}
+              helperText="Name cannot be more than 100 characters"
+              error={error.title}
+              onChange={handleTitleChange}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} className={classes.colorPallete}>
+            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+              Description
+            </Typography>
+            <TextField
+              id="collection-description"
+              placeholder="What is this collection about?"
+              variant="outlined"
+              value={description}
+              onChange={handleDescription}
+              rows={2}
+              rowsMax={2}
+              helperText="Description cannot be more than 500 characters"
+              error={error.description}
+              multiline
+              fullWidth
             />
           </Grid>
           <Grid item xs={12} className={classes.colorPallete}>

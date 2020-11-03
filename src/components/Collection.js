@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Parser from 'html-react-parser';
 import { connect } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { push } from 'connected-react-router';
@@ -74,7 +75,17 @@ const styles = theme => ({
     boxShadow: 'none',
     border: '1px solid #dadce0',
     borderRadius: 8
-  }
+  },
+  description: {
+    color: '#202124',
+    letterSpacing: '.01428571em',
+    lineHeight: '1.5rem',
+    fontSize: 16,
+    whiteSpace: 'pre-wrap',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 14
+    }
+  },
 });
 
 function userAlreadyJoined(people, userId) {
@@ -102,14 +113,30 @@ const Collection = props => {
       isAdding,
     },
   } = props;
+  const {
+    title,
+    color,
+    owner,
+    prayers,
+    public: isPublic,
+    createdAt,
+    _id,
+    edittableByUser,
+    people,
+    description
+  } = collectionInView || {};
   const [tabValue, setTabValue] = React.useState(0);
+  const [showMore, setShowMore] = React.useState(false);
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   });
-
+  console.log('showMore', showMore)
   useEffect(() => {
     dispatch(getCollection(id, userId));
   }, [dispatch, userId, id]);
+  useEffect(() => {
+    setShowMore(description?.length > 100)
+  }, [description]);
 
   const handleBack = () => {
     dispatch(push(routes.COLLECTIONS));
@@ -128,8 +155,6 @@ const Collection = props => {
       </main>
     );
   }
-
-  const { title, color, owner, prayers, public: isPublic, createdAt, _id, edittableByUser, people } = collectionInView;
   const dateCreated = getDateCreated(createdAt || owner.createdAt);
   const alreadyJoined = userAlreadyJoined(people, userId);
 
@@ -141,6 +166,14 @@ const Collection = props => {
     } else {
       dispatch(updateCollection(_id, { join: true, userId }, allCollection))
     }
+  }
+
+  const getDescription = () => {
+    if (showMore) {
+      return Parser(description.slice(0, 100).replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> ') + '...')
+    }
+
+    return Parser(description.replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> '))
   }
 
   return (
@@ -162,6 +195,7 @@ const Collection = props => {
             </Typography>
             <CollectionTitleModal
               title={title}
+              description={description}
               color={color}
               isNew={false}
               collectionId={_id}
@@ -189,6 +223,22 @@ const Collection = props => {
             </Button>
           </Grid>
           {/* <div className={classes.toolbar} /> */}
+          {description?.length > 0 && <Grid item xs={12}>
+            <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
+              {getDescription()}
+            </Typography>
+            <Button
+              variant="text"
+              color="primary"
+              onClick={() => setShowMore(s => !s)}
+              style={{
+                textTransform: 'none',
+                padding: 0
+              }}
+            >
+              {showMore ? 'Show more' : 'Show less'}
+            </Button>
+          </Grid>}
 
           <Grid item xs={12}>
             <NewPrayerButton collectionId={_id} />
