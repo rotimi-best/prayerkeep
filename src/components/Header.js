@@ -105,7 +105,7 @@ const Header = props => {
                 <MenuIcon />
               </IconButton>}
             <Typography variant="h6" className={classes.title}>
-              Parchment Notebook
+              Prayer Keep
             </Typography>
             <Avatar alt={userName} src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} />
           </Toolbar>

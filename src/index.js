@@ -45,7 +45,7 @@ const config = {
       /* eslint-disable-next-line no-restricted-globals */
       registration.showNotification(data.title, {
         body: 'You deserve a greater life',
-        icon: 'https://parchmentnotebook.netlify.app/images/icons/icon-128x128.png'
+        icon: 'https://prayerkeep.com/images/icons/icon-128x128.png'
       })
     })
   }

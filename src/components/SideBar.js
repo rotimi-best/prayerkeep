@@ -155,7 +155,7 @@ const SideBar = props => {
           <Divider />
 
           <Link
-            href={`mailto:${configs.SUPPORT_EMAIL}?subject=[Help]: Parchment Notebook`}
+            href={`mailto:${configs.SUPPORT_EMAIL}?subject=[Help]: Prayer Keep`}
             underline="none"
             color="textPrimary"
             target="_blank"

@@ -28,27 +28,27 @@ export default class PrayerInput extends Component {
     // a workaround we use this workaround to show different results
     const chaptersOfTheBible = [
       {
-        link: 'https://parchmentnotebook.netlify.app/prayers',
+        link: 'https://prayerkeep.com/prayers',
         name: 'Matthew',
       },
       {
-        link: 'https://parchmentnotebook.netlify.app/prayers',
+        link: 'https://prayerkeep.com/prayers',
         name: 'Luke',
       },
       {
-        link: 'https://parchmentnotebook.netlify.app/prayers',
+        link: 'https://prayerkeep.com/prayers',
         name: 'Leveticus',
       },
       {
-        link: 'https://parchmentnotebook.netlify.app/prayers',
+        link: 'https://prayerkeep.com/prayers',
         name: 'Lamentation',
       },
       {
-        link: 'https://parchmentnotebook.netlify.app/prayers',
+        link: 'https://prayerkeep.com/prayers',
         name: 'Mark',
       },
       {
-        link: 'https://parchmentnotebook.netlify.app/prayers',
+        link: 'https://prayerkeep.com/prayers',
         name: 'Joshua',
       },
     ]

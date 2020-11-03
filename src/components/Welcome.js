@@ -73,7 +73,7 @@ const Welcome = ({ dispatch }) => {
     <div className="Welcome">
       <header className="Welcome-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1>Parchment Notebook</h1>
+        <h1>Prayer Keep</h1>
         <p>Manage your prayer requests in one place and enjoy your prayer time.</p>
         {!onSignInSuccess && <StyledFirebaseAuth
           uiConfig={uiConfig}
