@@ -306,7 +306,7 @@ CollectionTitleModal.defaultProps = {
 }
 
 const mapStateToProps = state => ({
-  userId: state.authentication.user.userId,
+  userId: state?.authentication?.user?.userId,
   collections: state.collections,
 });
 

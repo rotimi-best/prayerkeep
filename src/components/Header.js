@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -41,8 +42,8 @@ const styles = theme => ({
 
 
 function hideHeader(route, isMobile) {
-  return false
-  // return route.includes('prayer') && isMobile
+  // return false
+  return route.includes('welcome')
 }
 
 const Header = props => {
@@ -77,7 +78,7 @@ const Header = props => {
     dispatch(toggleSideBar());
   };
 
-  if (!isLoggedIn || hideHeader(route, isMobile)) {
+  if (hideHeader(route, isMobile)) {
     return null;
   }
 
@@ -107,7 +108,13 @@ const Header = props => {
             <Typography variant="h6" className={classes.title}>
               Prayer Keep
             </Typography>
-            <Avatar alt={userName} src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} />
+            {isLoggedIn ? (
+              <Avatar alt={userName} src={userPictureUrl?.data ? userPictureUrl?.data?.url : userPictureUrl} />
+            ) : (
+              <Button variant="contained" color="primary" href="/welcome">
+                Sign Up
+              </Button>
+            )}
           </Toolbar>
         </AppBar>
       </div>

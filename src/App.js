@@ -42,7 +42,8 @@ function App() {
             {/* <PrivateRoute exact path="/plans" component={Plans} />
             <PrivateRoute exact path="/plan/:id" component={Plan} /> */}
             <PrivateRoute path="/collections" component={Collections} />
-            <PrivateRoute path="/collection/:id" component={Collection} />
+            {/* <PrivateRoute path="/collection/:id" component={Collection} /> */}
+            <Route path="/collection/:id" component={Collection} />
             <Redirect to="/" />
           </Switch>
           <BottomNavigation />

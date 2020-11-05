@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import ReactGA from 'react-ga';
 
 import App from './App';
 import configureStore from './configureStore';
+import configs from './configs';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 const store = configureStore({});
+
+if (configs.isProduction) {
+  ReactGA.initialize('G-4L57R90356');
+}
 
 ReactDOM.render(
   <Provider store={store}>

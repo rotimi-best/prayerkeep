@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -94,12 +94,18 @@ const PrayerCard = props => {
     formattedPassages = []
   } = prayer;
   const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector(state => ({
+    isLoggedIn: state.authentication.isLoggedIn,
+  }))
   const classes = useStyles();
   const [isInterceding, setIsInterceding] = React.useState(interceeding);
 
   const dateCreated = getDateCreated(createdAt);
 
   const openPrayer = () => {
+    if (!isLoggedIn) {
+      return dispatch(push("/welcome"));
+    }
     dispatch(push(`/prayer/${_id}`))
   }
 
@@ -119,6 +125,9 @@ const PrayerCard = props => {
   }
 
   const handleIsInterceding = () => {
+    if (!isLoggedIn) {
+      return dispatch(push("/welcome"));
+    }
     if (isOwner) {
       dispatch(openAlert('You cant add your request to your Intercession', alerts.INFO))
       return;

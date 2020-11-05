@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createRootReducer from './reducers';
+import { googleAnalytics } from './middlewares/reactGAMiddlewares';
 import configs from './configs';
 
 export const history = createBrowserHistory();
@@ -15,6 +16,9 @@ const middleware = [
 
 if (!configs.isProduction) {
   middleware.push(createLogger())
+} else {
+  // add google Analytics in Production
+  middleware.push(googleAnalytics);
 }
 
 export default function configureStore(preloadedState) {

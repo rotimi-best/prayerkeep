@@ -116,6 +116,7 @@ const Collection = props => {
       isUpdating,
       isAdding,
     },
+    isLoggedIn,
   } = props;
   const {
     title,
@@ -163,6 +164,10 @@ const Collection = props => {
   const alreadyJoined = userAlreadyJoined(people, userId);
 
   const handleShareOrJoin = () => {
+    if (!isLoggedIn) {
+      return dispatch(push(routes.WELCOME));
+    }
+
     if (isUpdating) return
     if (alreadyJoined) {
       navigator.clipboard.writeText(window.location.href);
@@ -286,7 +291,8 @@ const Collection = props => {
 const mapStateToProps = state => ({
   collections: state.collections,
   prayers: state.prayers,
-  userId: state.authentication.user.userId,
+  userId: state.authentication?.user?.userId,
+  isLoggedIn: state.authentication.isLoggedIn,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(Collection))
