@@ -15,9 +15,9 @@ const Main = ({ component: Component, openPrayerModal, openSidebar, ...rest }) =
   </div>
 );
 
-const PrivateRoute = ({ isLoggedIn, component, openPrayerModal, openSidebar, ...rest }) => {
+const PrivateRoute = ({ isLoggedIn, ignoreLogIn, component, openPrayerModal, openSidebar, ...rest }) => {
   const componentToRender = props =>
-    isLoggedIn
+    (isLoggedIn || ignoreLogIn)
     ? <Main
         component={component}
         openSidebar={openSidebar}
@@ -31,7 +31,8 @@ const PrivateRoute = ({ isLoggedIn, component, openPrayerModal, openSidebar, ...
 
 PrivateRoute.propTypes = {
   component: PropTypes.elementType.isRequired,
-  path: PropTypes.string.isRequired
+  path: PropTypes.string.isRequired,
+  ignoreLogIn: PropTypes.bool,
 };
 
 const mapStateToProps = ({ authentication, sidebar, modalListener }) => ({

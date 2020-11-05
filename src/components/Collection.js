@@ -105,7 +105,7 @@ function a11yProps(index) {
 
 const Collection = props => {
   const {
-    match: { params: { id } },
+    match: { url, params: { id } },
     classes,
     dispatch,
     userId,
@@ -135,7 +135,7 @@ const Collection = props => {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1224px)'
   });
-  console.log('showMore', showMore)
+
   useEffect(() => {
     dispatch(getCollection(id, userId));
   }, [dispatch, userId, id]);
@@ -165,7 +165,7 @@ const Collection = props => {
 
   const handleShareOrJoin = () => {
     if (!isLoggedIn) {
-      return dispatch(push(routes.WELCOME));
+      return dispatch(push(routes.WELCOME + `?goTo=${url}`));
     }
 
     if (isUpdating) return
@@ -255,9 +255,9 @@ const Collection = props => {
             </Button>}
           </Grid>
 
-          <Grid item xs={12}>
+          {isLoggedIn && <Grid item xs={12}>
             <NewPrayerButton collectionId={_id} />
-          </Grid>
+          </Grid>}
 
           <AppBar position="sticky" color="inherit" className={classes.tab}>
             <Tabs

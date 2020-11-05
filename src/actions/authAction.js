@@ -30,7 +30,7 @@ export const logIn = user => async (dispatch, getState) => {
       }
     } = getState();
 
-    const goTo = location.query.goTo || routes.HOME;
+    const goTo = location.query.goTo ? location.query.goTo : routes.HOME;
     dispatch(push(goTo))
 
     setTimeout(async () => {

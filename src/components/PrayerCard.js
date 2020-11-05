@@ -94,8 +94,9 @@ const PrayerCard = props => {
     formattedPassages = []
   } = prayer;
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector(state => ({
+  const { isLoggedIn, pathname } = useSelector(state => ({
     isLoggedIn: state.authentication.isLoggedIn,
+    pathname: state.router.location.pathname
   }))
   const classes = useStyles();
   const [isInterceding, setIsInterceding] = React.useState(interceeding);
@@ -104,7 +105,7 @@ const PrayerCard = props => {
 
   const openPrayer = () => {
     if (!isLoggedIn) {
-      return dispatch(push("/welcome"));
+      return dispatch(push(`/welcome?goTo=${pathname}`));
     }
     dispatch(push(`/prayer/${_id}`))
   }
@@ -126,7 +127,7 @@ const PrayerCard = props => {
 
   const handleIsInterceding = () => {
     if (!isLoggedIn) {
-      return dispatch(push("/welcome"));
+      return dispatch(push(`/welcome?goTo=${pathname}`));
     }
     if (isOwner) {
       dispatch(openAlert('You cant add your request to your Intercession', alerts.INFO))

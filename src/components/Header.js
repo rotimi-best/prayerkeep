@@ -111,7 +111,7 @@ const Header = props => {
             {isLoggedIn ? (
               <Avatar alt={userName} src={userPictureUrl?.data ? userPictureUrl?.data?.url : userPictureUrl} />
             ) : (
-              <Button variant="contained" color="primary" href="/welcome">
+              <Button variant="contained" color="primary" href={`/welcome?goTo=${route}`}>
                 Sign Up
               </Button>
             )}
