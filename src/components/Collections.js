@@ -13,6 +13,7 @@ import Tab from '@material-ui/core/Tab';
 import { withStyles } from '@material-ui/core/styles';
 import CollectionBox from './CollectionBox';
 import CollectionTitleModal from './CollectionTitleModal';
+import BadgeWithLabel from './BadgeWithLabel';
 
 import { getCollections } from '../actions/collectionsAction';
 
@@ -59,7 +60,11 @@ const styles = theme => ({
     margin: '10px 0',
     boxShadow: 'none',
     border: '1px solid #dadce0',
-    borderRadius: 8
+    borderRadius: 8,
+    '& .Mui-selected .badge': {
+      fontWeight: 500,
+      color: '#000000'
+    },
   }
 });
 
@@ -126,8 +131,8 @@ const Collections = props => {
               aria-label="collections-tabs"
               centered
             >
-              <Tab label="My Collections" {...a11yProps(0)} />
-              <Tab label="Explore" {...a11yProps(1)} />
+              <Tab label={<BadgeWithLabel label="My Collections" value={allCollection.length}/>} {...a11yProps(0)} />
+              <Tab label={<BadgeWithLabel label="Explore" value={suggestedCollections.length}/>} {...a11yProps(1)} />
             </Tabs>
           </AppBar>
           {/* <Grid item xs={12} className={classes.collections}> */}

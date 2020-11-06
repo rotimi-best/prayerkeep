@@ -19,6 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 // import Prayer from './Prayer';
 import CollectionTitleModal from './CollectionTitleModal';
+import BadgeWithLabel from './BadgeWithLabel';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import Empty from './Empty';
@@ -76,6 +77,10 @@ const styles = theme => ({
     border: '1px solid #dadce0',
     borderRadius: 8,
     top: 60,
+    '& .Mui-selected .badge': {
+      fontWeight: 500,
+      color: '#000000'
+    },
     [theme.breakpoints.down('sm')]: {
       top: 0
     }
@@ -268,8 +273,8 @@ const Collection = props => {
               aria-label="collection-tabs"
               centered
             >
-              <Tab label="Prayers" {...a11yProps(0)} />
-              <Tab label="People" {...a11yProps(1)} />
+              <Tab label={<BadgeWithLabel label="Prayer" value={prayers.length}/>} {...a11yProps(0)} />
+              <Tab label={<BadgeWithLabel label="People" value={people.length}/>} {...a11yProps(1)} />
             </Tabs>
           </AppBar>
           {tabValue === 0 && <Grid item xs={12}>

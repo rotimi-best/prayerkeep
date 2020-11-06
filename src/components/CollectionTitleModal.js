@@ -168,19 +168,49 @@ const CollectionTitleModal = props => {
     setColor(color.hex)
   };
 
+  const renderCustomButton = () => {
+    let icon = <EditIcon />;
+    if (isNew) {
+      icon = <AddIcon />
+    }
+
+    let content = null;
+    if (!isMobile) {
+      content = isNew ? 'Add New' : 'Edit'
+    }
+
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center'
+      }}>
+        {content && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={toggleModal}
+          >
+              {content}
+            </Button>
+        )}
+        {isMobile && <Fab
+          color="primary"
+          aria-label="new-collection"
+          onClick={toggleModal}
+        >
+          {icon}
+        </Fab>}
+      </div>
+    )
+
+  }
+
   return (
     <>
       {edittableByUser &&
         (typeof renderButton === 'function'
           ? renderButton({ onClick: toggleModal })
-          : <Fab
-          color="primary"
-          aria-label="new-collection"
-          onClick={toggleModal}
-          // classes={{ root: classes.editRoot }}
-        >
-          {isNew ? <AddIcon /> : <EditIcon />}
-        </Fab>)}
+          : renderCustomButton())}
       <Dialog
         open={openModal}
         onClose={handleClose}
