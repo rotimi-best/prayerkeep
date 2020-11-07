@@ -158,10 +158,6 @@ const PrayerCard = props => {
     });
   }
 
-  const handleIPrayed = () => {
-    dispatch(openSnackBar('You said Amen'))
-  }
-
   const handleShare = () => {
     const linkToPrayer = `https://${window.location.host}/prayer/${_id}`;
     navigator.clipboard.writeText(linkToPrayer);
