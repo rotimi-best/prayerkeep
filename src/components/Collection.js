@@ -32,7 +32,7 @@ import alerts from '../constants/alert';
 import Dot from './Dot';
 
 import { getCollection, updateCollection } from '../actions/collectionsAction';
-import { getDateCreated } from '../helpers';
+import { getDateCreated, getNewPrayerUrl } from '../helpers';
 // import { areTheyDifferent } from '../helpers/difference';
 import routes from '../constants/routes';
 
@@ -111,6 +111,7 @@ function a11yProps(index) {
 const Collection = props => {
   const {
     match: { url, params: { id } },
+    pathname,
     classes,
     dispatch,
     userId,
@@ -138,7 +139,7 @@ const Collection = props => {
   const [tabValue, setTabValue] = React.useState(0);
   const [showMore, setShowMore] = React.useState(false);
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
+    query: '(min-width: 1280px)'
   });
 
   useEffect(() => {
@@ -154,6 +155,9 @@ const Collection = props => {
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
+  const openNewPrayer = () => {
+    return dispatch(push(getNewPrayerUrl(pathname, _id)));
+  }
 
   if (!collectionInView || isFetching || isAdding) {
     return (
@@ -183,8 +187,11 @@ const Collection = props => {
   }
 
   const getDescription = () => {
+    if (!description?.length) {
+      return '';
+    }
     if (showMore) {
-      return Parser(description.slice(0, 100).replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> ') + '...')
+      return Parser(description?.slice(0, 100).replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> ') + '...')
     }
 
     return Parser(description.replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> '))
@@ -260,7 +267,7 @@ const Collection = props => {
             </Button>}
           </Grid>
 
-          {isLoggedIn && <Grid item xs={12}>
+          {edittableByUser && isLoggedIn && <Grid item xs={12}>
             <NewPrayerButton collectionId={_id} />
           </Grid>}
 
@@ -280,7 +287,13 @@ const Collection = props => {
           {tabValue === 0 && <Grid item xs={12}>
             {prayers.length
               ? prayers.map(prayer => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
-              : <Empty type="prayer" text="No prayer request with this collection yet"/>}
+              : (
+                <Empty
+                  onClick={edittableByUser ? openNewPrayer : null}
+                  type="prayer"
+                  text="No prayer request with this collection yet"
+                />
+              )}
           </Grid>}
           {tabValue === 1 && <Grid item xs={12}>
             <UserList
@@ -298,6 +311,7 @@ const mapStateToProps = state => ({
   prayers: state.prayers,
   userId: state.authentication?.user?.userId,
   isLoggedIn: state.authentication.isLoggedIn,
+  pathname: state.router.location.pathname,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(Collection))

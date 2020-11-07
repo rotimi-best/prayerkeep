@@ -65,7 +65,7 @@ const SideBar = props => {
   const { classes, openSidebar, dispatch, route } = props;
   const rootRoute = route.match(/\/\w+/);
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
+    query: '(min-width: 1280px)'
   })
 
   useEffect(() => {

@@ -17,7 +17,8 @@ const styles = theme => ({
     width: "100%",
     position: "fixed",
     bottom: 0,
-    borderTop: '1px solid #0000001f'
+    borderTop: '1px solid #0000001f',
+    zIndex: 1
   }
 });
 

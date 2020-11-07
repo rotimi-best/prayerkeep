@@ -8,6 +8,7 @@ import prayersReducer from './prayersReducer';
 import feedReducer from './feedReducer';
 import alertReducer from './alertReducer';
 import collectionsReducer from './collectionsReducer';
+import snackBarReducer from './snackBarReducer';
 
 const createRootReducer = history => combineReducers({
   router: connectRouter(history),
@@ -17,7 +18,8 @@ const createRootReducer = history => combineReducers({
   modalListener: modalListenerReducer,
   prayers: prayersReducer,
   collections: collectionsReducer,
-  alert: alertReducer
+  alert: alertReducer,
+  snackBar: snackBarReducer
 });
 
 export default createRootReducer;

@@ -4,6 +4,7 @@ import NotesIcon from '@material-ui/icons/Notes';
 import FolderIcon from '@material-ui/icons/Folder';
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
@@ -36,7 +37,7 @@ const EmptyIcon = ({type, props}) => {
 }
 
 const Empty = props => {
-  const { type, text, classes } = props;
+  const { type, text, classes, onClick } = props;
   const iconProps = {
     classes: {
       root: classes.iconRoot
@@ -48,6 +49,9 @@ const Empty = props => {
       <Typography variant="h6" className={classes.text}>
         {text}
       </Typography>
+      {onClick && <Button variant="contained" color="primary" onClick={onClick}>
+        Add New
+      </Button>}
     </div>
   )
 }

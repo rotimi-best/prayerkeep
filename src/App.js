@@ -18,6 +18,7 @@ import TriggerModalFromUrl from "./components/TriggerModalFromUrl";
 import RequestPermission from "./components/RequestPermission";
 import BottomNavigation from "./components/BottomNavigation";
 import Alert from "./components/Alert";
+import SnackBar from "./components/SnackBar";
 
 const AsyncWelcome = React.lazy(() => import('./components/Welcome'));
 const Welcome = () => (
@@ -34,6 +35,7 @@ function App() {
           <TriggerModalFromUrl />
           <RequestPermission />
           <Header />
+          <SnackBar />
           <Switch>
             <Route exact path="/welcome" component={Welcome} />
             <PrivateRoute exact path="/" component={Home} />

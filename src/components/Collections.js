@@ -91,7 +91,7 @@ const Collections = props => {
     isAdding,
   } = collections;
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
+    query: '(min-width: 1280px)'
   });
   const [tabValue, setTabValue] = React.useState(0);
 

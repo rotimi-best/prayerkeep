@@ -1,6 +1,7 @@
 import global from '../constants/global';
 
 export { default as getNextXDaysDate } from './getNextXDaysDate';
+export { default as getNewPrayerUrl } from './getNewPrayerUrl';
 
 export const getDateCreated = (createdAt) => {
   const date = new Date(createdAt);

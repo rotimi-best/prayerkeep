@@ -59,7 +59,7 @@ const Header = props => {
   } = props;
 
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
+    query: '(min-width: 1280px)'
   });
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"

@@ -12,7 +12,8 @@ import {
   PRAYER_ADD_SUCCESS,
   PRAYER_ADD_ERROR,
   PRAYER_RESET,
-  SET_PRAYERS_TAB_VALUE
+  SET_PRAYERS_TAB_VALUE,
+  COLLECTION_UPDATE_SUCCESS
 } from '../constants/actionsTypes';
 import {
   getPrayersService,
@@ -23,6 +24,45 @@ import {
 } from '../services/prayersService';
 import alerts from '../constants/alert';
 import { openAlert } from './alertAction';
+
+function getprayersByCollection(allPrayers) {
+  const groupedCollections = {};
+  const noCollection = {
+    _id: null,
+    title: 'Without Collection',
+    prayers: [],
+  };
+
+  for (const prayer of allPrayers) {
+    const { collections } = prayer;
+    if (collections?.length <= 1) {
+      noCollection.prayers.push(prayer)
+    }
+
+    for (const collection of collections) {
+      const { _id, title, edittableByUser } = collection;
+      if (!edittableByUser) {
+        continue;
+      }
+      if (groupedCollections[collection._id]) {
+        groupedCollections[collection._id].prayers.push(prayer)
+      } else {
+        groupedCollections[collection._id] = { _id, title, prayers: [prayer] };
+      }
+    }
+  }
+
+  const result = Object.values(groupedCollections);
+
+  if (noCollection.prayers.length) {
+    return [
+      ...result,
+      noCollection
+    ]
+  }
+
+  return result;
+};
 
 export const setPrayersTabValue = payload => dispatch => dispatch({
   type: SET_PRAYERS_TAB_VALUE,
@@ -49,14 +89,15 @@ export const getPrayers = userId => async dispatch => {
   const allPrayers = prayers;
   const answeredPrayers = allPrayers.filter(prayer => prayer.answered);
   const unAnsweredPrayers = allPrayers.filter(prayer => !prayer.answered);
-
+  const prayersByCollection = getprayersByCollection(allPrayers);
   dispatch({
     type: PRAYERS_FETCHED,
     payload: {
       allPrayers,
       answeredPrayers,
       unAnsweredPrayers,
-      interceedingPrayers
+      interceedingPrayers,
+      prayersByCollection
     },
   });
 };
@@ -108,10 +149,26 @@ export const updatePrayer = (userId, prayerId, prayerParams, prevPrayers, callba
   const payload = {
     prayer
   }
-  const {prayers} = getState();
+  const {prayers, router, collections } = getState();
 
   payload.allPrayers = prayers.allPrayers.map(p => p._id === prayer._id ? prayer : p);
+  payload.prayersByCollection = getprayersByCollection(payload.allPrayers);
+  payload.answeredPrayers = payload.allPrayers.filter(prayer => prayer.answered);
+  payload.unAnsweredPrayers = payload.allPrayers.filter(prayer => !prayer.answered);
 
+  // This is a collection page
+  if (router?.location?.pathname?.match(/\/collection\/.*/g)) {
+    const collectionInView = collections.collectionInView;
+    collectionInView.prayers = collectionInView.prayers.map(p => p._id === prayer._id ? prayer : p);
+
+    dispatch({
+      type: COLLECTION_UPDATE_SUCCESS,
+      payload: {
+        allCollection: collections.allCollection,
+        collectionInView
+      }
+    });
+  }
   dispatch({
     type: PRAYER_UPDATE_SUCCESS,
     payload
@@ -136,11 +193,18 @@ export const deletePrayer = (prayerId) => async (dispatch, getState) => {
     });
   }
   const {prayers} = getState();
+  const allPrayers = prayers.allPrayers.filter(p => p._id !== prayerId)
+  const prayersByCollection = getprayersByCollection(allPrayers);
+  const answeredPrayers = allPrayers.filter(prayer => prayer.answered);
+  const unAnsweredPrayers = allPrayers.filter(prayer => !prayer.answered);
 
   dispatch({
     type: PRAYER_UPDATE_SUCCESS,
     payload: {
-      allPrayers: prayers.allPrayers.filter(p => p._id !== prayerId)
+      allPrayers: prayers.allPrayers.filter(p => p._id !== prayerId),
+      prayersByCollection,
+      answeredPrayers,
+      unAnsweredPrayers
     }
   });
 
@@ -168,13 +232,14 @@ export const addPrayer = (prayerParams, prevPrayers, callback) => async dispatch
   const allPrayers = [prayer, ...prevPrayers];
   const answeredPrayers = allPrayers.filter(prayer => prayer.answered);
   const unAnsweredPrayers = allPrayers.filter(prayer => !prayer.answered);
-
+  const prayersByCollection = getprayersByCollection(allPrayers)
   dispatch({
     type: PRAYER_ADD_SUCCESS,
     payload: {
       allPrayers,
       answeredPrayers,
       unAnsweredPrayers,
+      prayersByCollection
     },
   });
   if (callback && typeof(callback) === "function") {

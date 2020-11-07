@@ -165,6 +165,7 @@ const CollectionTitleModal = props => {
     toggleModal()
   };
   const handleColorChange = (color) => {
+    console.log('color.hex', color.hex)
     setColor(color.hex)
   };
 

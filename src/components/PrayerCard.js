@@ -13,15 +13,20 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import BookmarkOutlinedIcon from '@material-ui/icons/BookmarkBorder';
+import BookmarkContainedIcon from '@material-ui/icons/Bookmark';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
+import Dot from './Dot';
 
 import BiblePasssageCard from './BiblePasssageCard';
-import PrayerIcon from './Icons/Prayer';
+import AnsweredBadge from './AnsweredBadge';
+// import PrayerIcon from './Icons/Prayer';
 import { getDateCreated } from '../helpers';
 import { openAlert } from '../actions/alertAction';
 import alerts from '../constants/alert';
 import { updatePrayer } from '../actions/prayersAction';
+import { openSnackBar } from '../actions/snackBarAction';
 
 const useStyles = makeStyles(() => ({
   cardActionRoot: {
@@ -77,10 +82,13 @@ const useStyles = makeStyles(() => ({
     marginLeft: 10,
     paddingTop: 5
   },
+  prayerStat: {
+    padding: '0 8px 8px',
+  }
 }));
 
 const PrayerCard = props => {
-  const { prayer, userId, isPrayerClickable } = props;
+  const { prayer, userId, isPrayerClickable, showCollectionTags } = props;
   const {
     description,
     collections,
@@ -91,7 +99,8 @@ const PrayerCard = props => {
     comments,
     intercessors,
     interceeding,
-    formattedPassages = []
+    formattedPassages = [],
+    answered
   } = prayer;
   const dispatch = useDispatch();
   const { isLoggedIn, pathname } = useSelector(state => ({
@@ -130,21 +139,27 @@ const PrayerCard = props => {
       return dispatch(push(`/welcome?goTo=${pathname}`));
     }
     if (isOwner) {
-      dispatch(openAlert('You cant add your request to your Intercession', alerts.INFO))
+      dispatch(openSnackBar('You cant add your request to your Intercession'))
       return;
     }
 
-    const newisInterceding= !isInterceding;
-    setIsInterceding(newisInterceding);
-    dispatch(
-      updatePrayer(userId, _id, { interceeding: newisInterceding })
-    );
+    setIsInterceding(isInterceding => {
+      const newisInterceding = !isInterceding
+      dispatch(
+        updatePrayer(userId, _id, { interceeding: newisInterceding })
+      );
 
-    if (newisInterceding) {
-      dispatch(openAlert('Added to your Intercessions', alerts.INFO))
-    } else {
-      dispatch(openAlert('Removed from your Intercessions', alerts.INFO))
-    }
+      if (newisInterceding) {
+        dispatch(openSnackBar('Added to your Intercessions'))
+      } else {
+        dispatch(openSnackBar('Removed from your Intercessions'))
+      }
+      return newisInterceding
+    });
+  }
+
+  const handleIPrayed = () => {
+    dispatch(openSnackBar('You said Amen'))
   }
 
   const handleShare = () => {
@@ -199,13 +214,17 @@ const PrayerCard = props => {
           </IconButton>
         )}
         title={owner.googleAuthUser.name}
-        subheader={`Praying since ${dateCreated}`}
+        subheader={(
+          <span>
+            Started praying {dateCreated} {answered && <AnsweredBadge />}
+          </span>
+        )}
         classes={{
           root: classes.cardHeaderRoot
         }}
       />
       <CustomCardContent />
-      {isOwner && Array.isArray(collections) && <CardActions
+      {showCollectionTags && isOwner && Array.isArray(collections) && <CardActions
         disableSpacing
         classes={{
           root: classes.cardActionRoot
@@ -223,37 +242,53 @@ const PrayerCard = props => {
           />
         )}
       </CardActions>}
-      <CardActions
-        classes={{ root: classes.cardActionButtonsRoot }}
-        disableSpacing
-      >
-        <div className={classes.iconWithCount}>
-          <IconButton aria-label="add to your intercessions" onClick={handleIsInterceding}>
-            <PrayerIcon fill={isInterceding && "#17bf63"} />
+      {showCollectionTags ? (
+        <CardActions
+          classes={{ root: classes.cardActionButtonsRoot }}
+          disableSpacing
+        >
+          {/* <div className={classes.iconWithCount}>
+            <IconButton aria-label="add to your intercessions" onClick={handleIPrayed}>
+              <PrayerIcon fill={isInterceding && "#17bf63"} />
+            </IconButton>
+            <Count count={totalIntercessors} />
+          </div> */}
+          <div className={classes.iconWithCount}>
+            <IconButton aria-label="add to your intercessions" onClick={handleIsInterceding}>
+              {isInterceding ? <BookmarkContainedIcon color="primary" /> : <BookmarkOutlinedIcon />}
+            </IconButton>
+            <Count count={totalIntercessors} />
+          </div>
+          <div className={classes.iconWithCount}>
+            <IconButton aria-label="comment" onClick={handleComment}>
+              <ChatBubbleOutlineIcon />
+            </IconButton>
+            <Count count={totalComments} />
+          </div>
+          <IconButton aria-describedby="share-prayer" aria-label="share link" onClick={handleShare}>
+            <ShareIcon />
           </IconButton>
-          <Count count={totalIntercessors} />
+        </CardActions>
+        ) : (
+        <div className={classes.prayerStat}>
+          <Typography className={classes.count} color="textSecondary" component="span">
+            {totalIntercessors} interceeding <Dot /> {totalComments} comment{totalComments > 1 ? 's' : ''}
+          </Typography>
         </div>
-        <div className={classes.iconWithCount}>
-          <IconButton aria-label="comment" onClick={handleComment}>
-            <ChatBubbleOutlineIcon />
-          </IconButton>
-          <Count count={totalComments} />
-        </div>
-        <IconButton aria-describedby="share-prayer" aria-label="share link" onClick={handleShare}>
-          <ShareIcon />
-        </IconButton>
-      </CardActions>
+      )}
     </Card>
   )
 }
 
 PrayerCard.propTypes = {
   prayer: PropTypes.object.isRequired,
-  isPrayerClickable: PropTypes.bool
+  isPrayerClickable: PropTypes.bool,
+  showCollectionTags: PropTypes.bool,
 };
 
 PrayerCard.defaultProps = {
-  isPrayerClickable: true
+  isPrayerClickable: true,
+  showCollectionTags: true
 }
 
 export default PrayerCard;

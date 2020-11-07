@@ -8,7 +8,8 @@ export default withStyles(() => ({
     backgroundColor: 'rgba(0,0,0,.07)',
     color: '#626262',
     verticalAlign: 'baseline',
-    padding: '0px 7px'
+    padding: '0px 7px',
+    fontSize: 13
   }
 }))(function Badge(props) {
   return (

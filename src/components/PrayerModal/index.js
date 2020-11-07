@@ -238,7 +238,9 @@ const PrayerModal = props => {
       dispatch(updatePrayer(userId, prayerToOpen._id, newPrayerRequest, props.prayers.allPrayers))
     } else {
       const callback = () => {
-        dispatch(getCollection(prayerModal.collectionId, userId));
+        if (prayerModal.collectionId) {
+          dispatch(getCollection(prayerModal.collectionId, userId));
+        }
       }
 
       dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers, callback))
