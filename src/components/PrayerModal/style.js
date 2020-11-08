@@ -61,7 +61,7 @@ export default theme => ({
     }
   },
   dialogContent: {
-    padding: 5
+    padding: '5px 20px'
   },
   chip: {
     margin: '2px 0'

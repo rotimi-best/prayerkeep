@@ -8,29 +8,29 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormLabel from '@material-ui/core/FormLabel';
+// import FormLabel from '@material-ui/core/FormLabel';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
+// import FormControl from '@material-ui/core/FormControl';
+// import FormGroup from '@material-ui/core/FormGroup';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Checkbox from '@material-ui/core/Checkbox';
-import CollectionMenu from '../CollectionMenu';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import CollectionMenu from '../CollectionMenu';
 import UnLovedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import LovedIcon from '@material-ui/icons/Favorite';
 import SendIcon from '@material-ui/icons/Send';
 
-import PrayerInput from '../PrayerInput';
+import GroupedPrayers from '../GroupedPrayers';
 
-import { date } from "../../helpers";
+// import { date } from "../../helpers";
 import { getFeed, updateQuote } from '../../actions/feedAction';
-import { updatePrayer } from '../../actions/prayersAction';
+// import { updatePrayer } from '../../actions/prayersAction';
 import useStyles from './styles';
 
 const Home = props => {
@@ -39,10 +39,10 @@ const Home = props => {
     dispatch,
     userId,
     feed,
-    prayers,
+    // prayers,
     userPictureUrl
   } = props;
-  const { prayersToday, quote } = feed;
+  const { publicPrayers, quote } = feed;
   const classes = useStyles();
   const [isLoved, setIsLoved] = React.useState(quote.isLovedByMe);
   const [comment, setComment] = React.useState('');
@@ -62,15 +62,16 @@ const Home = props => {
     query: '(min-width: 1280px)'
   });
 
-  const markPrayerAsPrayed = (prayerId) => {
-    if (prayerId) {
-      dispatch(updatePrayer(userId, prayerId, {
-        lastDatePrayed: date({ toUTC: true })
-      }, prayers.allPrayers, () => dispatch(getFeed(userId))));
-    }
-  }
+  // const markPrayerAsPrayed = (prayerId) => {
+  //   if (prayerId) {
+  //     dispatch(updatePrayer(userId, prayerId, {
+  //       lastDatePrayed: date({ toUTC: true })
+  //     }, prayers.allPrayers, () => dispatch(getFeed(userId))));
+  //   }
+  // }
 
   const handleLoveClick = () => {
+    if (feed.isFetching) return;
     setIsLoved(isLoved => {
       const newIsLoved = !isLoved;
       dispatch(
@@ -102,11 +103,8 @@ const Home = props => {
         }}
       >
       {feed.isFetching ? <LinearProgress /> : null}
-        <PrayerInput
-
-        />
         <Paper
-          variant="elevation"
+          variant="outlined"
           className={classes.userStatsRoot}
           elevation={2}
         >
@@ -147,7 +145,7 @@ const Home = props => {
               ) : null}
             </ListItem>
           </List>
-          {quote?.comments?.map(comment => (
+          {quote?.comments?.slice(0, 4)?.map(comment => (
             <React.Fragment key={comment._id}>
               <Divider light />
               <List className={classes.listRoot}>
@@ -176,8 +174,18 @@ const Home = props => {
           ))}
 
         </Paper>
-        <CollectionMenu />
-        <Paper
+
+
+        <GroupedPrayers
+          title="Popular prayer requests"
+          prayers={publicPrayers}
+          styles={{
+            margin: '0 0 10px 0'
+          }}
+          hideAction
+        />
+        {/* <CollectionMenu /> */}
+        {/* <Paper
           variant="elevation"
           className={classes.prayersForToday}
           elevation={2}
@@ -204,7 +212,7 @@ const Home = props => {
                   )}
             </FormGroup>
           </FormControl>
-        </Paper>
+        </Paper> */}
       </Container>
     </main>
   );

@@ -5,7 +5,6 @@ export default makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
   root: {
     flexGrow: 1,
-    padding: '20px 0',
     '& .MuiTextField-root': {
       margin: '8px 0',
       width: '100%',
@@ -16,7 +15,9 @@ export default makeStyles(theme => ({
     justifyContent: "center",
     flexDirection: "column",
     // alignItems: "center",
-    padding: '10px'
+    padding: '8px 16px 0px',
+    borderRadius: 8,
+    margin: '10px 0'
   },
   userStatsBody: {
     display: "flex",

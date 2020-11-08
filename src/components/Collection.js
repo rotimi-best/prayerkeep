@@ -245,6 +245,7 @@ const Collection = props => {
               className={classes.shareButton}
               endIcon={alreadyJoined ? <LinkIcon /> : <AddIcon />}
               onClick={handleShareOrJoin}
+              disabled={isUpdating}
             >
               {isUpdating ? <CircularProgress size={20} /> : (alreadyJoined ? 'Share' : 'Join')}
             </Button>

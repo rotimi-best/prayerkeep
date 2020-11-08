@@ -10,6 +10,7 @@ import {
 const initialState = {
   streak: 0,
   prayersToday: [],
+  publicPrayers: [],
   prayersPrayedToday: 0,
   quote: {},
   isFetching: false,
@@ -24,6 +25,7 @@ export default function(state = initialState, action) {
       return {
         // streak: payload.streak,
         prayersToday: payload.prayersToday,
+        publicPrayers: payload.publicPrayers,
         quote: payload.quote,
         isFetching: false,
         error: null,

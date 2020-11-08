@@ -47,6 +47,8 @@ const GroupedPrayers = props => {
     prayers,
     dispatch,
     userId,
+    hideAction,
+    styles = {}
   } = props;
   const [expand, setExpand] = React.useState(true)
 
@@ -58,19 +60,19 @@ const GroupedPrayers = props => {
     setExpand(expand => !expand)
   }
 
-  if (!collectionId) {
+  if (!collectionId && typeof(hideAction) !== "boolean") {
     return prayers.map((prayer, i) => (
       <PrayerCard userId={userId} key={prayer._id} prayer={prayer} showCollectionTags={false}/>
     ))
   }
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={styles}>
       <div className={classes.header}>
         <Typography variant="body1">
           {title}
         </Typography>
-        <div className={classes.action}>
+        {!hideAction && <div className={classes.action}>
           <Button
             variant="outlined"
             color="primary"
@@ -81,7 +83,7 @@ const GroupedPrayers = props => {
           <IconButton onClick={handleExpand}>
             {expand ? <ExpandMoreIcon /> : <ExpandLessIcon />}
           </IconButton>
-        </div>
+        </div>}
       </div>
       {expand && prayers.map((prayer, i) => (
         <PrayerCard userId={userId} key={prayer._id} prayer={prayer} showCollectionTags={false}/>

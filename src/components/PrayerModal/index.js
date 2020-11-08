@@ -11,12 +11,15 @@ import { withStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import FormControl from '@material-ui/core/FormControl';
@@ -106,6 +109,7 @@ const PrayerModal = props => {
   const [answeredPrayer, setAnsweredPrayer] = useState(false);
   const [startDate, setStartDate] = useState(todaysDate());
   const [endDate, setEndDate] = useState(getNextXDaysDate(30));
+  const [isPublic, setIsPublic] = useState(false);
   const [errors, setErrors] = useState({
     prayerRequest: false
   });
@@ -124,6 +128,7 @@ const PrayerModal = props => {
     setStartDate(todaysDate());
     setEndDate(getNextXDaysDate(365));
     setFormSubmitted(false);
+    setIsPublic(false);
     setErrors({
       prayerRequest: false
     });
@@ -152,6 +157,7 @@ const PrayerModal = props => {
       const edittableByUserCol = prayerToOpen.collections
         .filter(c => c.edittableByUser)
       setCollection(edittableByUserCol);
+      setIsPublic(prayerToOpen?.public || false);
     }
     if (prayerModal.open && prayerModal.collectionId) {
       const collectionFromUrl = filterArrayById(prayerModal.collectionId, allCollection);
@@ -226,6 +232,7 @@ const PrayerModal = props => {
       description: prayerRequest,
       answered: answeredPrayer,
       passages,
+      public: isPublic,
       collections,
       start: date({ toUTC: true, defDate: new Date(startDate) }),
       end: date({ toUTC: true, defDate: new Date(endDate) }),
@@ -270,6 +277,11 @@ const PrayerModal = props => {
   const handleVerseClicked = (value) => () => {
     handleBiblePickerVisibility()
     setPassage(value)
+  }
+  const handleIsPublic = (event) => {
+    if (event.target.value === 'yes') {
+      setIsPublic(true)
+    } else setIsPublic(false)
   }
 
   const handlePassageRemove= (passage) => () => {
@@ -397,6 +409,17 @@ const PrayerModal = props => {
             </div>
           </FormControl>
 
+          {/* Public or private */}
+          <FormControl component="fieldset">
+            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+              Do you want to make this prayer request public?
+            </Typography>
+            <RadioGroup aria-label="quiz" name="quiz" value={isPublic ? 'yes' : 'no'} onChange={handleIsPublic}>
+              <FormControlLabel value="yes" control={<Radio color="primary" />} label="Yes, sure" />
+              <FormControlLabel value="no" control={<Radio color="primary" />} label="No, it's private" />
+            </RadioGroup>
+          </FormControl>
+
           {/* Answered Prayer */}
           <FormControlLabel
             control={
@@ -418,8 +441,9 @@ const PrayerModal = props => {
             variant="text"
             color="primary"
             onClick={handleSave}
+            disabled={prayers.isUpdating || prayers.isAdding}
           >
-            Save
+            {(prayers.isUpdating || prayers.isAdding) ? <CircularProgress size={20} /> : 'Save'}
           </Button>
         </DialogActions>
       </Dialog>
