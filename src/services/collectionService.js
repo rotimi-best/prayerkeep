@@ -4,7 +4,13 @@ const { API_URL } = configs;
 
 export const getCollectionService = async (collectionId,userId) => {
   try {
-    const response = await axios.get(`${API_URL}/collection/${collectionId}?userId=${userId}`);
+    const response = await axios.get(`${API_URL}/collection/${collectionId}?userId=${userId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      }
+    });
     return { response: response.data };
   } catch (error) {
     const { data = {} } = error.response || {};
@@ -50,6 +56,28 @@ export const updateCollectionService = async (collectionId, collectionParams) =>
     const requestParams = {
       method: 'PUT',
       data: JSON.stringify(collectionParams),
+      headers: {
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+      url: `${API_URL}/collection/${collectionId}`
+    }
+
+    const response = await axios(requestParams);
+    return { response: response.data };
+  } catch (error) {
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
+  }
+};
+
+
+export const deleteCollectionService = async collectionId => {
+  try {
+    const requestParams = {
+      method: 'DELETE',
       headers: {
         'Accept': 'application/json',
         'Access-Control-Allow-Origin': '*',

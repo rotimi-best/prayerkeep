@@ -18,7 +18,6 @@ const TriggerModalFromUrl = props => {
     if (collectionId && isValidHex(collectionId)) {
       modalOptions.collectionId = collectionId;
     }
-    console.log('TriggerModalFromUrl', modalOptions)
 
     dispatch(togglePrayerModal(prayerModal === "open", modalOptions))
   } else if (!prayerModal && modalListener.prayerModal.open) {

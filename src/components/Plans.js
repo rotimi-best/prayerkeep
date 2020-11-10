@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from './Tabs';
 import Empty from './Empty';
-import MyPlans from './MyPlans';
+import PlanCard from './PlanCard';
 
 const useStyles = makeStyles(theme => ({
   containerRoot: {
@@ -14,7 +14,43 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: theme.mixins.toolbar,
 }));
-
+const prayerPlans = [
+  {
+    id: 1,
+    title: 'Pray until something happens with Apostle Suleman',
+    author: 'Rotimi Best',
+    prayedBy: 100,
+    shortDescription: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica'
+  },
+  {
+    id: 2,
+    title: 'Breakthrough in finances with Apostle Suleman',
+    author: 'Rotimi Best',
+    prayedBy: 100,
+    shortDescription: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica'
+  },
+  {
+    id: 3,
+    title: 'My womb must open with Apostle Suleman',
+    author: 'Rotimi Best',
+    prayedBy: 100,
+    shortDescription: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica'
+  },
+  {
+    id: 4,
+    title: 'Hear the voice of God with Apostle Suleman',
+    author: 'Rotimi Best',
+    prayedBy: 100,
+    shortDescription: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica'
+  },
+  {
+    id: 5,
+    title: 'Total turn around with Apostle Suleman',
+    author: 'Rotimi Best',
+    prayedBy: 100,
+    shortDescription: 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica'
+  },
+];
 const tabData = [
   {
     key: 1,
@@ -32,7 +68,7 @@ const tabData = [
   },
 ];
 const tabContent = {
-  '1': <MyPlans />,
+  '1':  prayerPlans.map(plan => <PlanCard key={plan.id} plan={plan} isPreview />),
   '2': <Empty type="comingSoon" text="Coming Soon..." />
 }
 

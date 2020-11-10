@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Masonry from 'react-masonry-css'
 import { useMediaQuery } from 'react-responsive';
 import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { withStyles } from '@material-ui/core/styles';
 import CollectionBox from './CollectionBox';
 import CollectionTitleModal from './CollectionTitleModal';
+import BadgeWithLabel from './BadgeWithLabel';
 
 import { getCollections } from '../actions/collectionsAction';
 
@@ -16,30 +21,60 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   root: {
     flexGrow: 1,
-    padding: `${theme.spacing(3)}px 0`,
+    padding: `10px 0`,
   },
   collectionHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15
+    marginBottom: 5,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 16
+    }
   },
   collections: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(16rem, 1fr))',
-    gridGap: '1rem'
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-evenly'
+  },
+  collection: {
+    margin: '0 5px',
+    width: '45% !important',
+    [theme.breakpoints.down('sm')]: {
+      width: '100% !important'
+    }
   },
   collectionBoxRoot: {
+    width: '100%',
+    verticalAlign: 'top',
     display: 'flex',
+    marginBottom: 10,
     '&:hover': {
       cursor: 'pointer'
     },
     '& > *': {
       margin: theme.spacing(2),
     },
-    width: '100%',
   },
+  tab: {
+    margin: '10px 0',
+    boxShadow: 'none',
+    border: '1px solid #dadce0',
+    borderRadius: 8,
+    '& .Mui-selected .badge': {
+      fontWeight: 500,
+      color: '#000000'
+    },
+  }
 });
+
+function a11yProps(index) {
+  return {
+    id: `scrollable-auto-tab-${index}`,
+    'aria-controls': `scrollable-auto-tabpanel-${index}`,
+    value: index
+  };
+}
 
 const Collections = props => {
   const {
@@ -50,13 +85,15 @@ const Collections = props => {
   } = props;
   const {
     allCollection,
+    suggestedCollections,
     isFetching,
     isUpdating,
     isAdding,
   } = collections;
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
+    query: '(min-width: 1280px)'
   });
+  const [tabValue, setTabValue] = React.useState(0);
 
   useEffect(() => {
     // if (!allCollection.length) {
@@ -64,6 +101,9 @@ const Collections = props => {
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
 
   return (
     <main className={classes.root}>
@@ -80,20 +120,55 @@ const Collections = props => {
             </Typography>
             <CollectionTitleModal isNew/>
           </Grid>
-          <Grid item xs={12} className={classes.collections}>
-            {(isFetching || isUpdating || isAdding)
-              ? <LinearProgress />
-              : allCollection.map(({ _id, title,color, prayers }) => (
-                  <CollectionBox
-                    key={_id}
-                    id={_id}
-                    title={title}
-                    color={color}
-                    prayers={prayers}
-                    collectionBoxRoot={classes.collectionBoxRoot}
-                  />
+          {(isFetching || isUpdating || isAdding)
+              && <LinearProgress />}
+          <AppBar position="sticky" color="inherit" className={classes.tab}>
+            <Tabs
+              value={tabValue}
+              indicatorColor="primary"
+              textColor="primary"
+              onChange={handleTabChange}
+              aria-label="collections-tabs"
+              centered
+            >
+              <Tab label={<BadgeWithLabel label="My Collections" value={allCollection.length}/>} {...a11yProps(0)} />
+              <Tab label={<BadgeWithLabel label="Explore" value={suggestedCollections.length}/>} {...a11yProps(1)} />
+            </Tabs>
+          </AppBar>
+          {/* <Grid item xs={12} className={classes.collections}> */}
+          {tabValue === 0 && <Masonry
+            breakpointCols={{
+              'default': 2,
+              500: 1
+            }}
+            className={classes.collections}
+            columnClassName={classes.collection}
+          >
+            {allCollection.map((collection) => (
+              <CollectionBox
+                key={collection._id}
+                collection={collection}
+                collectionBoxRoot={classes.collectionBoxRoot}
+              />
               ))}
-          </Grid>
+          </Masonry>}
+          {tabValue === 1 && <Masonry
+            breakpointCols={{
+              'default': 2,
+              500: 1
+            }}
+            className={classes.collections}
+            columnClassName={classes.collection}
+          >
+            {suggestedCollections.map((collection) => (
+              <CollectionBox
+                key={collection._id}
+                collection={collection}
+                collectionBoxRoot={classes.collectionBoxRoot}
+              />
+              ))}
+          </Masonry>}
+          {/* </Grid> */}
         </Grid>
       </Container>
     </main>

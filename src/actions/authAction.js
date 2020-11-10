@@ -21,16 +21,27 @@ export const logIn = user => async (dispatch, getState) => {
       payload: user
     })
 
-    dispatch(push(routes.HOME))
+    const {
+      authentication: {
+        isSubscribedToPushNotification
+      },
+      router: {
+        location
+      }
+    } = getState();
 
-    const sw = await navigator.serviceWorker.ready;
-    const subscription = await sw.pushManager.getSubscription();
+    const goTo = location.query.goTo ? location.query.goTo : routes.HOME;
+    dispatch(push(goTo))
 
-    const { isSubscribedToPushNotification } = getState().authentication;
+    setTimeout(async () => {
+      const sw = await navigator.serviceWorker.ready;
+      const subscription = await sw.pushManager.getSubscription();
 
-    if (!subscription && isSubscribedToPushNotification) {
-      dispatch(setIsSubscribedToPushNotification(false));
-    }
+      if (!subscription && isSubscribedToPushNotification) {
+        dispatch(setIsSubscribedToPushNotification(false));
+      }
+    }, 2000);
+
   } else {
     dispatch({
       type: USER_LOGIN_FAILED,

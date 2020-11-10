@@ -1,10 +1,10 @@
 {
-  "name": "Parchment Notebook",
-  "short_name": "Parchment Notebook",
+  "name": "Prayer Keep",
+  "short_name": "Prayer Keep",
   "theme_color": "#fff",
   "background_color": "#fff",
   "display": "standalone",
-  "Scope": "/",
+  "scope": "/",
   "start_url": "/",
   "icons": [
     {

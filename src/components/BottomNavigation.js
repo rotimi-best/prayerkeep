@@ -18,7 +18,8 @@ const styles = theme => ({
     width: "100%",
     position: "fixed",
     bottom: 0,
-    borderTop: '1px solid #0000001f'
+    borderTop: '1px solid #0000001f',
+    zIndex: 1
   }
 });
 
@@ -35,6 +36,7 @@ const SimpleBottomNavigation = props => {
   if (!isMobile || !isLoggedIn) {
     return null;
   }
+
   return (
       <React.Fragment>
         <div className={classes.toolbar} />

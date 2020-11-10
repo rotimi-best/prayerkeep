@@ -9,15 +9,25 @@ import {
   PRAYER_UPDATE_ERROR,
   PRAYER_UPDATE_REQUEST,
   PRAYER_UPDATE_SUCCESS,
-  PRAYER_RESET_ERROR,
+  PRAYER_RESET,
+  PRAYER_START_FETCHING,
+  PRAYER_FETCHED,
+  SET_PRAYERS_TAB_VALUE
 } from '../constants/actionsTypes';
 
 const initialState = {
   allPrayers: [],
+  answeredPrayers: [],
+  unAnsweredPrayers: [],
+  prayersByCollection: [],
+  prayer: null,
+  interceedingPrayers: [],
+  isPrayerFetching: false,
   isFetching: false,
   isUpdating: false,
   isAdding: false,
   error: null,
+  prayersTabValue: 0,
 }
 
 export default function(state = initialState, action) {
@@ -28,12 +38,29 @@ export default function(state = initialState, action) {
     case PRAYER_ADD_SUCCESS:
     case PRAYER_UPDATE_SUCCESS:
       return {
-        allPrayers: payload,
+        ...state,
+        allPrayers: payload.allPrayers ? payload.allPrayers : state.allPrayers,
+        answeredPrayers: payload.answeredPrayers ? payload.answeredPrayers : state.answeredPrayers,
+        prayersByCollection: payload.prayersByCollection ? payload.prayersByCollection : state.prayersByCollection,
+        unAnsweredPrayers: payload.unAnsweredPrayers ? payload.unAnsweredPrayers : state.unAnsweredPrayers,
+        interceedingPrayers: payload.interceedingPrayers ? payload.interceedingPrayers : state.interceedingPrayers,
+        prayer: payload.prayer || state.prayer,
         isFetching: false,
         isUpdating: false,
         isAdding: false,
         error: null,
       };
+    case PRAYER_START_FETCHING:
+      return {
+        ...state,
+        isPrayerFetching: true,
+      };
+    case PRAYER_FETCHED:
+      return {
+        ...state,
+        prayer: payload,
+        isPrayerFetching: false,
+      }
     case PRAYERS_START_FETCHING:
       return {
         ...state,
@@ -69,10 +96,15 @@ export default function(state = initialState, action) {
         isUpdating: true,
         error: null
       };
-    case PRAYER_RESET_ERROR:
+    case PRAYER_RESET:
       return {
         ...state,
-        error: null,
+        prayer: null,
+      }
+    case SET_PRAYERS_TAB_VALUE:
+      return {
+        ...state,
+        prayersTabValue: payload
       }
     default:
       return state;

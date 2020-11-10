@@ -34,13 +34,14 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   listItemIconRoot: {
-    color: 'black'
+    color: 'unset'
   },
   listItemTextRoot: {
     color: 'black'
   },
   listItemSelected: {
-    backgroundColor: `${theme.palette.secondary.light} !important`,
+    backgroundColor: `${theme.palette.primary.main} !important`,
+    color: '#fff',
     borderRadius: '0 25px 25px 0'
   },
   paperAnchorDockedLeft: {
@@ -64,7 +65,7 @@ const SideBar = props => {
   const { classes, openSidebar, dispatch, route } = props;
   const rootRoute = route.match(/\/\w+/);
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
+    query: '(min-width: 1280px)'
   })
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const SideBar = props => {
       dispatch(toggleSideBar())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isDesktopOrLaptop])
 
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar())
@@ -118,7 +119,7 @@ const SideBar = props => {
             onKeyDown={() => changeRouteTo(routes.HOME)}
           >
             <ListItemIcon classes={{ root: classes.listItemIconRoot }}><HomeIcon /></ListItemIcon>
-            <ListItemText classes={{ root: classes.listItemTextRoot }} primary={"Home"} />
+            <ListItemText primary={"Home"} />
           </ListItem>
           <ListItem
             selected={route === routes.PRAYERS}
@@ -154,7 +155,7 @@ const SideBar = props => {
           <Divider />
 
           <Link
-            href={`mailto:${configs.SUPPORT_EMAIL}?subject=[Help]: Parchment Notebook`}
+            href={`mailto:${configs.SUPPORT_EMAIL}?subject=[Help]: Prayer Keep`}
             underline="none"
             color="textPrimary"
             target="_blank"

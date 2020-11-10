@@ -5,31 +5,59 @@ import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
+import FolderSharedIcon from '@material-ui/icons/FolderShared';
+import Tooltip from '@material-ui/core/Tooltip';
+import Dot from './Dot';
 
-const CollectionBox = ({ id, title, color, collectionBoxRoot, prayers, dispatch }) => {
+const CollectionBox = ({ collectionBoxRoot, collection, dispatch }) => {
+  const {
+    _id,
+    title,
+    color,
+    prayers,
+    shared,
+    people,
+    owner
+  } = collection;
   const openCollection = () => {
-    dispatch(push(`/collection/${id}`))
+    dispatch(push(`/collection/${_id}`))
   }
 
   return (
     <Paper className={collectionBoxRoot} variant="outlined" onClick={openCollection}>
-      <FolderIcon style={{ color: color || '' }}/>
-      <span>
-        <Typography variant="body2" color="textPrimary" component="p">
-          {title.length >= 20 ? `${title.slice(0, 20)}...` : title}
-        </Typography>
-        <Typography variant="caption" color="textSecondary" component="p">
-          Has {prayers.length} prayer points
-        </Typography>
-      </span>
+      {shared ? (
+        <FolderSharedIcon style={{ color: color || '' }}/>
+      ) : (
+        <FolderIcon style={{ color: color || '' }}/>
+      )}
+      <Tooltip title={title} aria-label={title}>
+        <span>
+          <Typography variant="body2" color="textPrimary" style={{ fontSize: 15 }} component="p">
+            {/* {title.length >= 20 ? `${title.slice(0, 20)}...` : title} */}
+            {title}
+          </Typography>
+          <Typography variant="caption" color="textSecondary" component="p">
+            {owner?.googleAuthUser?.name}
+          </Typography>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="caption" color="textSecondary" component="p">
+              {prayers?.length} {prayers?.length > 1 ? 'prayers' : 'prayer'}
+            </Typography>
+              <Dot />
+            <Typography variant="caption" color="textSecondary" component="p">
+              {people?.length} {people?.length > 1 ? 'people' : 'person'}
+            </Typography>
+          </div>
+        </span>
+      </Tooltip>
     </Paper>
   )
 }
 
 CollectionBox.propTypes = {
-  title: PropTypes.string.isRequired,
+  dispatch: PropTypes.func.isRequired,
   collectionBoxRoot: PropTypes.string.isRequired,
-  prayers: PropTypes.array.isRequired,
+  collection: PropTypes.object.isRequired,
 };
 
 export default connect()(CollectionBox);

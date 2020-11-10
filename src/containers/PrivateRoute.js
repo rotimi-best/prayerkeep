@@ -15,23 +15,24 @@ const Main = ({ component: Component, openPrayerModal, openSidebar, ...rest }) =
   </div>
 );
 
-const PrivateRoute = ({ isLoggedIn, component, openPrayerModal, openSidebar, ...rest }) => {
+const PrivateRoute = ({ isLoggedIn, ignoreLogIn, component, openPrayerModal, openSidebar, ...rest }) => {
   const componentToRender = props =>
-    isLoggedIn
+    (isLoggedIn || ignoreLogIn)
     ? <Main
         component={component}
         openSidebar={openSidebar}
         openPrayerModal={openPrayerModal}
         {...props}
       />
-    : <Redirect to="/welcome" />;
+    : <Redirect to={`/welcome?goTo=${props.match.url}`} />;
 
   return <Route render={componentToRender} {...rest} />;
 };
 
 PrivateRoute.propTypes = {
   component: PropTypes.elementType.isRequired,
-  path: PropTypes.string.isRequired
+  path: PropTypes.string.isRequired,
+  ignoreLogIn: PropTypes.bool,
 };
 
 const mapStateToProps = ({ authentication, global, modalListener }) => ({

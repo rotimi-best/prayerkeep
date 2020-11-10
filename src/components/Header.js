@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive';
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
 import Avatar from '@material-ui/core/Avatar';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -41,19 +42,29 @@ const styles = theme => ({
   }
 });
 
+
+function hideHeader(route, isMobile) {
+  const pagesToHideHeader = [
+    // ROUTES.PLANS,
+    ROUTES.WELCOME
+  ];
+  return pagesToHideHeader.includes(route)
+}
+
 const Header = props => {
   const {
     classes,
     dispatch,
     isLoggedIn,
     route,
-    // userPictureUrl,
+    userPictureUrl,
     userName,
-    userId
+    userId,
+    collections
   } = props;
 
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)'
+    query: '(min-width: 1280px)'
   });
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
@@ -76,7 +87,7 @@ const Header = props => {
     ROUTES.PLANS
   ];
 
-  if (!isLoggedIn || pagesToHideHeader.includes(route)) {
+  if (hideHeader(route, isMobile)) {
     return null;
   }
 
@@ -104,11 +115,17 @@ const Header = props => {
                 <MenuIcon />
               </IconButton>}
             <Typography variant="h6" className={classes.title}>
-              Parchment Notebook
+              Prayer Keep
             </Typography>
-            {/* <Avatar alt={userName} src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} /> */}
             <Avatar alt={userName} />
 
+            {/* {isLoggedIn ? (
+              <Avatar alt={userName} src={userPictureUrl?.data ? userPictureUrl?.data?.url : userPictureUrl} />
+            ) : (
+              <Button variant="contained" color="primary" href={`/welcome?goTo=${route}`}>
+                Sign Up
+              </Button>
+            )} */}
           </Toolbar>
         </AppBar>
       </div>
@@ -126,6 +143,7 @@ Header.defaultProps = {
 
 const mapStateToProps = state => ({
   route: state.router.location.pathname,
+  collections: state?.collections?.allCollections,
   isLoggedIn: state.authentication.isLoggedIn,
   userId: state.authentication.user && state.authentication.user.userId,
   userName: state.authentication.user && state.authentication.user.name,
@@ -133,4 +151,6 @@ const mapStateToProps = state => ({
     && state.authentication.user.picture,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(Header));
+export default React.memo(
+  connect(mapStateToProps)(withStyles(styles)(Header))
+);

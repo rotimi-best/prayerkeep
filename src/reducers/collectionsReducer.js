@@ -15,6 +15,7 @@ import {
 
 const initialState = {
   allCollection: [],
+  suggestedCollections: [],
   collectionInView: null,
   isFetching: false,
   isUpdating: false,
@@ -30,8 +31,10 @@ export default function(state = initialState, action) {
     case COLLECTION_ADD_SUCCESS:
     case COLLECTION_UPDATE_SUCCESS:
       return {
-        allCollection: payload,
-        collectionInView: null,
+        ...state,
+        allCollection: payload.allCollection || payload,
+        suggestedCollections: payload.suggestedCollections || state.suggestedCollections,
+        collectionInView: payload.collectionInView || state.collectionInView,
         isFetching: false,
         isUpdating: false,
         isAdding: false,

@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router';
 import {
   COLLECTIONS_FETCHED,
   COLLECTIONS_ERROR,
@@ -16,7 +17,8 @@ import {
   getCollectionsService,
   updateCollectionService,
   addCollectionService,
-  getCollectionService
+  getCollectionService,
+  deleteCollectionService
 } from '../services/collectionService';
 import alerts from '../constants/alert';
 import { openAlert } from './alertAction';
@@ -38,11 +40,20 @@ export const getCollections = userId => async dispatch => {
     });
   }
 
-  const { collections } = response || {};
-
+  const { collections, sharedWithMe, suggestedCollections } = response || {};
+  const allCollection = [
+    ...collections,
+    ...(sharedWithMe.map(collection => {
+      collection.shared = true
+      return collection
+    }))
+  ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   dispatch({
     type: COLLECTIONS_FETCHED,
-    payload: collections,
+    payload: {
+      allCollection,
+      suggestedCollections
+    },
   });
 };
 
@@ -64,6 +75,10 @@ export const getCollection = (collectionId, userId) => async dispatch => {
   }
 
   const { collection } = response || {};
+
+  collection.prayers.forEach(prayer => {
+    prayer.owner = collection.owner
+  });
 
   dispatch({
     type: COLLECTION_FETCHED,
@@ -89,10 +104,18 @@ export const updateCollection = (collectionId, collectionParams, prevCollections
   }
 
   const { collection } = response || {};
+  collection.prayers.forEach(prayer => {
+    prayer.owner = collection.owner
+  });
+
+  const payload = {
+    allCollection: prevCollections.map(p => p._id === collection._id ? collection : p),
+    collectionInView: collection
+  }
 
   dispatch({
     type: COLLECTION_UPDATE_SUCCESS,
-    payload: prevCollections.map(p => p._id === collection._id ? collection : p),
+    payload
   });
 };
 
@@ -119,6 +142,31 @@ export const addCollection = (collectionParams, prevCollections) => async dispat
     type: COLLECTION_ADD_SUCCESS,
     payload: [collection, ...prevCollections],
   });
+};
+
+export const deleteCollection = (collectionId) => async (dispatch, getState) => {
+  dispatch({ type: COLLECTION_UPDATE_REQUEST });
+
+  const { error = null } = await deleteCollectionService(collectionId);
+
+  if (error) {
+    dispatch(openAlert(`Opps. Couldn't delete!! ${error}`, alerts.ERROR))
+
+    return dispatch({
+      type: COLLECTION_UPDATE_ERROR,
+      payload: error
+    });
+  }
+  const {collections} = getState();
+
+  dispatch({
+    type: COLLECTION_UPDATE_SUCCESS,
+    payload: {
+      allCollection: collections.allCollection.filter(c => c._id !== collectionId)
+    }
+  });
+  dispatch(push('/collections'))
+  dispatch(openAlert("Successfully deleted!!!", alerts.SUCCESS));
 };
 
 export const stopRequest = () => dispatch => dispatch({ type: COLLECTIONS_STOP_REQUEST });
