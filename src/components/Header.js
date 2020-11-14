@@ -69,7 +69,7 @@ const Header = props => {
     userPictureUrl,
     userName,
     userId,
-    collections
+    // collections
   } = props;
 
   const isDesktopOrLaptop = useMediaQuery({
@@ -91,10 +91,6 @@ const Header = props => {
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
   };
-
-  const pagesToHideHeader = [
-    ROUTES.PLANS
-  ];
 
   if (hideHeader(route, isMobile)) {
     return null;
