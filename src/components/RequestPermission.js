@@ -65,7 +65,7 @@ export default function RequestPermission() {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             To help you in your prayer journey, I will need to send you notifications.
-            A pop will open requesting you to give me permission, please accept it.
+            A prompt will open requesting you to give me permission, please accept it.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
