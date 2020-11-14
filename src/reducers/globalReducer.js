@@ -3,7 +3,7 @@ import {
 } from '../constants/actionsTypes';
 
 const initialState = {
-  open: false
+  openSideBar: false
 };
 
 export default function(state = initialState, action) {
@@ -12,7 +12,7 @@ export default function(state = initialState, action) {
   switch (type) {
     case TOGGLE_SIDE_BAR:
       return {
-        open: !state.open
+        openSideBar: !state.openSideBar
       };
     default:
       return state;

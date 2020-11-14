@@ -7,8 +7,9 @@ import customMuiTheme from "./customMuiTheme";
 import Home from "./components/Home";
 import Prayers from "./components/Prayers";
 import Prayer from "./components/Prayer";
-// import Plans from "./components/Plans";
-// import Plan from "./components/Plan";
+import Plans from "./components/Plans";
+import PlanPreview from "./components/PlanPreview";
+import Plan from "./components/Plan";
 import Collections from "./components/Collections";
 import Collection from "./components/Collection";
 import PrivateRoute from "./containers/PrivateRoute";
@@ -19,6 +20,8 @@ import RequestPermission from "./components/RequestPermission";
 import BottomNavigation from "./components/BottomNavigation";
 import Alert from "./components/Alert";
 import SnackBar from "./components/SnackBar";
+
+import ROUTES from './constants/routes';
 
 const AsyncWelcome = React.lazy(() => import('./components/Welcome'));
 const Welcome = () => (
@@ -37,14 +40,15 @@ function App() {
           <Header />
           <SnackBar />
           <Switch>
-            <Route exact path="/welcome" component={Welcome} />
-            <PrivateRoute exact path="/" component={Home} />
-            <PrivateRoute exact path="/prayers" component={Prayers} />
-            <PrivateRoute exact path="/prayer/:prayerId" component={Prayer} />
-            {/* <PrivateRoute exact path="/plans" component={Plans} />
-            <PrivateRoute exact path="/plan/:id" component={Plan} /> */}
-            <PrivateRoute path="/collections" component={Collections} />
-            <PrivateRoute path="/collection/:id" component={Collection} ignoreLogIn/>
+            <Route exact path={ROUTES.WELCOME} component={Welcome} />
+            <PrivateRoute exact path={ROUTES.HOME} component={Home} />
+            <PrivateRoute exact path={ROUTES.PRAYERS} component={Prayers} />
+            <PrivateRoute exact path={ROUTES.PLANS} component={Plans} />
+            <PrivateRoute exact path={ROUTES.PLAN_PREVIEW} component={PlanPreview} />
+            <PrivateRoute exact path={ROUTES.PLAN} component={Plan} />
+            <PrivateRoute exact path={ROUTES.PRAYER} component={Prayer} />
+            <PrivateRoute path={ROUTES.COLLECTIONS} component={Collections} />
+            <PrivateRoute path={ROUTES.COLLECTION} component={Collection} ignoreLogIn/>
             <Redirect to="/" />
           </Switch>
           <BottomNavigation />

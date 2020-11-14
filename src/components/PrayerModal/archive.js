@@ -143,17 +143,16 @@ const PrayerModal = props => {
 
       if (collectionFromUrl) {
         if (collectionFromUrl.edittableByUser) {
-          setCollection([
+          setCollection(collections => ([
             ...collections,
             collectionFromUrl
-          ]);
+          ]));
         } else if (collectionFromUrl.status) {
           setAnsweredPrayer(true);
         }
       }
     }
-    // eslint-disable-next-line
-  }, [prayerModal.open, prayerToOpen]);
+  }, [prayerModal.open, prayerToOpen, prayerModal.collectionId, allCollection]);
 
   // componentDidUpdate - Close modal
   useEffect(() => {

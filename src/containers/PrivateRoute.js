@@ -35,8 +35,8 @@ PrivateRoute.propTypes = {
   ignoreLogIn: PropTypes.bool,
 };
 
-const mapStateToProps = ({ authentication, sidebar, modalListener }) => ({
-  openSidebar: sidebar.open,
+const mapStateToProps = ({ authentication, global, modalListener }) => ({
+  openSidebar: global.openSideBar,
   openPrayerModal: modalListener.prayerModal.open,
   isLoggedIn: authentication.isLoggedIn
 });

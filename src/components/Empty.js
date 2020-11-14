@@ -4,9 +4,10 @@ import NotesIcon from '@material-ui/icons/Notes';
 import FolderIcon from '@material-ui/icons/Folder';
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 import Typography from '@material-ui/core/Typography';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Button from '@material-ui/core/Button';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     height: '100%',
     width: '100%',
@@ -31,6 +32,8 @@ const EmptyIcon = ({type, props}) => {
       return <NotesIcon {...props} />;
     case 'collection':
       return <FolderIcon {...props} />;
+    case 'comingSoon':
+      return <AccessTimeIcon {...props} />;
     default:
       return <CreateSharpIcon {...props} />
   }

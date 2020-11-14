@@ -11,8 +11,10 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { toggleSideBar } from "../actions/sidebarAction";
-import { getCollections } from "../actions/collectionsAction";
+// import { getCollections } from "../actions/collectionsAction";
 // import { getPrayers } from "../actions/prayersAction";
+
+import ROUTES from "../constants/routes";
 
 const styles = theme => ({
   root: {
@@ -42,8 +44,11 @@ const styles = theme => ({
 
 
 function hideHeader(route, isMobile) {
-  // return false
-  return route.includes('welcome')
+  const pagesToHideHeader = [
+    // ROUTES.PLANS,
+    ROUTES.WELCOME
+  ];
+  return pagesToHideHeader.includes(route)
 }
 
 const Header = props => {
@@ -67,8 +72,8 @@ const Header = props => {
 
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
-    if (userId && (!collections || !collections.length)) {
-      dispatch(getCollections(userId));
+    if (userId) {
+      // dispatch(getCollections(userId));
       // dispatch(getPrayers(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,6 +82,10 @@ const Header = props => {
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
   };
+
+  const pagesToHideHeader = [
+    ROUTES.PLANS
+  ];
 
   if (hideHeader(route, isMobile)) {
     return null;
@@ -108,13 +117,15 @@ const Header = props => {
             <Typography variant="h6" className={classes.title}>
               Prayer Keep
             </Typography>
-            {isLoggedIn ? (
+            <Avatar alt={userName} />
+
+            {/* {isLoggedIn ? (
               <Avatar alt={userName} src={userPictureUrl?.data ? userPictureUrl?.data?.url : userPictureUrl} />
             ) : (
               <Button variant="contained" color="primary" href={`/welcome?goTo=${route}`}>
                 Sign Up
               </Button>
-            )}
+            )} */}
           </Toolbar>
         </AppBar>
       </div>
@@ -138,7 +149,6 @@ const mapStateToProps = state => ({
   userName: state.authentication.user && state.authentication.user.name,
   userPictureUrl: state.authentication.user
     && state.authentication.user.picture,
-  sidebar: state.sidebar
 });
 
 export default React.memo(

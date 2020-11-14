@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
-import { push } from 'connected-react-router';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -19,6 +18,7 @@ import IconButton from '@material-ui/core/IconButton';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 import PrayerCard from '../PrayerCard';
+import BackButton from '../BackButton';
 
 import { getPrayer, updatePrayer, resetPrayer } from '../../actions/prayersAction';
 import routes from '../../constants/routes';
@@ -35,7 +35,6 @@ const Prayer = () => {
       && state.authentication.user.picture,
   }))
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const [comment, setComment] = React.useState('');
 
@@ -58,13 +57,6 @@ const Prayer = () => {
       comment
     }))
   }
-  const handleBack = () => {
-    if (window.history.length > 2) {
-      history.goBack();
-    } else {
-      dispatch(push(routes.PRAYERS));
-    }
-  }
 
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1280px)'
@@ -82,9 +74,7 @@ const Prayer = () => {
         {isPrayerFetching && <LinearProgress />}
         <CssBaseline />
         <Typography variant="h5" className={classes.headerText}>
-          <IconButton aria-label="back" onClick={handleBack}>
-            <KeyboardBackspaceIcon />
-          </IconButton>
+          <BackButton defaultGoTo={routes.PRAYERS} />
           Prayer
         </Typography>
         {prayer && <PrayerCard userId={userId} prayer={prayer} isPrayerClickable={false}/>}

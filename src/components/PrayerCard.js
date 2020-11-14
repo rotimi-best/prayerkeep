@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
-import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -19,6 +18,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
 import Dot from './Dot';
 
+import Card from './Card';
 import BiblePasssageCard from './BiblePasssageCard';
 import AnsweredBadge from './AnsweredBadge';
 // import PrayerIcon from './Icons/Prayer';
@@ -195,7 +195,7 @@ const PrayerCard = props => {
   const totalIntercessors = Array.isArray(intercessors) ? intercessors.length : intercessors;
 
   return (
-    <Card className={classes.card}>
+    <Card>
       <CardHeader
         avatar={
           <Avatar
