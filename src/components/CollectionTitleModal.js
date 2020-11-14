@@ -281,8 +281,7 @@ const CollectionTitleModal = props => {
               variant="outlined"
               value={description}
               onChange={handleDescription}
-              rows={2}
-              rowsMax={2}
+              rows={6}
               helperText="Description cannot be more than 500 characters"
               error={error.description}
               multiline
