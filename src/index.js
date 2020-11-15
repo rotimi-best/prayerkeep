@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import ReactGA from 'react-ga';
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
 
 import App from './App';
 import configureStore from './configureStore';
@@ -13,6 +15,16 @@ const store = configureStore({});
 
 if (configs.isProduction) {
   ReactGA.initialize('G-4L57R90356');
+
+  Sentry.init({
+    dsn: configs.sentry.dns,
+    release: "prayer-keep",
+    integrations: [new Integrations.BrowserTracing()],
+
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+  });
 }
 
 ReactDOM.render(

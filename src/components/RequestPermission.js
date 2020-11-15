@@ -52,11 +52,10 @@ export default function RequestPermission() {
 
       dispatch(setIsSubscribedToPushNotification(true));
     }
-  }, [dispatch, user.userId]);
+  }, [dispatch, user?.userId]);
 
   React.useEffect(() => {
     const sendSubscription = localStorage.getItem('sendSubscription');
-    console.log('sendSubscription', sendSubscription);
 
     if (sendSubscription === 'true') {
       handleClose(true, false)();
