@@ -2,6 +2,8 @@ import React, { Suspense } from "react";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch, Redirect } from "react-router-dom";
+import * as Sentry from "@sentry/react";
+
 import { history } from "./configureStore";
 import customMuiTheme from "./customMuiTheme";
 import Home from "./components/Home";
@@ -12,7 +14,6 @@ import Prayer from "./components/Prayer";
 import Collections from "./components/Collections";
 import Collection from "./components/Collection";
 import PrivateRoute from "./containers/PrivateRoute";
-import ErrorWrapper from "./containers/ErrorWrapper";
 import Header from "./components/Header";
 import TriggerModalFromUrl from "./components/TriggerModalFromUrl";
 import RequestPermission from "./components/RequestPermission";
@@ -27,9 +28,13 @@ const Welcome = () => (
   </Suspense>
 )
 
+function FallbackComponent() {
+  return <div>An error has occurred. Please send me a message on twitter <a href="https://twitter.com/rotimi_best">@rotimi_best</a></div>;
+}
+
 function App() {
   return (
-    <ErrorWrapper >
+    <Sentry.ErrorBoundary fallback={FallbackComponent} showDialog>
       <MuiThemeProvider theme={customMuiTheme}>
         <ConnectedRouter history={history}>
           <TriggerModalFromUrl />
@@ -51,8 +56,8 @@ function App() {
           <Alert />
         </ConnectedRouter>
       </MuiThemeProvider>
-    </ErrorWrapper>
+    </Sentry.ErrorBoundary>
   );
 }
 
-export default App;
+export default Sentry.withProfiler(App);

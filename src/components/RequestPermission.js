@@ -25,7 +25,7 @@ export default function RequestPermission() {
     setOpen(!isSubscribedToPushNotification);
   }, [isSubscribedToPushNotification]);
 
-  const handleClose = requestPush => async () => {
+  const handleClose = React.useCallback((requestPush, sendPushImmediately) => async () => {
     setOpen(false);
 
     if (requestPush) {
@@ -44,14 +44,24 @@ export default function RequestPermission() {
           method: 'POST',
           body: JSON.stringify({
             subscription: JSON.stringify(subscription),
-            userId: user.userId
+            userId: user.userId,
+            sendPushImmediately
           })
         });
       }
 
       dispatch(setIsSubscribedToPushNotification(true));
     }
-  };
+  }, [dispatch, user?.userId]);
+
+  React.useEffect(() => {
+    const sendSubscription = localStorage.getItem('sendSubscription');
+
+    if (sendSubscription === 'true') {
+      handleClose(true, false)();
+      localStorage.setItem('sendSubscription', 'false');
+    }
+  }, [handleClose]);
 
   return (
     <div>
@@ -69,10 +79,10 @@ export default function RequestPermission() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose(false)} color="primary">
+          <Button onClick={handleClose(false, true)} color="primary">
             Not interested
           </Button>
-          <Button onClick={handleClose(true)} color="primary" autoFocus>
+          <Button onClick={handleClose(true, true)} color="primary" autoFocus>
             Yes, great
           </Button>
         </DialogActions>

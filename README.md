@@ -10,4 +10,4 @@ $ serve -s build -l 3030
 
 ## Reproduce error of service worker not running latest changes
 
-Link to gh issue: [here](https://github.com/facebook/create-react-app/issues/5316)
+Link to github issue: [here](https://github.com/facebook/create-react-app/issues/5316)
