@@ -20,23 +20,25 @@ self.addEventListener('notificationclick', (event) => {
   }
 });
 
-// self.addEventListener('pushsubscriptionchange', function(event) {
-//   console.log('Subscription expired');
-//   event.waitUntil(
-//     self.registration.pushManager.subscribe({ userVisibleOnly: true })
-//     .then(function(subscription) {
-//       console.log('Subscribed after expiration', subscription.endpoint);
-//       // return fetch(`${API_URL}/subscription`, {
-//       //   headers: {
-//       //     'Accept': 'application/json',
-//       //     'Content-Type': 'application/json'
-//       //   },
-//       //   method: 'POST',
-//       //   body: JSON.stringify({
-//       //     subscription: JSON.stringify(subscription),
-//       //     userId: user.userId
-//       //   })
-//       // });
-//     })
-//   );
-// });
+self.addEventListener('pushsubscriptionchange', function(event) {
+  console.log('Subscription expired');
+  event.waitUntil(
+    self.registration.pushManager.subscribe({ userVisibleOnly: true })
+    .then(function(subscription) {
+      console.log('Subscribed after expiration', subscription.endpoint);
+      console.log('process.env', process.env);
+
+      // return fetch(`${API_URL}/subscription`, {
+      //   headers: {
+      //     'Accept': 'application/json',
+      //     'Content-Type': 'application/json'
+      //   },
+      //   method: 'POST',
+      //   body: JSON.stringify({
+      //     subscription: JSON.stringify(subscription),
+      //     userId: user.userId
+      //   })
+      // });
+    })
+  );
+});
