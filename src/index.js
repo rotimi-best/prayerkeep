@@ -40,7 +40,9 @@ const config = {
       // the browser download a fresh copy of our app (invalidating the cache)
       console.log('Reloading page')
       localStorage.setItem('sendSubscription', 'true');
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 200)
     }
   },
   onSuccess: async registration => {
