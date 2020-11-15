@@ -120,7 +120,7 @@ const Header = props => {
                 <MenuIcon />
               </IconButton>}
             <Typography variant="h6" className={classes.title}>
-              Prayer Keep
+              Prayer Keep ---
             </Typography>
             {/* <Avatar alt={userName} /> */}
             <div className={classes.right}>

@@ -33,7 +33,7 @@ const config = {
     // waiting to be activated.
     // Details about it: https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle
     if (registration && registration.waiting) {
-      await registration.unregister();
+      await registration.update();
       // Makes Workbox call skipWaiting()
       registration.waiting.postMessage({ type: 'SKIP_WAITING' });
       // Once the service worker is unregistered, we can reload the page to let

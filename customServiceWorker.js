@@ -19,3 +19,24 @@ self.addEventListener('notificationclick', (event) => {
       event.notification.close();
   }
 });
+
+// self.addEventListener('pushsubscriptionchange', function(event) {
+//   console.log('Subscription expired');
+//   event.waitUntil(
+//     self.registration.pushManager.subscribe({ userVisibleOnly: true })
+//     .then(function(subscription) {
+//       console.log('Subscribed after expiration', subscription.endpoint);
+//       // return fetch(`${API_URL}/subscription`, {
+//       //   headers: {
+//       //     'Accept': 'application/json',
+//       //     'Content-Type': 'application/json'
+//       //   },
+//       //   method: 'POST',
+//       //   body: JSON.stringify({
+//       //     subscription: JSON.stringify(subscription),
+//       //     userId: user.userId
+//       //   })
+//       // });
+//     })
+//   );
+// });
