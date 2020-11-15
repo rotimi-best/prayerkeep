@@ -25,7 +25,7 @@ export default function RequestPermission() {
     setOpen(!isSubscribedToPushNotification);
   }, [isSubscribedToPushNotification]);
 
-  const handleClose = requestPush => async () => {
+  const handleClose = React.useCallback(requestPush => async () => {
     setOpen(false);
 
     if (requestPush) {
@@ -51,7 +51,17 @@ export default function RequestPermission() {
 
       dispatch(setIsSubscribedToPushNotification(true));
     }
-  };
+  }, [dispatch, user.userId]);
+
+  React.useEffect(() => {
+    const sendSubscription = localStorage.getItem('sendSubscription');
+    console.log('sendSubscription', sendSubscription);
+
+    if (sendSubscription === 'true') {
+      handleClose(true)();
+      localStorage.setItem('sendSubscription', 'false');
+    }
+  }, [handleClose]);
 
   return (
     <div>

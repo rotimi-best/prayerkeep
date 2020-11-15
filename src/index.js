@@ -39,6 +39,7 @@ const config = {
       // Once the service worker is unregistered, we can reload the page to let
       // the browser download a fresh copy of our app (invalidating the cache)
       console.log('Reloading page')
+      localStorage.setItem('sendSubscription', 'true');
       window.location.reload();
     }
   },
