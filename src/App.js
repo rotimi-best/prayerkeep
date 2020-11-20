@@ -9,6 +9,7 @@ import customMuiTheme from "./customMuiTheme";
 import Home from "./components/Home";
 import Prayers from "./components/Prayers";
 import Prayer from "./components/Prayer";
+import PrayCollection from "./components/PrayCollection";
 // import Plans from "./components/Plans";
 // import Plan from "./components/Plan";
 import Collections from "./components/Collections";
@@ -41,6 +42,7 @@ function App() {
           <RequestPermission />
           <Header />
           <SnackBar />
+          <PrayCollection />
           <Switch>
             <Route exact path="/welcome" component={Welcome} />
             <PrivateRoute exact path="/" component={Home} />

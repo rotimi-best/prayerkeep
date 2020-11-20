@@ -100,7 +100,8 @@ const PrayerCard = props => {
     intercessors,
     interceeding,
     formattedPassages = [],
-    answered
+    answered,
+    isAnanymous
   } = prayer;
   const dispatch = useDispatch();
   const { isLoggedIn, pathname } = useSelector(state => ({
@@ -196,12 +197,12 @@ const PrayerCard = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader
+      {!isAnanymous && <CardHeader
         avatar={
           <Avatar
             aria-label="prayer owner avatar"
             className={classes.avatar}
-            src={owner.googleAuthUser.picture}
+            src={owner?.googleAuthUser?.picture}
           />
         }
         action={!isPrayerClickable && isOwner && (
@@ -209,7 +210,7 @@ const PrayerCard = props => {
             <EditIcon />
           </IconButton>
         )}
-        title={owner.googleAuthUser.name}
+        title={owner?.googleAuthUser?.name}
         subheader={(
           <span>
             Started praying {dateCreated} {answered && <AnsweredBadge />}
@@ -218,7 +219,7 @@ const PrayerCard = props => {
         classes={{
           root: classes.cardHeaderRoot
         }}
-      />
+      />}
       <CustomCardContent />
       {showCollectionTags && isOwner && Array.isArray(collections) && <CardActions
         disableSpacing
