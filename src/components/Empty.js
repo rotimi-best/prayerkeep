@@ -5,6 +5,8 @@ import FolderIcon from '@material-ui/icons/Folder';
 import CreateSharpIcon from '@material-ui/icons/CreateSharp';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import MusicNoteIcon from '@material-ui/icons/MusicNote';
+import SpeakerIcon from '@material-ui/icons/Speaker';
 
 const styles = theme => ({
   root: {
@@ -31,6 +33,10 @@ const EmptyIcon = ({type, props}) => {
       return <NotesIcon {...props} />;
     case 'collection':
       return <FolderIcon {...props} />;
+    case 'worship':
+      return <MusicNoteIcon {...props} />;
+    case 'exhortation':
+      return <SpeakerIcon {...props} />;
     default:
       return <CreateSharpIcon {...props} />
   }

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useMediaQuery } from 'react-responsive';
+import { storage } from '../../helpers/firebase';
 import { connect } from "react-redux";
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
@@ -9,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
 // import FormLabel from '@material-ui/core/FormLabel';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 // import FormControl from '@material-ui/core/FormControl';
@@ -29,9 +31,11 @@ import SendIcon from '@material-ui/icons/Send';
 import GroupedPrayers from '../GroupedPrayers';
 
 // import { date } from "../../helpers";
-import { getFeed, updateQuote } from '../../actions/feedAction';
+import { getFeed, updateQuote, uploadStory, uploadingStory } from '../../actions/feedAction';
 // import { updatePrayer } from '../../actions/prayersAction';
 import useStyles from './styles';
+import BorderedButton from "../BorderedButton";
+import Stories from "../Stories";
 
 const Home = props => {
   const {
@@ -46,6 +50,7 @@ const Home = props => {
   const classes = useStyles();
   const [isLoved, setIsLoved] = React.useState(quote.isLovedByMe);
   const [comment, setComment] = React.useState('');
+  const storyUploaderRef = React.useRef();
 
   useEffect(() => {
     dispatch(getFeed(userId, quoteId))
@@ -62,14 +67,6 @@ const Home = props => {
     query: '(min-width: 1280px)'
   });
 
-  // const markPrayerAsPrayed = (prayerId) => {
-  //   if (prayerId) {
-  //     dispatch(updatePrayer(userId, prayerId, {
-  //       lastDatePrayed: date({ toUTC: true })
-  //     }, prayers.allPrayers, () => dispatch(getFeed(userId))));
-  //   }
-  // }
-
   const handleLoveClick = () => {
     if (feed.isFetching) return;
     setIsLoved(isLoved => {
@@ -80,6 +77,30 @@ const Home = props => {
 
       return newIsLoved;
     });
+  }
+
+  const storyUpload = (event) => {
+    const file = event.target.files[0];
+    console.log(file);
+
+    if (file) {
+      dispatch(uploadingStory());
+      const name = `${file.name + new Date().getTime()}`
+      const uploadTask = storage.ref(`/images/${name}`).put(file);
+      uploadTask.on("state_changed", () => {}, console.error, () => {
+        storage
+          .ref("images")
+          .child(name)
+          .getDownloadURL()
+          .then((url) => {
+            dispatch(uploadStory(userId, url))
+          });
+      });
+    }
+  }
+
+  const clickUploader = () => {
+    storyUploaderRef.current.click()
   }
 
   const handleComment = (e) => {
@@ -103,6 +124,31 @@ const Home = props => {
         }}
       >
       {feed.isFetching ? <LinearProgress /> : null}
+      <Paper
+          variant="outlined"
+          className={classes.userStatsRoot}
+          elevation={2}
+        >
+          <div className={classes.headerWithAction}>
+            <Typography className={classes.title} color="textSecondary" gutterBottom>
+              Stories {feed.isStoryUploading && <CircularProgress size={20}  />}
+            </Typography>
+            <BorderedButton onClick={clickUploader} label="Add story"/>
+            <input
+              ref={storyUploaderRef}
+              style={{ display: 'none'}}
+              type="file"
+              name="video"
+              accept="video/*"
+              capture="user"
+              onChange={storyUpload}
+              id="story-input"
+            />
+          </div>
+          <Divider light />
+          <Stories />
+        </Paper>
+
         <Paper
           variant="outlined"
           className={classes.userStatsRoot}

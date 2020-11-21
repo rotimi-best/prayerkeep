@@ -13,7 +13,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 
 import SettingMenu from './SettingMenu';
 
-import { toggleSideBar } from "../actions/sidebarAction";
+import { toggleSideBar, setIsMobile } from "../actions/sidebarAction";
 // import { getCollections } from "../actions/collectionsAction";
 // import { getPrayers } from "../actions/prayersAction";
 
@@ -68,7 +68,7 @@ const Header = props => {
     route,
     userPictureUrl,
     userName,
-    userId,
+    // userId,
     // collections
   } = props;
 
@@ -81,12 +81,14 @@ const Header = props => {
 
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
-    if (userId) {
+    setIsMobile(isMobile)
+
+    // if (userId) {
       // dispatch(getCollections(userId));
       // dispatch(getPrayers(userId));
-    }
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isMobile])
 
   const handleToggleSideBar = () => {
     dispatch(toggleSideBar());
