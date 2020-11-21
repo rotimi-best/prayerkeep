@@ -29,6 +29,8 @@ import LovedIcon from '@material-ui/icons/Favorite';
 import SendIcon from '@material-ui/icons/Send';
 
 import GroupedPrayers from '../GroupedPrayers';
+import alerts from '../../constants/alert';
+import { openAlert } from '../../actions/alertAction';
 
 // import { date } from "../../helpers";
 import { getFeed, updateQuote, uploadStory, uploadingStory } from '../../actions/feedAction';
@@ -81,9 +83,14 @@ const Home = props => {
 
   const storyUpload = (event) => {
     const file = event.target.files[0];
-    console.log(file);
 
     if (file) {
+      const sizeInMb = (file.size * 0.000001).toFixed(2);
+      if (sizeInMb > 60) {
+        dispatch(openAlert(`Size: ${sizeInMb}mb is too large. Max size: 60mb`, alerts.ERROR));
+        return;
+      }
+
       dispatch(uploadingStory());
       const name = `${file.name + new Date().getTime()}`
       const uploadTask = storage.ref(`/images/${name}`).put(file);
@@ -140,7 +147,7 @@ const Home = props => {
               type="file"
               name="video"
               accept="video/*"
-              capture="user"
+              capture="video,camera"
               onChange={storyUpload}
               id="story-input"
             />

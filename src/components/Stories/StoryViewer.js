@@ -8,6 +8,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import useStyles from "./style";
 
@@ -22,7 +23,7 @@ export const StoryViewer = () => {
     isMobile: state.sidebar.isMobile,
     stories: state.feed.stories,
   }));
-  console.log('isMobile', isMobile)
+
   const handleClose = () => {
     history.push('/')
   }
@@ -32,7 +33,7 @@ export const StoryViewer = () => {
   }
   // console.log('bodyRef', bodyRef)
   // const height = bodyRef.current
-  //   ? bodyRef.current.offsetHeight
+  //   ? bodyRef.current.clientHeight
   //   : 0;
   return (
     <Dialog
@@ -51,7 +52,17 @@ export const StoryViewer = () => {
           </IconButton>
         </div>
         <div className={classes.body} ref={bodyRef}>
-          {story?.urls && <Stories stories={story.urls} width="100%" height={isMobile ? '94vh' : undefined}/>}
+          {story?.urls && (
+            <Stories
+              stories={story.urls}
+              width="100%"
+              height={isMobile ? '90vh' : undefined}
+              loader={<CircularProgress size={20} />}
+              storyStyles={{
+                overflow: 'none'
+              }}
+            />
+          )}
         </div>
       </DialogContent>
     </Dialog>

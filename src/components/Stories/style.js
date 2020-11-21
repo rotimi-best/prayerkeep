@@ -20,6 +20,7 @@ export default makeStyles(theme => ({
   storyViewerRoot: {
     '& .MuiDialogContent-root': {
       padding: 0,
+      backgroundColor: '#000'
     }
   },
   header: {
@@ -30,6 +31,11 @@ export default makeStyles(theme => ({
     backgroundColor: '#000',
     '& .MuiButtonBase-root': {
       backgroundColor: '#fff'
+    }
+  },
+  body: {
+    '& div div div': {
+      width: '100%'
     }
   }
 }));
