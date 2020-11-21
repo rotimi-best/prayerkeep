@@ -78,10 +78,10 @@ const Header = props => {
   const isMobile = useMediaQuery({
     query: "(max-width: 768px)"
   });
-
+  console.log('isMobile', isMobile)
   // componentDidMount - Get all collections and prayers
   useEffect(() => {
-    setIsMobile(isMobile)
+    dispatch(setIsMobile(isMobile))
 
     // if (userId) {
       // dispatch(getCollections(userId));

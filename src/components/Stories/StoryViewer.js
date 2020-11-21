@@ -17,11 +17,12 @@ export const StoryViewer = () => {
   const classes = useStyles();
   const { id } = useParams();
   const history = useHistory();
+  const bodyRef = React.useRef();
   const { stories, isMobile } = useSelector(state => ({
     isMobile: state.sidebar.isMobile,
     stories: state.feed.stories,
   }));
-
+  console.log('isMobile', isMobile)
   const handleClose = () => {
     history.push('/')
   }
@@ -29,11 +30,14 @@ export const StoryViewer = () => {
   if (id) {
     story = stories.find(story => story._id === id)
   }
-
+  // console.log('bodyRef', bodyRef)
+  // const height = bodyRef.current
+  //   ? bodyRef.current.offsetHeight
+  //   : 0;
   return (
     <Dialog
       fullScreen={fullScreen}
-      maxWidth="md"
+      maxWidth="xs"
       fullWidth={true}
       open={!!id}
       onClose={handleClose}
@@ -46,8 +50,8 @@ export const StoryViewer = () => {
             <CloseIcon />
           </IconButton>
         </div>
-        <div className={classes.body}>
-          {story?.urls && <Stories stories={story.urls} width="100%" height={isMobile ? "80vh" : undefined}/>}
+        <div className={classes.body} ref={bodyRef}>
+          {story?.urls && <Stories stories={story.urls} width="100%" height={isMobile ? '94vh' : undefined}/>}
         </div>
       </DialogContent>
     </Dialog>
