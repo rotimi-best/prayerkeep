@@ -1,19 +1,14 @@
 import React from 'react';
 // import { useSelector } from 'react-redux';
 // import { useHistory } from 'react-router-dom'
-import * as firebase from 'firebase/app';
+import firebase from '../helpers/firebase';
+
 import 'firebase/auth';
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { connect } from "react-redux";
-import configs from '../configs';
 import logo from '../logo.svg';
 import { logIn } from '../actions/authAction';
 import '../styles/Welcome.css';
-
-firebase.initializeApp({
-  apiKey: configs.firebase.apiKey,
-  authDomain: configs.firebase.authDomain,
-});
 
 const Welcome = ({ dispatch }) => {
   const [onSignInSuccess, setOnSignInSuccess] = React.useState(false);

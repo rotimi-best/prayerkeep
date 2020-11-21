@@ -24,6 +24,11 @@ export default makeStyles(theme => ({
     flexDirection: "row",
     justifyContent: "space-between"
   },
+  headerWithAction: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: 5
+  },
   daysPrayed: {
     textAlign: "center"
   },
@@ -57,7 +62,9 @@ export default makeStyles(theme => ({
   title: {
     fontSize: 18,
     color: '#000',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    display: 'flex',
+    alignItems: 'center'
   },
   bibleVerse: {
     color: colors.grey

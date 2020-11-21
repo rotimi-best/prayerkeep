@@ -31,7 +31,10 @@ const PrivateRoute = ({ isLoggedIn, ignoreLogIn, component, openPrayerModal, ope
 
 PrivateRoute.propTypes = {
   component: PropTypes.elementType.isRequired,
-  path: PropTypes.string.isRequired,
+  path: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]).isRequired,
   ignoreLogIn: PropTypes.bool,
 };
 

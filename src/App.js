@@ -43,7 +43,7 @@ function App() {
           <SnackBar />
           <Switch>
             <Route exact path="/welcome" component={Welcome} />
-            <PrivateRoute exact path="/" component={Home} />
+            <PrivateRoute exact path={["/", "/story/:id"]} component={Home} />
             <PrivateRoute exact path="/prayers" component={Prayers} />
             <PrivateRoute exact path="/prayer/:prayerId" component={Prayer} />
             {/* <PrivateRoute exact path="/plans" component={Plans} />
