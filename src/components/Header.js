@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 
-import SettingMenu from './SettingMenu';
+// import SettingMenu from './SettingMenu';
 
 import { toggleSideBar, setIsMobile } from "../actions/sidebarAction";
 // import { getCollections } from "../actions/collectionsAction";
