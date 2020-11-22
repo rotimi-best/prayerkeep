@@ -11,7 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 
-// import SettingMenu from './SettingMenu';
+import SettingMenu from './SettingMenu';
 
 import { toggleSideBar, setIsMobile } from "../actions/sidebarAction";
 // import { getCollections } from "../actions/collectionsAction";
@@ -126,7 +126,7 @@ const Header = props => {
             </Typography>
             {/* <Avatar alt={userName} /> */}
             <div className={classes.right}>
-              {/* <SettingMenu /> */}
+              <SettingMenu />
               {isLoggedIn ? (
                 <Avatar alt={userName} src={userPictureUrl?.data ? userPictureUrl?.data?.url : userPictureUrl} />
               ) : (
