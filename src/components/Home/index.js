@@ -82,6 +82,9 @@ const Home = props => {
   }
 
   const storyUpload = (event) => {
+    if (event) {
+      return
+    }
     const file = event.target.files[0];
 
     if (file) {
@@ -106,7 +109,8 @@ const Home = props => {
     }
   }
 
-  const clickUploader = () => {
+  const clickUploader = (event) => {
+    if (event) return
     storyUploaderRef.current.click()
   }
 
@@ -140,7 +144,8 @@ const Home = props => {
             <Typography className={classes.title} color="textSecondary" gutterBottom>
               Stories {feed.isStoryUploading && <CircularProgress size={20}  />}
             </Typography>
-            <BorderedButton onClick={clickUploader} label="Add story"/>
+            <BorderedButton onClick={clickUploader} label="Coming soon"/>
+            {/* <BorderedButton onClick={clickUploader} label="Add story"/> */}
             <input
               ref={storyUploaderRef}
               style={{ display: 'none'}}
