@@ -126,7 +126,7 @@ const Header = props => {
             </Typography>
             {/* <Avatar alt={userName} /> */}
             <div className={classes.right}>
-              <SettingMenu />
+              {/* <SettingMenu /> */}
               {isLoggedIn ? (
                 <Avatar alt={userName} src={userPictureUrl?.data ? userPictureUrl?.data?.url : userPictureUrl} />
               ) : (
