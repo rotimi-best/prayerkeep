@@ -30,6 +30,7 @@ import GroupAvatars from './GroupAvatars';
 import { openAlert } from '../actions/alertAction';
 import alerts from '../constants/alert';
 import Dot from './Dot';
+import PrayCollection from './PrayCollection';
 
 import { getCollection, updateCollection } from '../actions/collectionsAction';
 import { getDateCreated, getNewPrayerUrl } from '../helpers';
@@ -268,9 +269,13 @@ const Collection = props => {
             </Button>}
           </Grid>
 
-          {edittableByUser && isLoggedIn && <Grid item xs={12}>
-            <NewPrayerButton collectionId={_id} />
-          </Grid>}
+          {edittableByUser && isLoggedIn && (
+            <Grid item xs={12}>
+              <NewPrayerButton collectionId={_id} />
+            </Grid>
+          )}
+
+          <PrayCollection prayers={prayers}/>
 
           <AppBar position="sticky" color="inherit" className={classes.tab}>
             <Tabs
@@ -287,10 +292,10 @@ const Collection = props => {
           </AppBar>
           {tabValue === 0 && <Grid item xs={12}>
             {prayers.length
-              ? prayers.map(prayer => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
+              ? prayers.map(prayer => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} hideCreator/>)
               : (
                 <Empty
-                  onClick={edittableByUser ? openNewPrayer : null}
+                  // onClick={edittableByUser ? openNewPrayer : null}
                   type="prayer"
                   text="No prayer request with this collection yet"
                 />

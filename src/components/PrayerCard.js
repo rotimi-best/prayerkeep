@@ -88,7 +88,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 const PrayerCard = props => {
-  const { prayer, userId, isPrayerClickable, showCollectionTags } = props;
+  const {
+    prayer,
+    userId,
+    isPrayerClickable,
+    hideCreator,
+    // showCollectionTags
+  } = props;
+  const showCollectionTags = false
   const {
     description,
     collections,
@@ -197,7 +204,7 @@ const PrayerCard = props => {
 
   return (
     <Card className={classes.card}>
-      {!isAnanymous && <CardHeader
+      {!isAnanymous && !hideCreator && <CardHeader
         avatar={
           <Avatar
             aria-label="prayer owner avatar"
@@ -266,12 +273,13 @@ const PrayerCard = props => {
             <ShareIcon />
           </IconButton>
         </CardActions>
-        ) : (
-        <div className={classes.prayerStat}>
+        ) : (<span className={classes.prayerStat}>
+        {/* <div className={classes.prayerStat}>
           <Typography className={classes.count} color="textSecondary" component="span">
             {totalIntercessors} interceeding <Dot /> {totalComments} comment{totalComments > 1 ? 's' : ''}
           </Typography>
-        </div>
+        </div> */}
+        </span>
       )}
     </Card>
   )

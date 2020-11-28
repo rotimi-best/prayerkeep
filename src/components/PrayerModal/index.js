@@ -96,6 +96,7 @@ const PrayerModal = props => {
     dispatch,
     classes,
     allCollection,
+    collectionInView,
     prayers,
   } = props;
   const theme = useTheme();
@@ -136,7 +137,7 @@ const PrayerModal = props => {
 
   // componentDidMount - Get collections
   useEffect(() => {
-    if (!allCollection && allCollection.length) {
+    if (!allCollection && !allCollection.length) {
       dispatch(getCollections(userId))
     }
   }, [allCollection, dispatch, userId]);
@@ -160,7 +161,10 @@ const PrayerModal = props => {
       setIsPublic(prayerToOpen?.public || false);
     }
     if (prayerModal.open && prayerModal.collectionId) {
-      const collectionFromUrl = filterArrayById(prayerModal.collectionId, allCollection);
+      let collectionFromUrl = filterArrayById(prayerModal.collectionId, allCollection);
+      if (!collectionFromUrl && collectionInView) {
+        collectionFromUrl = collectionInView
+      }
 
       if (collectionFromUrl) {
         if (collectionFromUrl.edittableByUser) {
@@ -174,7 +178,7 @@ const PrayerModal = props => {
       }
     }
     // eslint-disable-next-line
-  }, [prayerModal.open, prayerToOpen]);
+  }, [prayerModal.open, prayerToOpen, collectionInView]);
 
   // componentDidUpdate - Close modal
   useEffect(() => {
@@ -459,7 +463,8 @@ const mapStateToProps = state => ({
   userId: state.authentication.user.userId,
   modalListener: state.modalListener,
   prayers: state.prayers,
-  allCollection: state.collections.allCollection
+  allCollection: state.collections.allCollection,
+  collectionInView: state.collections.collectionInView,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(PrayerModal));

@@ -10,15 +10,14 @@ import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import ScrollMenu from "react-horizontal-scrolling-menu";
-import IconButton from "@material-ui/core/IconButton";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 
 import PrayerCard from './PrayerCard';
 import NewPrayerButton from './NewPrayerButton';
 import Empty from './Empty';
 import GroupedPrayers from './GroupedPrayers';
 import BadgeWithLabel from './BadgeWithLabel';
+import PreviousArrow from './PreviousArrow';
+import NextArrow from './NextArrow';
 
 import { getPrayers, setPrayersTabValue } from '../actions/prayersAction';
 import { getNewPrayerUrl } from '../helpers';
@@ -39,10 +38,6 @@ const styles = theme => ({
           fontWeight: 'bold'
         }
       },
-      "& .arrow": {
-        backgroundColor: '#fff',
-        boxShadow: '0 1px 5px 0 rgba(0,0,0,0.16), 0 1px 2px 0 rgba(0,0,0,0.26)'
-      }
     }
   },
   toolbar: theme.mixins.toolbar,
@@ -58,21 +53,8 @@ const styles = theme => ({
   }
 });
 
-const Arrow = ({ text, className }) => {
-  return (
-    <IconButton
-      edge="start"
-      color="inherit"
-      aria-label="arrow"
-      className={className}
-    >
-      {text}
-    </IconButton>
-  );
-};
-
-const ArrowLeft = Arrow({ text: <NavigateBeforeIcon />, className: "arrow-prev arrow" });
-const ArrowRight = Arrow({ text: <NavigateNextIcon />, className: "arrow-next arrow" });
+const ArrowLeft = <PreviousArrow overideClassName="arrow-prev" />
+const ArrowRight = <NextArrow overideClassName="arrow-next" />
 
 const Prayers = props => {
   const {

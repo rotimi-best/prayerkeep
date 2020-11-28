@@ -39,23 +39,23 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 const config = {
   // Src: https://github.com/facebook/create-react-app/issues/5316#issuecomment-591075209
-  onUpdate: async registration => {
+  onUpdate: async (registration) => {
     console.log('App has been updated')
     // We want to run this code only if we detect a new service worker is
     // waiting to be activated.
     // Details about it: https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle
-    if (registration && registration.waiting) {
-      await registration.unregister();
+    // if (registration && registration.waiting) {
+      // await registration.unregister();
       // Makes Workbox call skipWaiting()
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      // registration.waiting.postMessage({ type: 'SKIP_WAITING' });
       // Once the service worker is unregistered, we can reload the page to let
       // the browser download a fresh copy of our app (invalidating the cache)
-      console.log('Reloading page')
-      localStorage.setItem('sendSubscription', 'true');
-      setTimeout(() => {
-        window.location.reload();
-      }, 200)
-    }
+      // console.log('Reloading page')
+      // localStorage.setItem('sendSubscription', 'true');
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 200)
+    // }
   },
   onSuccess: async registration => {
     console.log('serice worker registered successfully', registration)

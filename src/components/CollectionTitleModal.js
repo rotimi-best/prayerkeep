@@ -176,9 +176,9 @@ const CollectionTitleModal = props => {
     }
 
     let content = null;
-    if (!isMobile) {
-      content = isNew ? 'Add New' : 'Edit'
-    }
+    // if (!isMobile) {
+      // content = isNew ? 'Add New' : 'Edit'
+    // }
 
     return (
       <div style={{
@@ -194,7 +194,7 @@ const CollectionTitleModal = props => {
               {content}
             </Button>
         )}
-        {isMobile && <Fab
+        {<Fab
           color="primary"
           aria-label="new-collection"
           onClick={toggleModal}

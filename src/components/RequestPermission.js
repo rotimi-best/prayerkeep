@@ -27,13 +27,17 @@ export default function RequestPermission() {
 
   const handleClose = React.useCallback((requestPush, sendPushImmediately) => async () => {
     setOpen(false);
-
+    console.log('handle close called');
+    console.log('requestPush', requestPush)
+    console.log('sendPushImmediately', sendPushImmediately)
     if (requestPush) {
       const sw = await navigator.serviceWorker.ready;
       const subscription = await sw.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(publicPushKey)
       });
+
+      console.log('subscription', subscription)
 
       if (subscription) {
         await fetch(`${API_URL}/subscription`, {
@@ -48,6 +52,8 @@ export default function RequestPermission() {
             sendPushImmediately
           })
         });
+      } else {
+        console.log('Dont have subscription')
       }
 
       dispatch(setIsSubscribedToPushNotification(true));
