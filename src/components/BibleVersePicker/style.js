@@ -8,7 +8,7 @@ export default makeStyles(theme => ({
       padding: 0,
       width: 300,
       '& #scrollable-tabpanel': {
-        marginTop: 10,
+        marginTop: 5,
       },
       '& .MuiTab-root': {
         minWidth: 100

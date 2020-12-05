@@ -12,6 +12,7 @@ import Fab from '@material-ui/core/Fab';
 import ListItem from '@material-ui/core/ListItem';
 import IconButton from '@material-ui/core/IconButton';
 import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
 import DoneIcon from '@material-ui/icons/Done';
 
 import getBooks from '../../helpers/getBooks';
@@ -27,21 +28,49 @@ const ELEMENT_PER_COLUMN = 5;
 const HEIGHT = 330;
 const WIDTH = 300;
 
-const Books = React.memo(props => (
-  <FixedSizeList height={HEIGHT} width={WIDTH} itemSize={50} itemCount={books.length + 1}>
-    {({ index, style }) => {
-      const book = books[index];
-      if (!book) return null;
-      return (
-        <ListItem key={index} style={style} button onClick={props.handleBookSelected(book)}>
-          <ListItemText
-            primary={book}
-          />
-        </ListItem>
-      )
-    }}
-  </FixedSizeList>
-))
+const Books = React.memo(props => {
+  const searchRef = React.useRef(null);
+  const [search, setSearch] = React.useState('');
+  const bookList = books.filter(book => RegExp(`^${search.toLowerCase()}`).test(book.toLowerCase()))
+
+  React.useEffect(() => {
+    return searchRef?.current?.focus();
+  }, []);
+
+  const onSearchChange = (event) => {
+    setSearch(event.target.value);
+  }
+
+  return (
+    <React.Fragment>
+      <TextField
+        id="filter-books"
+        ref={searchRef}
+        label="Filter books..."
+        value={search}
+        variant="outlined"
+        style={{
+          width: '100%',
+          margin: 0
+        }}
+        onChange={onSearchChange}
+      />
+      <FixedSizeList height={275} width={WIDTH} itemSize={50} itemCount={bookList.length + 1}>
+        {({ index, style }) => {
+          const book = bookList[index];
+          if (!book) return null;
+          return (
+            <ListItem key={index} style={style} button onClick={props.handleBookSelected(book)}>
+              <ListItemText
+                primary={book}
+              />
+            </ListItem>
+          )
+        }}
+      </FixedSizeList>
+    </React.Fragment>
+  )
+})
 
 const NumberList = React.memo(({ classes, itemSize, onClick, selected, multiSelectable }) => (
   <React.Fragment>
