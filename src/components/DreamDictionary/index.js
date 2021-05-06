@@ -69,9 +69,9 @@ const RenderSearchResult = ({ data, type, classes }) => {
 
 export default function DreamDictionary() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState({});
   const [inputValue, setInputValue] = React.useState('');
-  const searchResult = value ? findMeaning(value.value) : {};
+  const searchResult = value.value ? findMeaning(value.value) : {};
 
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1280px)'
@@ -92,7 +92,7 @@ export default function DreamDictionary() {
           disableClearable
           id="search-dictionary"
           value={value}
-          getOptionLabel={(option) => option.label}
+          getOptionLabel={(option) => option.label || ''}
           onChange={(event, newValue) => {
             setValue(newValue);
           }}

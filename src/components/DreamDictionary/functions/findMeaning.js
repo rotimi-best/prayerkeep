@@ -22,6 +22,7 @@ const generateMeaning = word => {
 };
 
 export default (msg) => {
+ console.log('msg', msg)
   let found = false;
   let words;
   let page;
