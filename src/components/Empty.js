@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
 import SpeakerIcon from '@material-ui/icons/Speaker';
+import SearchIcon from '@material-ui/icons/Search';
 
 const styles = theme => ({
   root: {
@@ -37,6 +38,8 @@ const EmptyIcon = ({type, props}) => {
       return <MusicNoteIcon {...props} />;
     case 'exhortation':
       return <SpeakerIcon {...props} />;
+    case 'search':
+      return <SearchIcon {...props} />;
     default:
       return <CreateSharpIcon {...props} />
   }

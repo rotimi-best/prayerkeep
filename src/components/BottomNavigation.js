@@ -9,6 +9,7 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 import HomeIcon from '@material-ui/icons/Home';
 import NotesIcon from '@material-ui/icons/Notes';
 import FolderIcon from '@material-ui/icons/Folder';
+import SettingsSystemDaydreamIcon from '@material-ui/icons/SettingsSystemDaydream';
 import routes from '../constants/routes';
 
 const styles = theme => ({
@@ -51,6 +52,7 @@ const SimpleBottomNavigation = props => {
           <BottomNavigationAction label="Home" icon={<HomeIcon />} />
           <BottomNavigationAction label="Prayers" icon={<NotesIcon />} />
           <BottomNavigationAction label="Collections" icon={<FolderIcon />} />
+          <BottomNavigationAction label="Dreams" icon={<SettingsSystemDaydreamIcon />} />
           {/* <BottomNavigationAction label="Plans" icon={<DoneAllIcon />} /> */}
       </BottomNavigation>
     </>

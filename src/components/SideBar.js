@@ -17,6 +17,7 @@ import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import NotesIcon from '@material-ui/icons/Notes';
 import FolderIcon from '@material-ui/icons/Folder';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
+import SettingsSystemDaydreamIcon from '@material-ui/icons/SettingsSystemDaydream';
 import { toggleSideBar } from '../actions/sidebarAction';
 import routes from '../constants/routes';
 import configs from '../configs';
@@ -150,6 +151,21 @@ const SideBar = props => {
               <FolderIcon />
             </ListItemIcon>
             <ListItemText primary={"Collections"} />
+          </ListItem>
+          <ListItem
+            selected={routes.DREAM_DICTIONARY.includes(rootRoute)}
+            button
+            classes={{
+              selected: classes.listItemSelected,
+              gutters: classes.gutters
+            }}
+            onClick={() => changeRouteTo(routes.DREAM_DICTIONARY)}
+            onKeyDown={() => changeRouteTo(routes.DREAM_DICTIONARY)}
+          >
+            <ListItemIcon classes={{ root: classes.listItemIconRoot }}>
+              <SettingsSystemDaydreamIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Dream Dictionary"} />
           </ListItem>
 
           <Divider />
