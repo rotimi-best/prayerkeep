@@ -27,5 +27,24 @@ export default makeStyles(theme => ({
     '& img': {
       height: 700
     }
+  },
+  searchResult: {
+    minHeight: 500,
+    position: 'relative',
+    '& .MuiCircularProgress-root': {
+      top: '50%',
+      right: '50%',
+      position: 'absolute'
+    },
+    '& .nextButton': {
+      top: '50%',
+      right: 0,
+      position: 'absolute'
+    },
+    '& .prevButton': {
+      top: '50%',
+      left: 0,
+      position: 'absolute'
+    },
   }
 }));

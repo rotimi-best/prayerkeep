@@ -21,8 +21,38 @@ const generateMeaning = word => {
   return meaning;
 };
 
+export const generateDictionary = () => {
+  const result = {};
+  const resultInLocalStorage = localStorage.getItem('dictionary');
+
+  if (resultInLocalStorage) {
+    return JSON.parse(resultInLocalStorage);
+  }
+
+  for (let i = 0; i < lib.arr.length; i++) {
+    const { words, pages } = lib.arr[i].container;
+
+    for (let j = 0; j < words.length; j++) {
+      const word = words[j];
+      const meaning = generateMeaning(word);
+      const page = Array.isArray(pages[j]) ? pages[j][0] : pages[j];
+
+      result[page] = images
+
+      result[word] = {
+        data: meaning
+          ? meaning
+          : Array.isArray(page) ? page?.map(p => images[p]) : [images[page]]
+      }
+    }
+  }
+
+  localStorage.setItem('dictionary', JSON.stringify(result))
+
+  return result;
+}
+
 export default (msg) => {
- console.log('msg', msg)
   let found = false;
   let words;
   let page;
@@ -51,7 +81,9 @@ export default (msg) => {
 
             if (matchWord) {
               found = true;
-              page = el.container.pages[index];
+              page = Array.isArray(el.container.pages[index])
+                ? el.container.pages[index][0]
+                : el.container.pages[index];
               meaning = generateMeaning(word);
             }
 
@@ -83,17 +115,19 @@ export default (msg) => {
   }
 
   if (found) {
-    if (meaning) {
-      return {
-        type: 'text',
-        data: meaning
-      }
-    } else {
+    // if (meaning) {
+    //   return {
+    //     type: 'text',
+    //     data: meaning
+    //   }
+    // } else {
       return {
         type: 'image',
-        data: Array.isArray(page) ? page?.map(p => images[p]) : [images[page]]
+        page,
+        meaning,
+        imageUrl: images[page],
       }
-    }
+    // }
   }
 
   return {

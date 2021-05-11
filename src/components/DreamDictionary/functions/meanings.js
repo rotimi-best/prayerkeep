@@ -7,5 +7,5 @@ for (const alphabet of supportedAlphabets) {
     ...require(`../constants/meanings/${alphabet}`).default
   }
 }
-console.log(meanings)
+
 export default meanings;
