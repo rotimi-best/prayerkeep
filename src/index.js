@@ -44,18 +44,18 @@ const config = {
     // We want to run this code only if we detect a new service worker is
     // waiting to be activated.
     // Details about it: https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle
-    // if (registration && registration.waiting) {
-      // await registration.unregister();
+    if (registration && registration.waiting) {
+      await registration.unregister();
       // Makes Workbox call skipWaiting()
       // registration.waiting.postMessage({ type: 'SKIP_WAITING' });
       // Once the service worker is unregistered, we can reload the page to let
       // the browser download a fresh copy of our app (invalidating the cache)
-      // console.log('Reloading page')
-      // localStorage.setItem('sendSubscription', 'true');
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 200)
-    // }
+      console.log('Reloading page')
+      localStorage.setItem('sendSubscription', 'true');
+      setTimeout(() => {
+        window.location.reload();
+      }, 200)
+    }
   },
   onSuccess: async registration => {
     console.log('serice worker registered successfully', registration)
