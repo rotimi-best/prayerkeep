@@ -20,29 +20,34 @@ import useStyles from './styles';
 
 const options = getAllWords();
 
+const useImageLoaded = () => {
+  const [loaded, setLoaded] = React.useState(false)
+  const ref = React.useRef()
+
+  const onLoad = () => {
+    setLoaded(true)
+  }
+
+  React.useEffect(() => {
+    if (ref.current && ref.current.complete) {
+      onLoad()
+    }
+  })
+
+  return [ref, loaded, onLoad]
+}
+
 const SearchResult = (props) => {
   const { imageUrl, onNext, onPrev, classes } = props;
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [ref, loaded, onLoad] = useImageLoaded()
 
   let content;
   if (/^http/.test(imageUrl)) {
     content = <img
       src={imageUrl}
       alt={`Translation images`}
-      ref={(input) => {
-        // onLoad replacement for SSR
-        if (!input) { return; }
-        const img = input;
-    
-        const updateFunc = () => {
-          setIsLoading(false);
-        };
-        img.onload = updateFunc;
-        if (img.complete) {
-          updateFunc();
-        }
-      }}
-      
+      ref={ref}
+      onLoad={onLoad}
     />
   } 
   // else if (!!data) {
@@ -81,8 +86,20 @@ const SearchResult = (props) => {
       <IconButton onClick={onPrev}  className={`prevButton`}>
         <ArrowBackIosIcon />
       </IconButton>
-      {isLoading ? <CircularProgress /> : content}
+      {content}
+      {!loaded && <CircularProgress />}
     </Paper>
+  )
+}
+
+const Spinner = ({ classes }) => {
+
+  return (
+    <div
+      className={classes.searchResult}
+    >
+      <CircularProgress />
+    </div>
   )
 }
 
@@ -91,16 +108,21 @@ export default function DreamDictionary() {
   const [value, setValue] = React.useState({});
   const [inputValue, setInputValue] = React.useState('');
   const [searchResult, setSearchResult] = React.useState({});
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1280px)'
   });
   const onNextClick = () => {
-    const {page } =  searchResult;
+    setIsLoading(true)
+    const {page} =  searchResult;
     const nextPage = parseInt(page) + 1;
     const nextPageImage = images[`${nextPage}`];
 
     if (nextPageImage) {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 100)
       setSearchResult({
         page: `${nextPage}`,
         imageUrl: nextPageImage
@@ -108,11 +130,15 @@ export default function DreamDictionary() {
     }
   }
   const onPrevClick = () => {
-    const {page } =  searchResult;
+    setIsLoading(true)
+    const {page} =  searchResult;
     const prevPage = parseInt(page) - 1;
     const prevPageImage = images[`${prevPage}`];
 
     if (prevPageImage) {
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 100)
       setSearchResult({
         page: `${prevPage}`,
         imageUrl: prevPageImage
@@ -140,10 +166,16 @@ export default function DreamDictionary() {
           onChange={(event, newValue) => {
             setValue(newValue);
             setSearchResult(newValue.value ? findMeaning(newValue.value) : {})
+            if (isLoading) {
+              setIsLoading(false)
+            }
           }}
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);
+            if (!isLoading) {
+              setIsLoading(true)
+            }
           }}
           options={options}
           renderInput={(params) => (
@@ -156,12 +188,14 @@ export default function DreamDictionary() {
             />
           )}
         />
-        <SearchResult
-          imageUrl={searchResult.imageUrl}
-          classes={classes}
-          onNext={onNextClick}
-          onPrev={onPrevClick}
-        />
+        {isLoading ? <Spinner classes={classes} /> : (
+          <SearchResult
+            imageUrl={searchResult.imageUrl}
+            classes={classes}
+            onNext={onNextClick}
+            onPrev={onPrevClick}
+          />
+        )}
       </Container>
     </main>
   )
