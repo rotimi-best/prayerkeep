@@ -46,7 +46,6 @@ const styles = theme => ({
   right: {
     display: 'flex',
     alignItems: 'center',
-    width: 85,
     justifyContent: 'space-between'
   }
 });
