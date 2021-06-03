@@ -47,7 +47,7 @@ function App() {
             <PrivateRoute exact path={["/", "/story/:id"]} component={Home} />
             <PrivateRoute exact path="/prayers" component={Prayers} />
             <PrivateRoute exact path="/prayer/:prayerId" component={Prayer} />
-            <PrivateRoute exact path="/dreamdictionary" component={DreamDictionary} />
+            <Route exact path="/dreamdictionary" component={DreamDictionary} />
             {/* <PrivateRoute exact path="/plans" component={Plans} />
             {/* <PrivateRoute exact path="/plans" component={Plans} />
             <PrivateRoute exact path="/plan/:id" component={Plan} /> */}
