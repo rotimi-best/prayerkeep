@@ -28,7 +28,7 @@ import UnLovedIcon from '@material-ui/icons/FavoriteBorderRounded';
 import LovedIcon from '@material-ui/icons/Favorite';
 import SendIcon from '@material-ui/icons/Send';
 
-import GroupedPrayers from '../GroupedPrayers';
+// import GroupedPrayers from '../GroupedPrayers';
 import alerts from '../../constants/alert';
 import { openAlert } from '../../actions/alertAction';
 
@@ -53,7 +53,10 @@ const Home = (props) => {
     // prayers,
     userPictureUrl,
   } = props;
-  const { publicPrayers, quote } = feed;
+  const {
+    // publicPrayers,
+    quote,
+  } = feed;
   const classes = useStyles();
   const [isLoved, setIsLoved] = React.useState(quote.isLovedByMe);
   const [comment, setComment] = React.useState('');

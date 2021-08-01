@@ -6,7 +6,7 @@ import {
   FEED_STOP_REQUEST,
   FEED_RESET_ERROR,
   STORY_UPLOADED,
-  STORY_UPLOADING
+  STORY_UPLOADING,
 } from '../constants/actionsTypes';
 
 const initialState = {
@@ -19,12 +19,12 @@ const initialState = {
   isFetching: false,
   isStoryUploading: false,
   error: null,
-}
+};
 
-export default function(state = initialState, action) {
+export default function feedReducer(state = initialState, action) {
   const { type, payload } = action;
 
-  switch(type) {
+  switch (type) {
     case FEED_FETCHED:
       return {
         // streak: payload.streak,
@@ -40,7 +40,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isFetching: true,
-        error: null
+        error: null,
       };
     case FEED_STOP_REQUEST:
       return {
@@ -61,19 +61,19 @@ export default function(state = initialState, action) {
     case QUOTE_UPDATED:
       return {
         ...state,
-        quote: payload
+        quote: payload,
       };
     case STORY_UPLOADING:
       return {
         ...state,
-        isStoryUploading: true
-      }
+        isStoryUploading: true,
+      };
     case STORY_UPLOADED:
       return {
         ...state,
         stories: payload,
         isStoryUploading: false,
-      }
+      };
     default:
       return state;
   }

@@ -224,7 +224,7 @@ export const archivePrayer =
     archivePrayerService(userId, prayerId, prayerParams);
 
     const prayers = getState().prayers.allPrayers.map((p) =>
-      p._id == prayerId ? { ...p, ...prayerParams } : p
+      p._id === prayerId ? { ...p, ...prayerParams } : p
     );
 
     const payload = {

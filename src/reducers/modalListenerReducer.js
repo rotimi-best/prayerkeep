@@ -1,17 +1,17 @@
 import {
   OPEN_PRAYER_MODAL,
-  CLOSE_PRAYER_MODAL
+  CLOSE_PRAYER_MODAL,
 } from '../constants/actionsTypes';
 
 const initialState = {
   prayerModal: {
     open: false,
     prayerId: null,
-    collectionId: null
-  }
+    collectionId: null,
+  },
 };
 
-export default function (state = initialState, action) {
+export default function modalListenerReducer(state = initialState, action) {
   const newState = JSON.parse(JSON.stringify(state));
   const { type, payload } = action;
 
@@ -23,7 +23,7 @@ export default function (state = initialState, action) {
           open: true,
           prayerId: payload.prayerId,
           collectionId: payload.collectionId,
-        }
+        },
       };
     case CLOSE_PRAYER_MODAL:
       return {
@@ -32,9 +32,9 @@ export default function (state = initialState, action) {
           open: false,
           prayerId: null,
           collectionId: null,
-        }
+        },
       };
     default:
       return newState;
   }
-};
+}

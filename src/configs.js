@@ -7,21 +7,23 @@ const {
   REACT_APP_FIREBASE_API_KEY = '',
   REACT_APP_FIREBASE_STORAGE_BUCKET = '',
   REACT_APP_PUBLIC_PUSH_KEY,
-  REACT_APP_SENTRY_DNS
+  REACT_APP_SENTRY_DNS,
 } = process.env;
 
-export default {
+const CONFIG = {
   FB_APP_ID: REACT_APP_FB_APP_ID,
   SUPPORT_EMAIL: REACT_APP_SUPPORT_EMAIL,
   API_URL: REACT_APP_API_URL,
-  isProduction: REACT_APP_STAGE === "production",
+  isProduction: REACT_APP_STAGE === 'production',
   firebase: {
     apiKey: REACT_APP_FIREBASE_API_KEY,
     authDomain: REACT_APP_FIREBASE_AUTH_DOMAIN,
     storageBucket: REACT_APP_FIREBASE_STORAGE_BUCKET,
   },
   sentry: {
-    dns: REACT_APP_SENTRY_DNS
+    dns: REACT_APP_SENTRY_DNS,
   },
-  publicPushKey: REACT_APP_PUBLIC_PUSH_KEY
-}
+  publicPushKey: REACT_APP_PUBLIC_PUSH_KEY,
+};
+
+export default CONFIG;

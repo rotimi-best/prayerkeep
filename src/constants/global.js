@@ -1,4 +1,4 @@
-export default {
+const GLOBAL = {
   MONTHS: {
     SHORT: [
       'Jan',
@@ -28,5 +28,7 @@ export default {
       'November',
       'December',
     ],
-  }
-}
+  },
+};
+
+export default GLOBAL;

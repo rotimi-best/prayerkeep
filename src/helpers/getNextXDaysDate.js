@@ -1,4 +1,4 @@
-export default (xDays) => {
+export default function getNextXDaysDate(xDays) {
   let nextXDaysDate = new Date();
 
   if (!xDays) {
@@ -9,7 +9,7 @@ export default (xDays) => {
   const month = nextXDaysDate.getMonth();
   const date = nextXDaysDate.getDate();
 
-  for (let i=0; i < xDays; i++){
+  for (let i = 0; i < xDays; i++) {
     nextXDaysDate = new Date(year, month, date + i);
   }
 

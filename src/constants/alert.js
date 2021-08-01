@@ -1,6 +1,8 @@
-export default {
+const ALERT = {
   SUCCESS: 'success',
   ERROR: 'error',
   INFO: 'info',
-  WARNING: 'warning'
-}
+  WARNING: 'warning',
+};
+
+export default ALERT;

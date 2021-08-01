@@ -1,4 +1,4 @@
-export default theme => ({
+const styles = (theme) => ({
   root: {
     flexWrap: 'wrap',
   },
@@ -17,8 +17,8 @@ export default theme => ({
     padding: 5,
     width: 'fit-content',
     '& .MuiButtonBase-root': {
-      textTransform: 'unset'
-    }
+      textTransform: 'unset',
+    },
   },
   expansionRoot: {
     width: '100%',
@@ -35,16 +35,16 @@ export default theme => ({
     borderRadius: 4,
     padding: '5px 10px',
     '& .MuiFormLabel-root': {
-      marginLeft: 10
-    }
+      marginLeft: 10,
+    },
   },
   chipRoot: {
-    margin: 2
+    margin: 2,
   },
   choosenCollection: {
     display: 'flex',
     flexWrap: 'wrap',
-    marginBottom: 5
+    marginBottom: 5,
   },
   headerWithButton: {
     display: 'flex',
@@ -53,17 +53,19 @@ export default theme => ({
     '& .MuiFab-root': {
       width: 35,
       height: 30,
-      marginLeft: 30
+      marginLeft: 30,
     },
     '& .MuiSvgIcon-root': {
       width: 20,
-      height: 18
-    }
+      height: 18,
+    },
   },
   dialogContent: {
-    padding: '5px 20px'
+    padding: '5px 20px',
   },
   chip: {
-    margin: '2px 0'
-  }
+    margin: '2px 0',
+  },
 });
+
+export default styles;

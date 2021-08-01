@@ -2,7 +2,7 @@ import {
   USER_LOGIN_TOGGLE,
   USER_LOGIN_FAILED,
   USER_LOGIN_REQUEST,
-  SET_IS_SUBSCRIBED_TO_PUSH_NOTIFICATION
+  SET_IS_SUBSCRIBED_TO_PUSH_NOTIFICATION,
 } from '../constants/actionsTypes';
 
 const user = JSON.parse(localStorage.getItem('user')) || null;
@@ -11,11 +11,11 @@ const initialState = {
   error: null,
   isLoggedIn: user !== null,
   user,
-  isSubscribedToPushNotification: true
+  isSubscribedToPushNotification: true,
 };
 
-export default function (state = initialState, action) {
-  const newState = JSON.parse(JSON.stringify(state) );
+export default function authenticationReducer(state = initialState, action) {
+  const newState = JSON.parse(JSON.stringify(state));
   const { type, payload = null } = action;
 
   switch (type) {
@@ -24,7 +24,7 @@ export default function (state = initialState, action) {
         ...newState,
         isFetching: false,
         isLoggedIn: !newState.isLoggedIn,
-        user: payload
+        user: payload,
       };
     case USER_LOGIN_REQUEST:
       return {
@@ -35,14 +35,14 @@ export default function (state = initialState, action) {
       return {
         ...newState,
         isFetching: false,
-        error: payload
-      }
+        error: payload,
+      };
     case SET_IS_SUBSCRIBED_TO_PUSH_NOTIFICATION:
       return {
         ...newState,
-        isSubscribedToPushNotification: payload
-      }
+        isSubscribedToPushNotification: payload,
+      };
     default:
       return newState;
   }
-};
+}

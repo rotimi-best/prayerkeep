@@ -10,7 +10,7 @@ import {
   COLLECTION_UPDATE_REQUEST,
   COLLECTION_UPDATE_SUCCESS,
   COLLECTION_FETCHING,
-  COLLECTION_FETCHED
+  COLLECTION_FETCHED,
 } from '../constants/actionsTypes';
 
 const initialState = {
@@ -21,19 +21,20 @@ const initialState = {
   isUpdating: false,
   isAdding: false,
   error: null,
-}
+};
 
-export default function(state = initialState, action) {
+export default function collectionsReducer(state = initialState, action) {
   const { type, payload } = action;
 
-  switch(type) {
+  switch (type) {
     case COLLECTIONS_FETCHED:
     case COLLECTION_ADD_SUCCESS:
     case COLLECTION_UPDATE_SUCCESS:
       return {
         ...state,
         allCollection: payload.allCollection || payload,
-        suggestedCollections: payload.suggestedCollections || state.suggestedCollections,
+        suggestedCollections:
+          payload.suggestedCollections || state.suggestedCollections,
         collectionInView: payload.collectionInView || state.collectionInView,
         isFetching: false,
         isUpdating: false,
@@ -54,7 +55,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isFetching: true,
-        error: null
+        error: null,
       };
     case COLLECTIONS_STOP_REQUEST:
       return {
@@ -72,18 +73,18 @@ export default function(state = initialState, action) {
         isUpdating: false,
         isAdding: false,
         error: payload,
-      }
+      };
     case COLLECTION_ADD_REQUEST:
       return {
         ...state,
         isAdding: true,
-        error: null
+        error: null,
       };
     case COLLECTION_UPDATE_REQUEST:
       return {
         ...state,
         isUpdating: true,
-        error: null
+        error: null,
       };
     default:
       return state;

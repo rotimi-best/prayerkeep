@@ -14,7 +14,7 @@ import ScrollMenu from 'react-horizontal-scrolling-menu';
 import PrayerCard from './PrayerCard';
 import NewPrayerButton from './NewPrayerButton';
 import Empty from './Empty';
-import GroupedPrayers from './GroupedPrayers';
+// import GroupedPrayers from './GroupedPrayers';
 import BadgeWithLabel from './BadgeWithLabel';
 import PreviousArrow from './PreviousArrow';
 import NextArrow from './NextArrow';
