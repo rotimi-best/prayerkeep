@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { storage } from '../../helpers/firebase';
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
@@ -33,20 +33,25 @@ import alerts from '../../constants/alert';
 import { openAlert } from '../../actions/alertAction';
 
 // import { date } from "../../helpers";
-import { getFeed, updateQuote, uploadStory, uploadingStory } from '../../actions/feedAction';
+import {
+  getFeed,
+  updateQuote,
+  uploadStory,
+  uploadingStory,
+} from '../../actions/feedAction';
 // import { updatePrayer } from '../../actions/prayersAction';
 import useStyles from './styles';
-import BorderedButton from "../BorderedButton";
-import Stories from "../Stories";
+import BorderedButton from '../BorderedButton';
+import Stories from '../Stories';
 
-const Home = props => {
+const Home = (props) => {
   const {
     quoteId = '',
     dispatch,
     userId,
     feed,
     // prayers,
-    userPictureUrl
+    userPictureUrl,
   } = props;
   const { publicPrayers, quote } = feed;
   const classes = useStyles();
@@ -55,74 +60,79 @@ const Home = props => {
   const storyUploaderRef = React.useRef();
 
   useEffect(() => {
-    dispatch(getFeed(userId, quoteId))
+    dispatch(getFeed(userId, quoteId));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (quote.isLovedByMe !== isLoved)
-      setIsLoved(quote.isLovedByMe);
-      // eslint-disable-next-line
+    if (quote.isLovedByMe !== isLoved) setIsLoved(quote.isLovedByMe);
+    // eslint-disable-next-line
   }, [quote.isLovedByMe]);
 
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1280px)'
+    query: '(min-width: 1280px)',
   });
 
   const handleLoveClick = () => {
     if (feed.isFetching) return;
-    setIsLoved(isLoved => {
+    setIsLoved((isLoved) => {
       const newIsLoved = !isLoved;
-      dispatch(
-        updateQuote(userId, quote._id, { loved: newIsLoved })
-      );
+      dispatch(updateQuote(userId, quote._id, { loved: newIsLoved }));
 
       return newIsLoved;
     });
-  }
+  };
 
   const storyUpload = (event) => {
     if (event) {
-      return
+      return;
     }
     const file = event.target.files[0];
 
     if (file) {
       const sizeInMb = (file.size * 0.000001).toFixed(2);
       if (sizeInMb > 60) {
-        dispatch(openAlert(`Size: ${sizeInMb}mb is too large. Max size: 60mb`, alerts.ERROR));
+        dispatch(
+          openAlert(
+            `Size: ${sizeInMb}mb is too large. Max size: 60mb`,
+            alerts.ERROR
+          )
+        );
         return;
       }
 
       dispatch(uploadingStory());
-      const name = `${file.name + new Date().getTime()}`
+      const name = `${file.name + new Date().getTime()}`;
       const uploadTask = storage.ref(`/images/${name}`).put(file);
-      uploadTask.on("state_changed", () => {}, console.error, () => {
-        storage
-          .ref("images")
-          .child(name)
-          .getDownloadURL()
-          .then((url) => {
-            dispatch(uploadStory(userId, url))
-          });
-      });
+      uploadTask.on(
+        'state_changed',
+        () => {},
+        console.error,
+        () => {
+          storage
+            .ref('images')
+            .child(name)
+            .getDownloadURL()
+            .then((url) => {
+              dispatch(uploadStory(userId, url));
+            });
+        }
+      );
     }
-  }
+  };
 
   const clickUploader = (event) => {
-    if (event) return
-    storyUploaderRef.current.click()
-  }
+    if (event) return;
+    storyUploaderRef.current.click();
+  };
 
   const handleComment = (e) => {
     setComment(e.target.value);
-  }
+  };
   const handleSubmitComment = () => {
     setComment('');
-    dispatch(
-      updateQuote(userId, quote._id, { comment })
-    );
-  }
+    dispatch(updateQuote(userId, quote._id, { comment }));
+  };
 
   return (
     <main className={classes.root}>
@@ -131,24 +141,28 @@ const Home = props => {
       <Container
         maxWidth="sm"
         classes={{
-          root: classes.containerRoot
+          root: classes.containerRoot,
         }}
       >
-      {feed.isFetching ? <LinearProgress /> : null}
-      <Paper
+        {feed.isFetching ? <LinearProgress /> : null}
+        <Paper
           variant="outlined"
           className={classes.userStatsRoot}
           elevation={2}
         >
           <div className={classes.headerWithAction}>
-            <Typography className={classes.title} color="textSecondary" gutterBottom>
-              Stories {feed.isStoryUploading && <CircularProgress size={20}  />}
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              Stories {feed.isStoryUploading && <CircularProgress size={20} />}
             </Typography>
-            <BorderedButton onClick={clickUploader} label="Coming soon"/>
+            <BorderedButton onClick={clickUploader} label="Coming soon" />
             {/* <BorderedButton onClick={clickUploader} label="Add story"/> */}
             <input
               ref={storyUploaderRef}
-              style={{ display: 'none'}}
+              style={{ display: 'none' }}
               type="file"
               name="video"
               accept="video/*"
@@ -166,25 +180,44 @@ const Home = props => {
           className={classes.userStatsRoot}
           elevation={2}
         >
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
+          <Typography
+            className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
             Prayer Quote
           </Typography>
-          <Typography className={classes.bibleQuote} variant="body2" color="textPrimary">
+          <Typography
+            className={classes.bibleQuote}
+            variant="body2"
+            color="textPrimary"
+          >
             {quote.title}
           </Typography>
 
           <Divider light />
-          <CardActions disableSpacing classes={{ root: classes.cardActionRoot }}>
+          <CardActions
+            disableSpacing
+            classes={{ root: classes.cardActionRoot }}
+          >
             <IconButton aria-label="love quote" onClick={handleLoveClick}>
               {isLoved ? <LovedIcon color="primary" /> : <UnLovedIcon />}
-            </IconButton> {quote.loves}
+            </IconButton>{' '}
+            {quote.loves}
           </CardActions>
           <Divider light />
           <List className={classes.listRoot}>
             <ListItem>
               {comment.length === 0 ? (
                 <ListItemAvatar>
-                  <Avatar alt="user-profile-photo" src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} />
+                  <Avatar
+                    alt="user-profile-photo"
+                    src={
+                      userPictureUrl.data
+                        ? userPictureUrl.data.url
+                        : userPictureUrl
+                    }
+                  />
                 </ListItemAvatar>
               ) : null}
               <TextField
@@ -197,19 +230,25 @@ const Home = props => {
                 variant="outlined"
               />
               {comment.length > 0 ? (
-                <IconButton aria-label="Submit comment" onClick={handleSubmitComment}>
+                <IconButton
+                  aria-label="Submit comment"
+                  onClick={handleSubmitComment}
+                >
                   <SendIcon color="action" />
                 </IconButton>
               ) : null}
             </ListItem>
           </List>
-          {quote?.comments?.slice(0, 4)?.map(comment => (
+          {quote?.comments?.slice(0, 4)?.map((comment) => (
             <React.Fragment key={comment._id}>
               <Divider light />
               <List className={classes.listRoot}>
                 <ListItem alignItems="flex-start">
                   <ListItemAvatar>
-                    <Avatar alt="user-profile-photo" src={comment.author.googleAuthUser.picture} />
+                    <Avatar
+                      alt="user-profile-photo"
+                      src={comment.author.googleAuthUser.picture}
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     primary={comment.author.googleAuthUser.name}
@@ -230,18 +269,16 @@ const Home = props => {
               </List>
             </React.Fragment>
           ))}
-
         </Paper>
 
-
-        <GroupedPrayers
+        {/* <GroupedPrayers
           title="Popular prayer requests"
           prayers={publicPrayers}
           styles={{
             margin: '0 0 10px 0'
           }}
           hideAction
-        />
+        /> */}
         {/* <CollectionMenu /> */}
         {/* <Paper
           variant="elevation"
@@ -276,13 +313,13 @@ const Home = props => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userId: state.authentication.user.userId,
   feed: state.feed,
   quoteId: state.router.location.query.quoteId,
   prayers: state.prayers,
-  userPictureUrl: state.authentication.user
-    && state.authentication.user.picture,
+  userPictureUrl:
+    state.authentication.user && state.authentication.user.picture,
 });
 
 export default connect(mapStateToProps)(Home);

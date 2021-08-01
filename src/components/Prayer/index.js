@@ -20,20 +20,28 @@ import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 import PrayerCard from '../PrayerCard';
 
-import { getPrayer, updatePrayer, resetPrayer } from '../../actions/prayersAction';
+import {
+  getPrayer,
+  updatePrayer,
+  resetPrayer,
+} from '../../actions/prayersAction';
 import routes from '../../constants/routes';
 import useStyles from './style';
+
+const disableComments = true;
 
 const Prayer = () => {
   const classes = useStyles();
   const { prayerId } = useParams();
-  const {isPrayerFetching, userId, prayer, userPictureUrl} = useSelector(state => ({
-    prayer: state.prayers.prayer,
-    isPrayerFetching: state.prayers.isPrayerFetching,
-    userId: state.authentication.user.userId,
-    userPictureUrl: state.authentication.user
-      && state.authentication.user.picture,
-  }))
+  const { isPrayerFetching, userId, prayer, userPictureUrl } = useSelector(
+    (state) => ({
+      prayer: state.prayers.prayer,
+      isPrayerFetching: state.prayers.isPrayerFetching,
+      userId: state.authentication.user.userId,
+      userPictureUrl:
+        state.authentication.user && state.authentication.user.picture,
+    })
+  );
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -41,33 +49,35 @@ const Prayer = () => {
 
   useEffect(() => {
     if (prayerId) {
-      dispatch(getPrayer(userId, prayerId))
+      dispatch(getPrayer(userId, prayerId));
     }
 
     return () => {
-      dispatch(resetPrayer())
-    }
+      dispatch(resetPrayer());
+    };
   }, [dispatch, userId, prayerId]);
 
   const handleComment = (e) => {
     setComment(e.target.value);
-  }
+  };
   const handleSubmitComment = () => {
     setComment('');
-    dispatch(updatePrayer(userId, prayerId, {
-      comment
-    }))
-  }
+    dispatch(
+      updatePrayer(userId, prayerId, {
+        comment,
+      })
+    );
+  };
   const handleBack = () => {
     if (window.history.length > 2) {
       history.goBack();
     } else {
       dispatch(push(routes.PRAYERS));
     }
-  }
+  };
 
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1280px)'
+    query: '(min-width: 1280px)',
   });
 
   return (
@@ -76,7 +86,7 @@ const Prayer = () => {
       <Container
         maxWidth="sm"
         classes={{
-          root: classes.containerRoot
+          root: classes.containerRoot,
         }}
       >
         {isPrayerFetching && <LinearProgress />}
@@ -87,13 +97,26 @@ const Prayer = () => {
           </IconButton>
           Prayer
         </Typography>
-        {prayer && <PrayerCard userId={userId} prayer={prayer} isPrayerClickable={false}/>}
-        {!isPrayerFetching && (
+        {prayer && (
+          <PrayerCard
+            userId={userId}
+            prayer={prayer}
+            isPrayerClickable={false}
+          />
+        )}
+        {!isPrayerFetching && !disableComments && (
           <List className={classes.listRoot}>
             <ListItem divider>
               {comment.length === 0 ? (
                 <ListItemAvatar>
-                  <Avatar alt="user-profile-photo" src={userPictureUrl.data ? userPictureUrl.data.url : userPictureUrl} />
+                  <Avatar
+                    alt="user-profile-photo"
+                    src={
+                      userPictureUrl.data
+                        ? userPictureUrl.data.url
+                        : userPictureUrl
+                    }
+                  />
                 </ListItemAvatar>
               ) : null}
               <TextField
@@ -106,43 +129,49 @@ const Prayer = () => {
                 variant="outlined"
               />
               {comment.length > 0 ? (
-                <IconButton aria-label="Submit comment" onClick={handleSubmitComment}>
+                <IconButton
+                  aria-label="Submit comment"
+                  onClick={handleSubmitComment}
+                >
                   <SendIcon color="action" />
                 </IconButton>
               ) : null}
             </ListItem>
           </List>
         )}
-          {prayer?.comments?.map(comment => (
-            <React.Fragment key={comment._id}>
-              <List className={classes.listRoot}>
-                <ListItem alignItems="flex-start">
-                  <ListItemAvatar>
-                    <Avatar alt="user-profile-photo" src={comment.author.googleAuthUser.picture} />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={comment.author.googleAuthUser.name}
-                    secondary={
-                      <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          className={classes.inline}
-                          color="textPrimary"
-                        >
-                          {comment.comment}
-                        </Typography>
-                      </React.Fragment>
-                    }
+        {prayer?.comments?.map((comment) => (
+          <React.Fragment key={comment._id}>
+            <List className={classes.listRoot}>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Avatar
+                    alt="user-profile-photo"
+                    src={comment.author.googleAuthUser.picture}
                   />
-                </ListItem>
-              </List>
-              <Divider light />
-            </React.Fragment>
-          ))}
+                </ListItemAvatar>
+                <ListItemText
+                  primary={comment.author.googleAuthUser.name}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary"
+                      >
+                        {comment.comment}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+            </List>
+            <Divider light />
+          </React.Fragment>
+        ))}
       </Container>
     </main>
   );
-}
+};
 
 export default Prayer;

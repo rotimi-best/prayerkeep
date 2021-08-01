@@ -36,25 +36,25 @@ import { getDateCreated, getNewPrayerUrl } from '../helpers';
 // import { areTheyDifferent } from '../helpers/difference';
 import routes from '../constants/routes';
 
-const styles = theme => ({
+const styles = (theme) => ({
   toolbar: theme.mixins.toolbar,
   root: {
     flexGrow: 1,
     '& .MuiContainer-root': {
-      padding: 5
-    }
+      padding: 5,
+    },
   },
   collectionHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '0 5px'
+    padding: '0 5px',
   },
   authorAndCreatedAt: {
     paddingLeft: 10,
     '& .MuiTypography-caption': {
-      fontSize: 14
-    }
+      fontSize: 14,
+    },
   },
   headerText: {
     display: 'flex',
@@ -69,7 +69,7 @@ const styles = theme => ({
   },
   shareButton: {
     height: 'fit-content',
-    marginLeft: 5
+    marginLeft: 5,
   },
   tab: {
     marginTop: 10,
@@ -79,11 +79,11 @@ const styles = theme => ({
     top: 60,
     '& .Mui-selected .badge': {
       fontWeight: 500,
-      color: '#000000'
+      color: '#000000',
     },
     [theme.breakpoints.down('sm')]: {
-      top: 0
-    }
+      top: 0,
+    },
   },
   description: {
     color: '#202124',
@@ -92,25 +92,28 @@ const styles = theme => ({
     fontSize: 16,
     whiteSpace: 'pre-wrap',
     [theme.breakpoints.down('sm')]: {
-      fontSize: 14
-    }
+      fontSize: 14,
+    },
   },
 });
 
 function userAlreadyJoined(people, userId) {
-  return people.some(person => person.userId === userId)
+  return people.some((person) => person.userId === userId);
 }
 function a11yProps(index) {
   return {
     id: `scrollable-auto-tab-${index}`,
     'aria-controls': `scrollable-auto-tabpanel-${index}`,
-    value: index
+    value: index,
   };
 }
 
-const Collection = props => {
+const Collection = (props) => {
   const {
-    match: { url, params: { id } },
+    match: {
+      url,
+      params: { id },
+    },
     pathname,
     classes,
     dispatch,
@@ -134,30 +137,30 @@ const Collection = props => {
     _id,
     edittableByUser,
     people,
-    description
+    description,
   } = collectionInView || {};
   const [tabValue, setTabValue] = React.useState(0);
   const [showMore, setShowMore] = React.useState(false);
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1280px)'
+    query: '(min-width: 1280px)',
   });
 
   useEffect(() => {
     dispatch(getCollection(id, userId));
   }, [dispatch, userId, id]);
   useEffect(() => {
-    setShowMore(description?.length > 100)
+    setShowMore(description?.length > 100);
   }, [description]);
 
   const handleBack = () => {
     dispatch(push(routes.COLLECTIONS));
-  }
+  };
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
   const openNewPrayer = () => {
     return dispatch(push(getNewPrayerUrl(pathname, _id)));
-  }
+  };
 
   if (!collectionInView || isFetching || isAdding) {
     return (
@@ -177,31 +180,37 @@ const Collection = props => {
       return dispatch(push(routes.WELCOME + `?goTo=${url}`));
     }
 
-    if (isUpdating) return
+    if (isUpdating) return;
     if (alreadyJoined) {
       navigator.clipboard.writeText(window.location.href);
-      dispatch(openAlert('Link copied.', alerts.INFO))
+      dispatch(openAlert('Link copied.', alerts.INFO));
     } else {
-      dispatch(updateCollection(_id, { join: true, userId }, allCollection))
+      dispatch(updateCollection(_id, { join: true, userId }, allCollection));
     }
-  }
+  };
 
   const getDescription = () => {
     if (!description?.length) {
       return '';
     }
     if (showMore) {
-      return Parser(description?.slice(0, 100).replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> ') + '...')
+      return Parser(
+        description
+          ?.slice(0, 100)
+          .replace(/(https?:\/\/.+?)(?:\s|$)/gi, '<a href="$1">$1</a> ') + '...'
+      );
     }
 
-    return Parser(description.replace(/(https?:\/\/.+?)(?:\s|$)/ig, '<a href="$1">$1</a> '))
-  }
+    return Parser(
+      description.replace(/(https?:\/\/.+?)(?:\s|$)/gi, '<a href="$1">$1</a> ')
+    );
+  };
 
   const getPrayerSummary = () => {
     const totalPrayers = prayers?.length;
 
-    return `${totalPrayers} ${totalPrayers > 1 ? 'prayers' : 'prayer'}`
-  }
+    return `${totalPrayers} ${totalPrayers > 1 ? 'prayers' : 'prayer'}`;
+  };
 
   return (
     <main className={classes.root}>
@@ -209,11 +218,7 @@ const Collection = props => {
       <CssBaseline />
       <Container maxWidth="sm">
         <Grid container>
-          <Grid
-            item
-            xs={12}
-            className={classes.collectionHeader}
-          >
+          <Grid item xs={12} className={classes.collectionHeader}>
             <Typography variant="h5" className={classes.headerText}>
               <IconButton aria-label="back" onClick={handleBack}>
                 <KeyboardBackspaceIcon />
@@ -232,13 +237,12 @@ const Collection = props => {
           </Grid>
           <Grid item xs={12} className={classes.authorAndCreatedAt}>
             <Typography variant="caption" color="textSecondary" component="p">
-            {getPrayerSummary()} <Dot /> {owner.googleAuthUser.name} <Dot /> {dateCreated}
+              {getPrayerSummary()} <Dot /> {owner.googleAuthUser.name} <Dot />{' '}
+              {dateCreated}
             </Typography>
           </Grid>
           <Grid item xs={12} className={classes.groupAvatars}>
-            <GroupAvatars
-              users={people}
-            />
+            <GroupAvatars users={people} />
             <Button
               variant="outlined"
               color="primary"
@@ -247,30 +251,45 @@ const Collection = props => {
               onClick={handleShareOrJoin}
               disabled={isUpdating}
             >
-              {isUpdating ? <CircularProgress size={20} /> : (alreadyJoined ? 'Share' : 'Join')}
+              {isUpdating ? (
+                <CircularProgress size={20} />
+              ) : alreadyJoined ? (
+                'Share'
+              ) : (
+                'Join'
+              )}
             </Button>
           </Grid>
           {/* <div className={classes.toolbar} /> */}
           <Grid item xs={12}>
-            <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
+            <Typography
+              className={classes.description}
+              variant="body2"
+              color="textPrimary"
+              component="p"
+            >
               {getDescription()}
             </Typography>
-            {description?.length > 100 && <Button
-              variant="text"
-              color="primary"
-              onClick={() => setShowMore(s => !s)}
-              style={{
-                textTransform: 'none',
-                padding: 0
-              }}
-            >
-              {showMore ? 'Show more' : 'Show less'}
-            </Button>}
+            {description?.length > 100 && (
+              <Button
+                variant="text"
+                color="primary"
+                onClick={() => setShowMore((s) => !s)}
+                style={{
+                  textTransform: 'none',
+                  padding: 0,
+                }}
+              >
+                {showMore ? 'Show more' : 'Show less'}
+              </Button>
+            )}
           </Grid>
 
-          {edittableByUser && isLoggedIn && <Grid item xs={12}>
-            <NewPrayerButton collectionId={_id} />
-          </Grid>}
+          {edittableByUser && isLoggedIn && (
+            <Grid item xs={12}>
+              <NewPrayerButton collectionId={_id} />
+            </Grid>
+          )}
 
           <AppBar position="sticky" color="inherit" className={classes.tab}>
             <Tabs
@@ -281,33 +300,47 @@ const Collection = props => {
               aria-label="collection-tabs"
               centered
             >
-              <Tab label={<BadgeWithLabel label="Prayer" value={prayers.length}/>} {...a11yProps(0)} />
-              <Tab label={<BadgeWithLabel label="People" value={people.length}/>} {...a11yProps(1)} />
+              <Tab
+                label={<BadgeWithLabel label="Prayer" value={prayers.length} />}
+                {...a11yProps(0)}
+              />
+              <Tab
+                label={<BadgeWithLabel label="People" value={people.length} />}
+                {...a11yProps(1)}
+              />
             </Tabs>
           </AppBar>
-          {tabValue === 0 && <Grid item xs={12}>
-            {prayers.length
-              ? prayers.map(prayer => <PrayerCard userId={userId} key={prayer._id} prayer={prayer} />)
-              : (
+          {tabValue === 0 && (
+            <Grid item xs={12}>
+              {prayers.length ? (
+                prayers.map((prayer) => (
+                  <PrayerCard
+                    userId={userId}
+                    key={prayer._id}
+                    prayer={prayer}
+                  />
+                ))
+              ) : (
                 <Empty
                   onClick={edittableByUser ? openNewPrayer : null}
                   type="prayer"
                   text="No prayer request with this collection yet"
                 />
               )}
-          </Grid>}
-          {tabValue === 1 && <Grid item xs={12}>
-            <UserList
-              users={people}
-            />
-          </Grid>}
+            </Grid>
+          )}
+          {tabValue === 1 && (
+            <Grid item xs={12}>
+              <UserList users={people} />
+            </Grid>
+          )}
         </Grid>
       </Container>
     </main>
-  )
-}
+  );
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   collections: state.collections,
   prayers: state.prayers,
   userId: state.authentication?.user?.userId,
@@ -315,4 +348,4 @@ const mapStateToProps = state => ({
   pathname: state.router.location.pathname,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(Collection))
+export default connect(mapStateToProps)(withStyles(styles)(Collection));

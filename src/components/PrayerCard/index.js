@@ -12,21 +12,22 @@ import IconButton from '@material-ui/core/IconButton';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+// import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import BookmarkOutlinedIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkContainedIcon from '@material-ui/icons/Bookmark';
 import ShareIcon from '@material-ui/icons/Share';
 import { makeStyles } from '@material-ui/core/styles';
-import Dot from './Dot';
 
-import BiblePasssageCard from './BiblePasssageCard';
-import AnsweredBadge from './AnsweredBadge';
-// import PrayerIcon from './Icons/Prayer';
-import { getDateCreated } from '../helpers';
-import { openAlert } from '../actions/alertAction';
-import alerts from '../constants/alert';
-import { updatePrayer } from '../actions/prayersAction';
-import { openSnackBar } from '../actions/snackBarAction';
+import Dot from '../Dot';
+import BiblePasssageCard from '../BiblePasssageCard';
+import PrayerCardMenu from './components/PrayerCardMenu';
+import AnsweredBadge from '../AnsweredBadge';
+// import PrayerIcon from '../Icons/Prayer';
+import { getDateCreated } from '../../helpers';
+import { openAlert } from '../../actions/alertAction';
+import alerts from '../../constants/alert';
+import { updatePrayer } from '../../actions/prayersAction';
+import { openSnackBar } from '../../actions/snackBarAction';
 
 const useStyles = makeStyles(() => ({
   cardActionRoot: {
@@ -36,10 +37,10 @@ const useStyles = makeStyles(() => ({
     margin: 10,
     boxShadow: 'none',
     border: '1px solid #dadce0',
-    borderRadius: 8
+    borderRadius: 8,
   },
   cardHeaderRoot: {
-    padding: '6px 16px 0px 16px'
+    padding: '6px 16px 0px 16px',
   },
   chipRoot: {
     margin: 2,
@@ -53,41 +54,41 @@ const useStyles = makeStyles(() => ({
   chipLabel: {
     // color: '#3c4043',
     fontSize: 11,
-    padding: '3px 5px'
+    padding: '3px 5px',
   },
   description: {
     color: '#202124',
     letterSpacing: '.01428571em',
     lineHeight: '1.5rem',
     fontSize: 16,
-    marginBottom: 5
+    marginBottom: 5,
   },
   classContentRoot: {
-    padding: '8px 16px 0px'
+    padding: '8px 16px 0px',
   },
   cardActionButtonsRoot: {
     justifyContent: 'space-around',
     padding: '0 8px 8px',
     '& .MuiSvgIcon-root': {
       width: 18,
-      height: 18
+      height: 18,
     },
   },
   iconWithCount: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   count: {
     fontSize: 13,
     marginLeft: 10,
-    paddingTop: 5
+    paddingTop: 5,
   },
   prayerStat: {
     padding: '0 8px 8px',
-  }
+  },
 }));
 
-const PrayerCard = props => {
+const PrayerCard = (props) => {
   const { prayer, userId, isPrayerClickable, showCollectionTags } = props;
   const {
     description,
@@ -100,13 +101,13 @@ const PrayerCard = props => {
     intercessors,
     interceeding,
     formattedPassages = [],
-    answered
+    answered,
   } = prayer;
   const dispatch = useDispatch();
-  const { isLoggedIn, pathname } = useSelector(state => ({
+  const { isLoggedIn, pathname } = useSelector((state) => ({
     isLoggedIn: state.authentication.isLoggedIn,
-    pathname: state.router.location.pathname
-  }))
+    pathname: state.router.location.pathname,
+  }));
   const classes = useStyles();
   const [isInterceding, setIsInterceding] = React.useState(interceeding);
 
@@ -116,56 +117,58 @@ const PrayerCard = props => {
     if (!isLoggedIn) {
       return dispatch(push(`/welcome?goTo=${pathname}`));
     }
-    dispatch(push(`/prayer/${_id}`))
-  }
+    dispatch(push(`/prayer/${_id}`));
+  };
 
-  const handleComment = () => {
-    if (window.location.pathname !== `/prayer/${_id}`) {
-      return openPrayer();
-    }
-    return;
-  }
+  // const handleComment = () => {
+  //   if (window.location.pathname !== `/prayer/${_id}`) {
+  //     return openPrayer();
+  //   }
+  //   return;
+  // };
 
-  const handleEdit = () => {
-    dispatch(push(`?prayerModal=open&prayerId=${_id}`));
-  }
+  // const handleEdit = () => {
+  //   dispatch(push(`?prayerModal=open&prayerId=${_id}`));
+  // };
 
-  const handleCollectionClick = collectionId => () => {
+  const handleCollectionClick = (collectionId) => () => {
     dispatch(push(`/collection/${collectionId}`));
-  }
+  };
 
   const handleIsInterceding = () => {
     if (!isLoggedIn) {
       return dispatch(push(`/welcome?goTo=${pathname}`));
     }
     if (isOwner) {
-      dispatch(openSnackBar('You cant add your request to your Intercession'))
+      dispatch(openSnackBar('You cant add your request to your Intercession'));
       return;
     }
 
-    setIsInterceding(isInterceding => {
-      const newisInterceding = !isInterceding
-      dispatch(
-        updatePrayer(userId, _id, { interceeding: newisInterceding })
-      );
+    setIsInterceding((isInterceding) => {
+      const newisInterceding = !isInterceding;
+      dispatch(updatePrayer(userId, _id, { interceeding: newisInterceding }));
 
       if (newisInterceding) {
-        dispatch(openSnackBar('Added to your Intercessions'))
+        dispatch(openSnackBar('Added to your Intercessions'));
       } else {
-        dispatch(openSnackBar('Removed from your Intercessions'))
+        dispatch(openSnackBar('Removed from your Intercessions'));
       }
-      return newisInterceding
+      return newisInterceding;
     });
-  }
+  };
 
   const handleShare = () => {
     const linkToPrayer = `https://${window.location.host}/prayer/${_id}`;
     navigator.clipboard.writeText(linkToPrayer);
-    dispatch(openAlert('Link copied to clipboard', alerts.INFO))
+    dispatch(openAlert('Link copied to clipboard', alerts.INFO));
   };
 
   const Count = ({ count }) => (
-    <Typography className={classes.count} color="textSecondary" component="span">
+    <Typography
+      className={classes.count}
+      color="textSecondary"
+      component="span"
+    >
       {count}
     </Typography>
   );
@@ -173,26 +176,31 @@ const PrayerCard = props => {
   const CustomCardContent = () => {
     const content = (
       <CardContent classes={{ root: classes.classContentRoot }}>
-        <Typography className={classes.description} variant="body2" color="textPrimary" component="p">
+        <Typography
+          className={classes.description}
+          variant="body2"
+          color="textPrimary"
+          component="p"
+        >
           {description}
         </Typography>
-        {formattedPassages.map((passage, i) => <BiblePasssageCard key={`passage-${i}`} passage={passage} />)}
+        {formattedPassages.map((passage, i) => (
+          <BiblePasssageCard key={`passage-${i}`} passage={passage} />
+        ))}
       </CardContent>
     );
 
     if (isPrayerClickable) {
-      return (
-        <CardActionArea onClick={openPrayer}>
-          {content}
-        </CardActionArea>
-      )
+      return <CardActionArea onClick={openPrayer}>{content}</CardActionArea>;
     }
 
     return content;
-  }
+  };
 
   const totalComments = Array.isArray(comments) ? comments.length : comments;
-  const totalIntercessors = Array.isArray(intercessors) ? intercessors.length : intercessors;
+  const totalIntercessors = Array.isArray(intercessors)
+    ? intercessors.length
+    : intercessors;
 
   return (
     <Card className={classes.card}>
@@ -204,40 +212,38 @@ const PrayerCard = props => {
             src={owner.googleAuthUser.picture}
           />
         }
-        action={!isPrayerClickable && isOwner && (
-          <IconButton aria-label="edit" onClick={handleEdit}>
-            <EditIcon />
-          </IconButton>
-        )}
+        action={isOwner && <PrayerCardMenu prayer={prayer} userId={userId} />}
         title={owner.googleAuthUser.name}
-        subheader={(
+        subheader={
           <span>
             Started praying {dateCreated} {answered && <AnsweredBadge />}
           </span>
-        )}
+        }
         classes={{
-          root: classes.cardHeaderRoot
+          root: classes.cardHeaderRoot,
         }}
       />
       <CustomCardContent />
-      {showCollectionTags && isOwner && Array.isArray(collections) && <CardActions
-        disableSpacing
-        classes={{
-          root: classes.cardActionRoot
-        }}
-      >
-        {collections.map(list =>
-          <Chip
-            key={list._id}
-            onClick={handleCollectionClick(list._id)}
-            label={list.title}
-            classes={{
-              root: classes.chipRoot,
-              label: classes.chipLabel
-            }}
-          />
-        )}
-      </CardActions>}
+      {showCollectionTags && isOwner && Array.isArray(collections) && (
+        <CardActions
+          disableSpacing
+          classes={{
+            root: classes.cardActionRoot,
+          }}
+        >
+          {collections.map((list) => (
+            <Chip
+              key={list._id}
+              onClick={handleCollectionClick(list._id)}
+              label={list.title}
+              classes={{
+                root: classes.chipRoot,
+                label: classes.chipLabel,
+              }}
+            />
+          ))}
+        </CardActions>
+      )}
       {showCollectionTags ? (
         <CardActions
           classes={{ root: classes.cardActionButtonsRoot }}
@@ -250,31 +256,47 @@ const PrayerCard = props => {
             <Count count={totalIntercessors} />
           </div> */}
           <div className={classes.iconWithCount}>
-            <IconButton aria-label="add to your intercessions" onClick={handleIsInterceding}>
-              {isInterceding ? <BookmarkContainedIcon color="primary" /> : <BookmarkOutlinedIcon />}
+            <IconButton
+              aria-label="add to your intercessions"
+              onClick={handleIsInterceding}
+            >
+              {isInterceding ? (
+                <BookmarkContainedIcon color="primary" />
+              ) : (
+                <BookmarkOutlinedIcon />
+              )}
             </IconButton>
             <Count count={totalIntercessors} />
           </div>
-          <div className={classes.iconWithCount}>
+          {/* <div className={classes.iconWithCount}>
             <IconButton aria-label="comment" onClick={handleComment}>
               <ChatBubbleOutlineIcon />
             </IconButton>
             <Count count={totalComments} />
-          </div>
-          <IconButton aria-describedby="share-prayer" aria-label="share link" onClick={handleShare}>
+          </div> */}
+          <IconButton
+            aria-describedby="share-prayer"
+            aria-label="share link"
+            onClick={handleShare}
+          >
             <ShareIcon />
           </IconButton>
         </CardActions>
-        ) : (
+      ) : (
         <div className={classes.prayerStat}>
-          <Typography className={classes.count} color="textSecondary" component="span">
-            {totalIntercessors} interceeding <Dot /> {totalComments} comment{totalComments > 1 ? 's' : ''}
+          <Typography
+            className={classes.count}
+            color="textSecondary"
+            component="span"
+          >
+            {totalIntercessors} interceeding <Dot /> {totalComments} comment
+            {totalComments > 1 ? 's' : ''}
           </Typography>
         </div>
       )}
     </Card>
-  )
-}
+  );
+};
 
 PrayerCard.propTypes = {
   prayer: PropTypes.object.isRequired,
@@ -284,7 +306,7 @@ PrayerCard.propTypes = {
 
 PrayerCard.defaultProps = {
   isPrayerClickable: true,
-  showCollectionTags: true
-}
+  showCollectionTags: true,
+};
 
 export default PrayerCard;

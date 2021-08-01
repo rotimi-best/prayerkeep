@@ -6,10 +6,10 @@ export const getPrayersService = async (userId) => {
   try {
     const response = await axios.get(`${API_URL}/prayer/${userId}`, {
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
-      }
+      },
     });
     return { response: response.data };
   } catch (error) {
@@ -21,13 +21,16 @@ export const getPrayersService = async (userId) => {
 
 export const getPrayerService = async (userId, prayerId) => {
   try {
-    const response = await axios.get(`${API_URL}/prayer/${userId}/${prayerId}`, {
-      headers: {
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
+    const response = await axios.get(
+      `${API_URL}/prayer/${userId}/${prayerId}`,
+      {
+        headers: {
+          Accept: 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+        },
       }
-    });
+    );
     return { response: response.data };
   } catch (error) {
     const { data = {} } = error.response || {};
@@ -42,12 +45,12 @@ export const addPrayerService = async (prayerParams) => {
       method: 'POST',
       data: JSON.stringify(prayerParams),
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      url: `${API_URL}/prayer`
-    }
+      url: `${API_URL}/prayer`,
+    };
     const response = await axios(requestParams);
     return { response: response.data };
   } catch (error) {
@@ -63,12 +66,12 @@ export const updatePrayerService = async (userId, prayerId, prayerParams) => {
       method: 'PUT',
       data: JSON.stringify(prayerParams),
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      url: `${API_URL}/prayer/${userId}/${prayerId}`
-    }
+      url: `${API_URL}/prayer/${userId}/${prayerId}`,
+    };
 
     const response = await axios(requestParams);
     return { response: response.data };
@@ -79,17 +82,39 @@ export const updatePrayerService = async (userId, prayerId, prayerParams) => {
   }
 };
 
-export const deletePrayerService = async prayerId => {
+export const archivePrayerService = async (userId, prayerId, prayerParams) => {
+  try {
+    const requestParams = {
+      method: 'PUT',
+      data: JSON.stringify(prayerParams),
+      headers: {
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+      url: `${API_URL}/prayer/${userId}/${prayerId}/archive`,
+    };
+
+    const response = await axios(requestParams);
+    return { response: response.data };
+  } catch (error) {
+    const { data = {} } = error.response || {};
+
+    return { error: data.message || error.toString() };
+  }
+};
+
+export const deletePrayerService = async (prayerId) => {
   try {
     const requestParams = {
       method: 'DELETE',
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
-      url: `${API_URL}/prayer/${prayerId}`
-    }
+      url: `${API_URL}/prayer/${prayerId}`,
+    };
 
     const response = await axios(requestParams);
     return { response: response.data };

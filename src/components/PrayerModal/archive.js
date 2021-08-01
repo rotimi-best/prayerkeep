@@ -3,7 +3,7 @@ import React, {
   useRef,
   forwardRef,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -35,16 +35,23 @@ import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
 import { DialogActions } from '@material-ui/core';
 
 import CollectionTitleModal from '../CollectionTitleModal';
-import BibleVersePicker from "../BibleVersePicker";
+import BibleVersePicker from '../BibleVersePicker';
 import DeleteModal from '../DeleteModal';
 
-import { date, getNextXDaysDate } from "../../helpers";
+import { date, getNextXDaysDate } from '../../helpers';
 import colorConstants from '../../constants/colors';
-import { addPrayer, updatePrayer, getPrayers } from '../../actions/prayersAction';
+import {
+  addPrayer,
+  updatePrayer,
+  getPrayers,
+} from '../../actions/prayersAction';
 import { getCollections } from '../../actions/collectionsAction';
 import styles from './style';
 
@@ -54,19 +61,23 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const filterArrayById = (id, arrayToFilter) => {
   if (id) {
-    return arrayToFilter.filter(a => a._id === id)[0] || null;
+    return arrayToFilter.filter((a) => a._id === id)[0] || null;
   }
 
-  return null
-}
-
-const todaysDate = defDate => {
-  const fullDate = defDate ? new Date(defDate) : new Date();
-
-  return new Date(fullDate.getFullYear(), fullDate.getMonth(), fullDate.getDate())
+  return null;
 };
 
-const PrayerModal = props => {
+const todaysDate = (defDate) => {
+  const fullDate = defDate ? new Date(defDate) : new Date();
+
+  return new Date(
+    fullDate.getFullYear(),
+    fullDate.getMonth(),
+    fullDate.getDate()
+  );
+};
+
+const PrayerModal = (props) => {
   const {
     modalListener: { prayerModal },
     userId,
@@ -78,8 +89,11 @@ const PrayerModal = props => {
   const repeatLabel = useRef(null);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const collectionToPickFrom = allCollection.filter(c => c.edittableByUser);
-  const prayerToOpen = filterArrayById(prayerModal.prayerId, prayers.allPrayers);
+  const collectionToPickFrom = allCollection.filter((c) => c.edittableByUser);
+  const prayerToOpen = filterArrayById(
+    prayerModal.prayerId,
+    prayers.allPrayers
+  );
   const history = useHistory();
 
   const [prayerRequest, setPrayerRequest] = useState('');
@@ -90,7 +104,7 @@ const PrayerModal = props => {
   const [startDate, setStartDate] = useState(todaysDate());
   const [endDate, setEndDate] = useState(getNextXDaysDate(30));
   const [errors, setErrors] = useState({
-    prayerRequest: false
+    prayerRequest: false,
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const isEditMode = !!prayerToOpen;
@@ -106,22 +120,21 @@ const PrayerModal = props => {
     setEndDate(getNextXDaysDate(30));
     setFormSubmitted(false);
     setErrors({
-      prayerRequest: false
+      prayerRequest: false,
     });
   }, [history]);
 
   // componentDidMount - Get collections
   useEffect(() => {
     if (!allCollection && allCollection.length) {
-      dispatch(getCollections(userId))
+      dispatch(getCollections(userId));
     }
   }, [allCollection, dispatch, userId]);
 
   useEffect(() => {
     if (prayerModal.prayerId && !prayerToOpen) {
-      dispatch(getPrayers(userId))
+      dispatch(getPrayers(userId));
     }
-
   }, [prayerModal.prayerId, prayerToOpen, dispatch, userId]);
 
   // componentDidUpdate - Set fields
@@ -129,24 +142,25 @@ const PrayerModal = props => {
     if (prayerModal.open && prayerToOpen) {
       setPrayerRequest(prayerToOpen.description);
       setAnsweredPrayer(prayerToOpen.answered);
-      const edittableByUserCol = prayerToOpen.collections
-        .filter(c => c.edittableByUser)
-        // .map(c => c.title)
+      const edittableByUserCol = prayerToOpen.collections.filter(
+        (c) => c.edittableByUser
+      );
+      // .map(c => c.title)
       setCollection(edittableByUserCol);
       setNote(prayerToOpen.note);
       setRepeat(prayerToOpen.repeat);
-      setStartDate(todaysDate(prayerToOpen.start))
+      setStartDate(todaysDate(prayerToOpen.start));
       setEndDate(todaysDate(prayerToOpen.end));
     }
     if (prayerModal.open && prayerModal.collectionId) {
-      const collectionFromUrl = filterArrayById(prayerModal.collectionId, allCollection);
+      const collectionFromUrl = filterArrayById(
+        prayerModal.collectionId,
+        allCollection
+      );
 
       if (collectionFromUrl) {
         if (collectionFromUrl.edittableByUser) {
-          setCollection([
-            ...collections,
-            collectionFromUrl
-          ]);
+          setCollection([...collections, collectionFromUrl]);
         } else if (collectionFromUrl.status) {
           setAnsweredPrayer(true);
         }
@@ -160,51 +174,51 @@ const PrayerModal = props => {
     const { error, isAdding, isUpdating } = prayers;
     if (formSubmitted) {
       if (!error && !isAdding && !isUpdating) {
-        handleClose()
+        handleClose();
       }
     }
   }, [prayers, formSubmitted, handleClose]);
 
-  const handleCollection = e => {
-    const [col] = collectionToPickFrom.filter(c => c._id === e.target.value);
+  const handleCollection = (e) => {
+    const [col] = collectionToPickFrom.filter((c) => c._id === e.target.value);
     if (col) {
       const newCollection = e.target.checked
         ? [...collections, col]
-        : collections.filter(c => c._id !== e.target.value);
+        : collections.filter((c) => c._id !== e.target.value);
 
       setCollection(newCollection);
     }
   };
 
-  const handleAnsweredPrayer = e => {
+  const handleAnsweredPrayer = (e) => {
     setAnsweredPrayer(e.target.checked);
   };
 
-  const handleStartDate = date => {
+  const handleStartDate = (date) => {
     setStartDate(date);
   };
 
-  const handleEndDate = date => {
+  const handleEndDate = (date) => {
     setEndDate(date);
   };
 
-  const handlePrayerRequest = e => {
+  const handlePrayerRequest = (e) => {
     setPrayerRequest(e.target.value);
   };
 
-  const handleRepeat = e => {
+  const handleRepeat = (e) => {
     setRepeat(e.target.value);
   };
 
-  const handleNote = e => {
+  const handleNote = (e) => {
     setNote(e.target.value);
   };
 
-  const handleSave = e => {
+  const handleSave = (e) => {
     if (!prayerRequest.length) {
       return setErrors({
         ...errors,
-        prayerRequest: true
+        prayerRequest: true,
       });
     }
 
@@ -222,98 +236,119 @@ const PrayerModal = props => {
     // Send to server
     setFormSubmitted(true);
     if (prayerToOpen) {
-      dispatch(updatePrayer(userId, prayerToOpen._id, newPrayerRequest, props.prayers.allPrayers))
-    } else dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers))
-  }
+      dispatch(
+        updatePrayer(
+          userId,
+          prayerToOpen._id,
+          newPrayerRequest,
+          props.prayers.allPrayers
+        )
+      );
+    } else dispatch(addPrayer(newPrayerRequest, props.prayers.allPrayers));
+  };
 
   return (
-      <Dialog
-        fullScreen={fullScreen}
-        maxWidth="sm"
-        fullWidth={true}
-        open={prayerModal.open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-        aria-labelledby="prayer-request-modal"
-      >
-        <AppBar className={classes.appBar}>
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-            <Typography id="prayer-request-modal" color="inherit" variant="h6" className={classes.title}>
-              {isEditMode ? 'Edit' : 'New'} prayer request
-            </Typography>
-            {/* <Button
+    <Dialog
+      fullScreen={fullScreen}
+      maxWidth="sm"
+      fullWidth={true}
+      open={prayerModal.open}
+      onClose={handleClose}
+      TransitionComponent={Transition}
+      aria-labelledby="prayer-request-modal"
+    >
+      <AppBar className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+          <Typography
+            id="prayer-request-modal"
+            color="inherit"
+            variant="h6"
+            className={classes.title}
+          >
+            {isEditMode ? 'Edit' : 'New'} prayer request
+          </Typography>
+          {/* <Button
               color="inherit"
               onClick={handleSave}
               startIcon={<SaveIcon />}
             >
               Save
             </Button> */}
-          </Toolbar>
-        </AppBar>
-        <DialogContent dividers>
-          {/* Prayer Request */}
-          <TextField
-            id="your-prayer-request"
-            label="Your Prayer Request"
-            placeholder="Start typing your request..."
-            variant="outlined"
-            className={classes.margin}
-            value={prayerRequest}
-            onChange={handlePrayerRequest}
-            rowsMax={6}
-            error={errors.prayerRequest}
-            multiline
-            fullWidth
-            autoFocus
-          />
+        </Toolbar>
+      </AppBar>
+      <DialogContent dividers>
+        {/* Prayer Request */}
+        <TextField
+          id="your-prayer-request"
+          label="Your Prayer Request"
+          placeholder="Start typing your request..."
+          variant="outlined"
+          className={classes.margin}
+          value={prayerRequest}
+          onChange={handlePrayerRequest}
+          rowsMax={6}
+          error={errors.prayerRequest}
+          multiline
+          fullWidth
+          autoFocus
+        />
 
-          <div className={classes.newCollection}>
-            <Typography variant="subtitle1">Add to a collection</Typography>
-            <CollectionTitleModal title="" isNew/>
+        <div className={classes.newCollection}>
+          <Typography variant="subtitle1">Add to a collection</Typography>
+          <CollectionTitleModal title="" isNew />
+        </div>
+        {collections.length ? (
+          <div className={classes.choosenCollection}>
+            {collections.map((list) => (
+              <Chip
+                key={list._id}
+                label={list.title}
+                classes={{
+                  root: classes.chipRoot,
+                }}
+                style={{
+                  backgroundColor: list.color || `rgba(0,0,0,0.08)`,
+                  fontWeight: 600,
+                  color: list.color
+                    ? colorConstants.colorsBg[list.color]
+                      ? '#000'
+                      : '#fff'
+                    : '#000',
+                }}
+              />
+            ))}
           </div>
-          {collections.length
-            ? <div className={classes.choosenCollection}>
-                {collections.map(list =>
-                  <Chip
-                    key={list._id}
-                    label={list.title}
-                    classes={{
-                      root: classes.chipRoot
-                    }}
-                    style={{
-                        backgroundColor: list.color || `rgba(0,0,0,0.08)`,
-                        fontWeight: 600,
-                        color: list.color
-                          ? colorConstants.colorsBg[list.color]
-                            ? '#000'
-                            : '#fff'
-                          : '#000'
-                    }}
-                    />
-                )}
-              </div>
-            : null}
+        ) : null}
 
-          {/* Choose Collection */}
-          <ExpansionPanel>
-            <ExpansionPanelSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="choose-collection-content"
-              id="choose-collection"
-            >
-              <Typography className={classes.heading}>Choose Collection</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
+        {/* Choose Collection */}
+        <ExpansionPanel>
+          <ExpansionPanelSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="choose-collection-content"
+            id="choose-collection"
+          >
+            <Typography className={classes.heading}>
+              Choose Collection
+            </Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
             <FormControl component="fieldset" className={classes.formControl}>
               <FormGroup>
-                {collectionToPickFrom.map(({ _id, title }) =>
+                {collectionToPickFrom.map(({ _id, title }) => (
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={collections.find(c => c._id === _id) ? true : false}
+                        checked={
+                          collections.find((c) => c._id === _id) ? true : false
+                        }
                         onChange={handleCollection}
                         value={_id}
                       />
@@ -321,37 +356,41 @@ const PrayerModal = props => {
                     label={title}
                     key={_id}
                   />
-                )}
+                ))}
               </FormGroup>
             </FormControl>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
 
-          {/* Answered Prayer */}
-          <FormControlLabel
-            control={
-              <Checkbox checked={answeredPrayer} onChange={handleAnsweredPrayer} value="answered" />
-            }
-            label={`Mark as "Answered Prayer"`}
-          />
+        {/* Answered Prayer */}
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={answeredPrayer}
+              onChange={handleAnsweredPrayer}
+              value="answered"
+            />
+          }
+          label={`Mark as "Answered Prayer"`}
+        />
 
-          {/* NOTE */}
-          <TextField
-            id="your-prayer-request-note"
-            label="Add a note"
-            placeholder="Any testimony, word from God or scenerio related to this prayer?"
-            variant="outlined"
-            className={classes.margin}
-            value={note}
-            onChange={handleNote}
-            rows={6}
-            rowsMax={6}
-            multiline
-            fullWidth
-          />
+        {/* NOTE */}
+        <TextField
+          id="your-prayer-request-note"
+          label="Add a note"
+          placeholder="Any testimony, word from God or scenerio related to this prayer?"
+          variant="outlined"
+          className={classes.margin}
+          value={note}
+          onChange={handleNote}
+          minRows={6}
+          rowsMax={6}
+          multiline
+          fullWidth
+        />
 
-          {/* REPEAT */}
-          {/* <FormControl variant="outlined" className={classes.formControl}>
+        {/* REPEAT */}
+        {/* <FormControl variant="outlined" className={classes.formControl}>
             <InputLabel ref={repeatLabel} htmlFor="outlined-age-native-simple">
               Repeat
             </InputLabel>
@@ -373,8 +412,8 @@ const PrayerModal = props => {
             </Select>
           </FormControl> */}
 
-          {/* Start and End Date */}
-          {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        {/* Start and End Date */}
+        {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Grid container justify="space-around">
               <KeyboardDatePicker
                 margin="normal"
@@ -406,34 +445,36 @@ const PrayerModal = props => {
               />
             </Grid>
           </MuiPickersUtilsProvider> */}
-        </DialogContent>
+      </DialogContent>
 
-        {/* Delete and Save button */}
-        <DialogActions>
-          {isEditMode && <DeleteModal prayerId={prayerModal.prayerId} label="Delete" />}
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleSave}
-            startIcon={<SaveIcon />}
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* Delete and Save button */}
+      <DialogActions>
+        {isEditMode && (
+          <DeleteModal prayerId={prayerModal.prayerId} label="Delete" />
+        )}
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleSave}
+          startIcon={<SaveIcon />}
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
-}
+};
 
 PrayerModal.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   location: state.router.location,
   userId: state.authentication.user.userId,
   modalListener: state.modalListener,
   prayers: state.prayers,
-  allCollection: state.collections.allCollection
+  allCollection: state.collections.allCollection,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(PrayerModal));

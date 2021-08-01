@@ -9,7 +9,7 @@ import Chip from '@material-ui/core/Chip';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
-import ScrollMenu from "react-horizontal-scrolling-menu";
+import ScrollMenu from 'react-horizontal-scrolling-menu';
 
 import PrayerCard from './PrayerCard';
 import NewPrayerButton from './NewPrayerButton';
@@ -22,135 +22,143 @@ import NextArrow from './NextArrow';
 import { getPrayers, setPrayersTabValue } from '../actions/prayersAction';
 import { getNewPrayerUrl } from '../helpers';
 
-const styles = theme => ({
+const styles = (theme) => ({
   containerRoot: {
     padding: 0,
-    "& .horizontal-menu": {
-      margin: "10px 5px",
-      "& .MuiChip-root": {
+    '& .horizontal-menu': {
+      margin: '10px 5px',
+      '& .MuiChip-root': {
         marginRight: 15,
         fontSize: 16,
-        fontWeight: "bold",
-        cursor: "pointer",
+        fontWeight: 'bold',
+        cursor: 'pointer',
         '&.MuiChip-colorPrimary .badge': {
           backgroundColor: '#fff',
           color: '#000',
-          fontWeight: 'bold'
-        }
+          fontWeight: 'bold',
+        },
       },
-    }
+    },
   },
   toolbar: theme.mixins.toolbar,
   content: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   filters: {},
   tab: {
     boxShadow: 'none',
     [theme.breakpoints.up('lg')]: {
       top: 60,
-    }
-  }
+    },
+  },
 });
 
-const ArrowLeft = <PreviousArrow overideClassName="arrow-prev" />
-const ArrowRight = <NextArrow overideClassName="arrow-next" />
+const ArrowLeft = <PreviousArrow overideClassName="arrow-prev" />;
+const ArrowRight = <NextArrow overideClassName="arrow-next" />;
 
-const Prayers = props => {
+const Prayers = (props) => {
   const {
     classes,
     pathname,
     prayers: {
       allPrayers: prayers,
+      archivedPrayers,
       answeredPrayers,
       unAnsweredPrayers,
       interceedingPrayers,
-      prayersByCollection,
+      // prayersByCollection,
       isFetching,
       isUpdating,
       isAdding,
-      prayersTabValue
+      prayersTabValue,
     },
     dispatch,
-    userId
+    userId,
   } = props;
 
-  const handleChange = newValue => {
+  const handleChange = (newValue) => {
     dispatch(setPrayersTabValue(parseInt(newValue, 10)));
   };
 
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1280px)'
+    query: '(min-width: 1280px)',
   });
   const isMobile = useMediaQuery({
-    query: "(max-width: 768px)"
+    query: '(max-width: 768px)',
   });
 
   useEffect(() => {
     if (!prayers.length) {
-      dispatch(getPrayers(userId))
+      dispatch(getPrayers(userId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const openNewPrayer = () => {
     return dispatch(push(getNewPrayerUrl(pathname)));
-  }
+  };
 
   const tabData = [
     {
-      label: "All My Prayers",
+      label: 'All My Prayers',
       value: 0,
-      textIfNoData: "No prayer request added yet",
+      textIfNoData: 'No prayer request added yet',
       showButtonToAdd: true,
-      data: prayersByCollection,
-      render: function() {
-        return prayersByCollection.map((prayerCol) => (
-          <GroupedPrayers
-            key={prayerCol._id}
-            collectionId={prayerCol._id}
-            title={prayerCol.title}
-            prayers={prayerCol.prayers}
-          />
-        ))
-      }
+      data: prayers,
+      // render: function() {
+      //   return prayersByCollection.map((prayerCol) => (
+      //     <GroupedPrayers
+      //       key={prayerCol._id}
+      //       collectionId={prayerCol._id}
+      //       title={prayerCol.title}
+      //       prayers={prayerCol.prayers}
+      //     />
+      //   ))
+      // }
     },
     {
-      label: "Intercessions",
+      label: 'Intercessions',
       value: 1,
       textIfNoData:
-        "You are not interceeding for anyone yet. Ask your friends for prayers",
+        'You are not interceeding for anyone yet. Ask your friends for prayers',
       showButtonToAdd: false,
-      data: interceedingPrayers
+      data: interceedingPrayers,
     },
     {
-      label: "Unanswered",
+      label: 'Answered',
       value: 2,
-      textIfNoData: "All your prayers are answered :) Ask God for more",
+      textIfNoData: 'No answered prayer yet, God is working.',
       showButtonToAdd: false,
-      data: unAnsweredPrayers
+      data: answeredPrayers,
     },
     {
-      label: "Answered",
+      label: 'Unanswered',
       value: 3,
-      textIfNoData: "No answered prayer yet, God is working.",
+      textIfNoData: 'All your prayers are answered :) Ask God for more',
       showButtonToAdd: false,
-      data: answeredPrayers
-    }
+      data: unAnsweredPrayers,
+    },
+    {
+      label: 'Archived',
+      value: 4,
+      textIfNoData: 'No Archived prayer added yet.',
+      showButtonToAdd: false,
+      data: archivedPrayers,
+    },
   ];
 
   const currentTab = tabData[prayersTabValue];
 
-  const Menu = selected =>
-    tabData.map(tab => (
+  const Menu = (selected) =>
+    tabData.map((tab) => (
       <Chip
         key={tab.value}
-        label={<BadgeWithLabel label={tab.label} value={tab.data.length}/>}
-        color={selected === tab.value ? "primary" : "default"}
-        variant={selected === tab.value ? "default" : "outlined"}
+        label={<BadgeWithLabel label={tab.label} value={tab.data.length} />}
+        color={selected === tab.value ? 'primary' : 'default'}
+        variant={selected === tab.value ? 'default' : 'outlined'}
       />
     ));
 
-  const hideArrow = !isMobile && tabData.length <= 4
+  const hideArrow = !isMobile && tabData.length <= 4;
 
   return (
     <main className={classes.content}>
@@ -158,17 +166,13 @@ const Prayers = props => {
       <Container
         maxWidth="sm"
         classes={{
-          root: classes.containerRoot
+          root: classes.containerRoot,
         }}
       >
         <CssBaseline />
         <NewPrayerButton />
         {/* <div className={classes.filters}> */}
-        <AppBar
-          position="sticky"
-          color="inherit"
-          className={classes.tab}
-        >
+        <AppBar position="sticky" color="inherit" className={classes.tab}>
           <ScrollMenu
             alignCenter={false}
             data={Menu(prayersTabValue)}
@@ -182,9 +186,18 @@ const Prayers = props => {
         <div role="tabpanel">
           {(isAdding || isUpdating || isFetching) && <LinearProgress />}
           {currentTab.data && currentTab.data.length ? (
-            currentTab.render ? currentTab.render() : currentTab.data.map((prayer, i) => (
-              <PrayerCard userId={userId} key={prayer._id} prayer={prayer} showCollectionTags={false} />
-            ))
+            currentTab.render ? (
+              currentTab.render()
+            ) : (
+              currentTab.data.map((prayer, i) => (
+                <PrayerCard
+                  userId={userId}
+                  key={prayer._id}
+                  prayer={prayer}
+                  showCollectionTags={false}
+                />
+              ))
+            )
           ) : (
             <Empty
               type="prayer"
@@ -196,7 +209,7 @@ const Prayers = props => {
       </Container>
     </main>
   );
-}
+};
 
 Prayers.propTypes = {
   classes: PropTypes.object.isRequired,
@@ -204,7 +217,7 @@ Prayers.propTypes = {
   userId: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   prayers: state.prayers,
   userId: state.authentication.user.userId,
   pathname: state.router.location.pathname,
